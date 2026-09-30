@@ -16,10 +16,217 @@
 }
 
 body {
-    background-color: var(--background);
-    color: var(--foreground);
     font-family: var(--font-sans);
     -webkit-font-smoothing: antialiased;
+}
+
+/* Default Public Site Styles */
+body:not([data-admin-theme]) {
+    background-color: var(--background);
+    color: var(--foreground);
+}
+
+/* =========================================================
+   ADMIN DESIGN SYSTEM - DYNAMIC TOKENS (LIGHT & DARK MODES)
+   ========================================================= */
+
+/* Admin Light Theme */
+[data-admin-theme="light"] {
+    --adm-bg: #F8FAFC;
+    --adm-sidebar: #FFFFFF;
+    --adm-sidebar-border: #E2E8F0;
+    --adm-header: rgba(255, 255, 255, 0.9);
+    --adm-header-border: #E2E8F0;
+    --adm-card: #FFFFFF;
+    --adm-card-border: #E2E8F0;
+    --adm-card-hover: #F8FAFC;
+    --adm-text: #0F172A;
+    --adm-text-secondary: #334155;
+    --adm-text-muted: #64748B;
+    --adm-banner-bg: linear-gradient(135deg, #1E1B4B 0%, #312E81 50%, #4338CA 100%);
+    --adm-banner-border: rgba(99, 102, 241, 0.3);
+    --adm-banner-text: #FFFFFF;
+    --adm-banner-muted: #E0E7FF;
+    --adm-table-head: #F8FAFC;
+    --adm-table-border: #E2E8F0;
+    --adm-table-hover: #F1F5F9;
+    --adm-input-bg: #FFFFFF;
+    --adm-input-border: #CBD5E1;
+    --adm-input-focus: #4F46E5;
+    --adm-status-pending-bg: #FEF3C7;
+    --adm-status-pending-text: #92400E;
+    --adm-status-pending-border: #FCD34D;
+    --adm-status-approved-bg: #DBEAFE;
+    --adm-status-approved-text: #1E40AF;
+    --adm-status-approved-border: #93C5FD;
+    --adm-status-active-bg: #E0E7FF;
+    --adm-status-active-text: #3730A3;
+    --adm-status-active-border: #A5B4FC;
+    --adm-status-completed-bg: #D1FAE5;
+    --adm-status-completed-text: #065F46;
+    --adm-status-completed-border: #6EE7B7;
+    --adm-status-rejected-bg: #FEE2E2;
+    --adm-status-rejected-text: #991B1B;
+    --adm-status-rejected-border: #FCA5A5;
+    --adm-scrollbar-track: #F1F5F9;
+    --adm-scrollbar-thumb: #94A3B8;
+    --adm-shadow-sm: 0 1px 2px 0 rgba(0, 0, 0, 0.05);
+    --adm-shadow-md: 0 4px 6px -1px rgba(0, 0, 0, 0.07), 0 2px 4px -2px rgba(0, 0, 0, 0.05);
+    --adm-shadow-lg: 0 10px 15px -3px rgba(0, 0, 0, 0.08), 0 4px 6px -4px rgba(0, 0, 0, 0.05);
+}
+
+/* Admin Dark Theme (Default) */
+[data-admin-theme="dark"] {
+    --adm-bg: #030712;
+    --adm-sidebar: #0B0F19;
+    --adm-sidebar-border: #1E293B;
+    --adm-header: rgba(11, 15, 25, 0.85);
+    --adm-header-border: #1E293B;
+    --adm-card: #0F172A;
+    --adm-card-border: #1E293B;
+    --adm-card-hover: #172033;
+    --adm-text: #F8FAFC;
+    --adm-text-secondary: #CBD5E1;
+    --adm-text-muted: #94A3B8;
+    --adm-banner-bg: linear-gradient(135deg, rgba(30, 27, 75, 0.9) 0%, rgba(15, 23, 42, 0.95) 50%, rgba(15, 23, 42, 1) 100%);
+    --adm-banner-border: rgba(99, 102, 241, 0.25);
+    --adm-banner-text: #FFFFFF;
+    --adm-banner-muted: #CBD5E1;
+    --adm-table-head: #0B0F19;
+    --adm-table-border: #1E293B;
+    --adm-table-hover: rgba(30, 41, 59, 0.5);
+    --adm-input-bg: #030712;
+    --adm-input-border: #1E293B;
+    --adm-input-focus: #6366F1;
+    --adm-status-pending-bg: rgba(120, 53, 15, 0.4);
+    --adm-status-pending-text: #FCD34D;
+    --adm-status-pending-border: rgba(245, 158, 11, 0.4);
+    --adm-status-approved-bg: rgba(30, 58, 138, 0.4);
+    --adm-status-approved-text: #93C5FD;
+    --adm-status-approved-border: rgba(59, 130, 246, 0.4);
+    --adm-status-active-bg: rgba(49, 46, 129, 0.4);
+    --adm-status-active-text: #A5B4FC;
+    --adm-status-active-border: rgba(99, 102, 241, 0.4);
+    --adm-status-completed-bg: rgba(6, 78, 59, 0.4);
+    --adm-status-completed-text: #6EE7B7;
+    --adm-status-completed-border: rgba(16, 185, 129, 0.4);
+    --adm-status-rejected-bg: rgba(127, 29, 29, 0.4);
+    --adm-status-rejected-text: #FCA5A5;
+    --adm-status-rejected-border: rgba(239, 68, 68, 0.4);
+    --adm-scrollbar-track: #030712;
+    --adm-scrollbar-thumb: #334155;
+    --adm-shadow-sm: 0 1px 2px 0 rgba(0, 0, 0, 0.3);
+    --adm-shadow-md: 0 4px 6px -1px rgba(0, 0, 0, 0.4), 0 2px 4px -2px rgba(0, 0, 0, 0.3);
+    --adm-shadow-lg: 0 10px 15px -3px rgba(0, 0, 0, 0.5), 0 4px 6px -4px rgba(0, 0, 0, 0.4);
+}
+
+/* =========================================================
+   REUSABLE SEMANTIC UTILITY CLASSES (NO HARDCODING)
+   ========================================================= */
+.adm-canvas {
+    background-color: var(--adm-bg) !important;
+    color: var(--adm-text) !important;
+    transition: background-color 0.25s ease, color 0.25s ease;
+}
+
+.adm-sidebar {
+    background-color: var(--adm-sidebar) !important;
+    border-color: var(--adm-sidebar-border) !important;
+    transition: background-color 0.25s ease, border-color 0.25s ease;
+}
+
+.adm-header {
+    background-color: var(--adm-header) !important;
+    border-color: var(--adm-header-border) !important;
+    backdrop-filter: blur(12px);
+    -webkit-backdrop-filter: blur(12px);
+    transition: background-color 0.25s ease, border-color 0.25s ease;
+}
+
+.adm-card {
+    background-color: var(--adm-card) !important;
+    border: 1px solid var(--adm-card-border) !important;
+    color: var(--adm-text) !important;
+    box-shadow: var(--adm-shadow-md);
+    transition: background-color 0.25s ease, border-color 0.25s ease, box-shadow 0.25s ease;
+}
+
+.adm-card:hover {
+    box-shadow: var(--adm-shadow-lg);
+}
+
+.adm-banner {
+    background: var(--adm-banner-bg) !important;
+    border: 1px solid var(--adm-banner-border) !important;
+    color: var(--adm-banner-text) !important;
+    box-shadow: var(--adm-shadow-lg);
+}
+
+.adm-table-head {
+    background-color: var(--adm-table-head) !important;
+    border-color: var(--adm-table-border) !important;
+    color: var(--adm-text-muted) !important;
+}
+
+.adm-table-row {
+    border-color: var(--adm-table-border) !important;
+    transition: background-color 0.15s ease;
+}
+
+.adm-table-row:hover {
+    background-color: var(--adm-table-hover) !important;
+}
+
+.adm-input {
+    background-color: var(--adm-input-bg) !important;
+    border: 1px solid var(--adm-input-border) !important;
+    color: var(--adm-text) !important;
+    transition: border-color 0.2s ease, box-shadow 0.2s ease, background-color 0.25s ease;
+}
+
+.adm-input:focus {
+    outline: none;
+    border-color: var(--adm-input-focus) !important;
+    box-shadow: 0 0 0 3px rgba(99, 102, 241, 0.2);
+}
+
+.adm-text {
+    color: var(--adm-text) !important;
+}
+
+.adm-text-secondary {
+    color: var(--adm-text-secondary) !important;
+}
+
+.adm-text-muted {
+    color: var(--adm-text-muted) !important;
+}
+
+/* Status Badges */
+.adm-badge-pending {
+    background-color: var(--adm-status-pending-bg) !important;
+    color: var(--adm-status-pending-text) !important;
+    border: 1px solid var(--adm-status-pending-border) !important;
+}
+.adm-badge-approved {
+    background-color: var(--adm-status-approved-bg) !important;
+    color: var(--adm-status-approved-text) !important;
+    border: 1px solid var(--adm-status-approved-border) !important;
+}
+.adm-badge-active {
+    background-color: var(--adm-status-active-bg) !important;
+    color: var(--adm-status-active-text) !important;
+    border: 1px solid var(--adm-status-active-border) !important;
+}
+.adm-badge-completed {
+    background-color: var(--adm-status-completed-bg) !important;
+    color: var(--adm-status-completed-text) !important;
+    border: 1px solid var(--adm-status-completed-border) !important;
+}
+.adm-badge-rejected {
+    background-color: var(--adm-status-rejected-bg) !important;
+    color: var(--adm-status-rejected-text) !important;
+    border: 1px solid var(--adm-status-rejected-border) !important;
 }
 
 h1, h2, h3, .font-serif {
@@ -29,16 +236,28 @@ h1, h2, h3, .font-serif {
 /* Custom Clean Scrollbar */
 ::-webkit-scrollbar {
     width: 8px;
+    height: 8px;
 }
 
 ::-webkit-scrollbar-track {
     background: #FAFBF9;
 }
 
+[data-admin-theme]::-webkit-scrollbar-track,
+[data-admin-theme] ::-webkit-scrollbar-track {
+    background: var(--adm-scrollbar-track);
+}
+
 ::-webkit-scrollbar-thumb {
     background: #4338CA;
     border-radius: 10px;
     border: 2px solid #FAFBF9;
+}
+
+[data-admin-theme]::-webkit-scrollbar-thumb,
+[data-admin-theme] ::-webkit-scrollbar-thumb {
+    background: var(--adm-scrollbar-thumb);
+    border: 2px solid var(--adm-scrollbar-track);
 }
 
 ::-webkit-scrollbar-thumb:hover {
