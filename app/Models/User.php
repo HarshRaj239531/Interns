@@ -37,11 +37,11 @@ class User extends Authenticatable
 
     public function isAdmin(): bool
     {
-        return in_array($this->role, ['ADMIN', 'SUPER_ADMIN', 'admin', 'super-admin']);
+        return in_array($this->role, ['ADMIN', 'admin']);
     }
 
-    public function isSuperAdmin(): bool
+    public function isStudent(): bool
     {
-        return in_array($this->role, ['SUPER_ADMIN', 'super-admin']);
+        return in_array($this->role, ['STUDENT', 'student']);
     }
 }

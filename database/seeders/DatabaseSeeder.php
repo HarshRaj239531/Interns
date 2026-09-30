@@ -26,18 +26,7 @@ class DatabaseSeeder extends Seeder
             ]
         );
 
-        // 2. Seed Super Admin
-        $superAdmin = User::firstOrCreate(
-            ['email' => 'superadmin@infinityinterns.com'],
-            [
-                'name' => 'Master Portal Controller',
-                'phone' => '+91 6204221832',
-                'password' => Hash::make('SuperAdmin@123'),
-                'role' => 'SUPER_ADMIN',
-            ]
-        );
-
-        // 3. Seed Sample Students with Profiles
+        // 2. Seed Sample Students with Profiles
         $students = [
             [
                 'name' => 'Ritika Srivastava',

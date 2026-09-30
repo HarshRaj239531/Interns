@@ -4,7 +4,6 @@ use App\Http\Controllers\AdminPortalController;
 use App\Http\Controllers\AuthController;
 use App\Http\Controllers\SiteController;
 use App\Http\Controllers\StudentPortalController;
-use App\Http\Controllers\SuperAdminPortalController;
 use Illuminate\Support\Facades\Route;
 
 // Public Static & Dynamic Pages
@@ -62,8 +61,5 @@ Route::middleware(['auth', 'admin'])->prefix('admin')->name('admin.')->group(fun
     Route::get('/applications/{id}/marksheet', [AdminPortalController::class, 'viewStudentMarksheet'])->name('application.view-marksheet');
 });
 
-// Super Admin Portal (Root level control)
-Route::middleware(['auth', 'superadmin'])->prefix('super-admin')->name('superadmin.')->group(function () {
-    Route::get('/', fn () => redirect()->route('superadmin.dashboard'));
-    Route::get('/dashboard', [SuperAdminPortalController::class, 'dashboard'])->name('dashboard');
-});
+// Redirect /super-admin to Admin Dashboard
+Route::get('/super-admin/{any?}', fn () => redirect()->route('admin.dashboard'))->where('any', '.*');

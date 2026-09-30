@@ -11,9 +11,6 @@ class AuthController extends Controller
     {
         if (Auth::check()) {
             $user = Auth::user();
-            if ($user->isSuperAdmin()) {
-                return redirect()->route('superadmin.dashboard');
-            }
             if ($user->isAdmin()) {
                 return redirect()->route('admin.dashboard');
             }
@@ -36,10 +33,6 @@ class AuthController extends Controller
         if (Auth::attempt($credentials, $remember)) {
             $request->session()->regenerate();
             $user = Auth::user();
-
-            if ($user->isSuperAdmin()) {
-                return redirect()->intended(route('superadmin.dashboard'))->with('success', 'Logged in to Super Admin Master Control');
-            }
 
             if ($user->isAdmin()) {
                 return redirect()->intended(route('admin.dashboard'))->with('success', 'Welcome back, Administrator');

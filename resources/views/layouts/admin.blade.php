@@ -20,7 +20,7 @@
                 <div>
                     <span class="font-serif font-bold text-sm text-white tracking-wider block">Infinity Interns</span>
                     <span class="text-[10px] text-indigo-400 font-semibold tracking-wider uppercase block">
-                        {{ auth()->user()->isSuperAdmin() ? 'Super Admin Portal' : 'Admin Portal' }}
+                        Admin Portal
                     </span>
                 </div>
             </a>
@@ -36,13 +36,6 @@
                     <svg class="w-4 h-4" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M8 10h.01M12 10h.01M16 10h.01M9 16H5a2 2 0 01-2-2V6a2 2 0 012-2h14a2 2 0 012 2v8a2 2 0 01-2 2h-5l-5 5v-5z"/></svg>
                     <span>Inquiries & MOU Desks</span>
                 </a>
-
-                @if(auth()->user()->isSuperAdmin())
-                    <a href="{{ route('superadmin.dashboard') }}" class="flex items-center gap-3 px-3.5 py-2.5 rounded-xl transition {{ request()->routeIs('superadmin.dashboard') ? 'bg-amber-600 text-white shadow-md shadow-amber-600/30' : 'text-amber-400 hover:text-white hover:bg-amber-950/40' }}">
-                        <svg class="w-4 h-4" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M9 12l2 2 4-4m5.618-4.016A11.955 11.955 0 0112 2.944a11.955 11.955 0 01-8.618 3.04A12.02 12.02 0 003 9c0 5.591 3.824 10.29 9 11.622 5.176-1.332 9-6.03 9-11.622 0-1.042-.133-2.052-.382-3.016z"/></svg>
-                        <span>Root Master Control</span>
-                    </a>
-                @endif
 
                 <a href="{{ route('verify') }}" target="_blank" class="flex items-center gap-3 px-3.5 py-2.5 rounded-xl text-slate-400 hover:text-white hover:bg-slate-800/60 transition">
                     <svg class="w-4 h-4" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M10 6H6a2 2 0 00-2 2v10a2 2 0 002 2h10a2 2 0 002-2v-4M14 4h6m0 0v6m0-6L10 14"/></svg>
