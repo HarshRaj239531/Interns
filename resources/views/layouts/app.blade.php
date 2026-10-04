@@ -30,85 +30,202 @@
                 </div>
             </a>
 
-            <!-- Desktop Nav Links -->
-            <div class="hidden xl:flex items-center gap-4 lg:gap-5">
-                <a href="{{ route('home') }}" class="nav-link-underline text-[11px] uppercase tracking-wider font-semibold transition-colors {{ request()->routeIs('home') ? 'text-indigo-600 font-bold' : 'text-slate-700 hover:text-indigo-600' }}">Home</a>
-                <a href="{{ route('programs') }}" class="nav-link-underline text-[11px] uppercase tracking-wider font-semibold transition-colors {{ request()->routeIs('programs') ? 'text-indigo-600 font-bold' : 'text-slate-700 hover:text-indigo-600' }}">Programs</a>
-                <a href="{{ route('journey') }}" class="nav-link-underline text-[11px] uppercase tracking-wider font-semibold transition-colors {{ request()->routeIs('journey') ? 'text-indigo-600 font-bold' : 'text-slate-700 hover:text-indigo-600' }}">Journey</a>
-                <a href="{{ route('certification') }}" class="nav-link-underline text-[11px] uppercase tracking-wider font-semibold transition-colors {{ request()->routeIs('certification') ? 'text-indigo-600 font-bold' : 'text-slate-700 hover:text-indigo-600' }}">Certification</a>
-                <a href="{{ route('subjects') }}" class="nav-link-underline text-[11px] uppercase tracking-wider font-semibold transition-colors {{ request()->routeIs('subjects') ? 'text-indigo-600 font-bold' : 'text-slate-700 hover:text-indigo-600' }}">Subjects</a>
-                <a href="{{ route('mentors') }}" class="nav-link-underline text-[11px] uppercase tracking-wider font-semibold transition-colors {{ request()->routeIs('mentors') ? 'text-indigo-600 font-bold' : 'text-slate-700 hover:text-indigo-600' }}">Mentors</a>
-                <a href="{{ route('colleges') }}" class="nav-link-underline text-[11px] uppercase tracking-wider font-semibold transition-colors {{ request()->routeIs('colleges') ? 'text-indigo-600 font-bold' : 'text-slate-700 hover:text-indigo-600' }}">For Colleges</a>
-                <a href="{{ route('stories') }}" class="nav-link-underline text-[11px] uppercase tracking-wider font-semibold transition-colors {{ request()->routeIs('stories') ? 'text-indigo-600 font-bold' : 'text-slate-700 hover:text-indigo-600' }}">Stories</a>
-                <a href="{{ route('faq') }}" class="nav-link-underline text-[11px] uppercase tracking-wider font-semibold transition-colors {{ request()->routeIs('faq') ? 'text-indigo-600 font-bold' : 'text-slate-700 hover:text-indigo-600' }}">FAQ</a>
-                <a href="{{ route('contact') }}" class="nav-link-underline text-[11px] uppercase tracking-wider font-semibold transition-colors {{ request()->routeIs('contact') ? 'text-indigo-600 font-bold' : 'text-slate-700 hover:text-indigo-600' }}">Contact</a>
+            <!-- Desktop Nav Links (Clean, Curated & Organized) -->
+            <div class="hidden lg:flex items-center gap-1 xl:gap-1.5">
+                <a href="{{ route('home') }}" class="px-3.5 py-1.5 rounded-full text-xs font-semibold transition-all {{ request()->routeIs('home') ? 'bg-indigo-50 text-indigo-700 font-bold' : 'text-slate-700 hover:text-indigo-600 hover:bg-slate-100/70' }}">
+                    Home
+                </a>
+                <a href="{{ route('programs') }}" class="px-3.5 py-1.5 rounded-full text-xs font-semibold transition-all {{ request()->routeIs('programs') ? 'bg-indigo-50 text-indigo-700 font-bold' : 'text-slate-700 hover:text-indigo-600 hover:bg-slate-100/70' }}">
+                    Programs
+                </a>
+                <a href="{{ route('certification') }}" class="px-3.5 py-1.5 rounded-full text-xs font-semibold transition-all {{ request()->routeIs('certification') ? 'bg-indigo-50 text-indigo-700 font-bold' : 'text-slate-700 hover:text-indigo-600 hover:bg-slate-100/70' }}">
+                    Certification
+                </a>
+
+                <!-- Explore Dropdown -->
+                <div class="relative group" id="exploreDropdownContainer">
+                    <button type="button" id="exploreDropdownBtn" class="flex items-center gap-1 px-3.5 py-1.5 rounded-full text-xs font-semibold transition-all cursor-pointer {{ request()->routeIs(['journey', 'subjects', 'mentors', 'colleges', 'stories', 'faq']) ? 'bg-indigo-50 text-indigo-700 font-bold' : 'text-slate-700 hover:text-indigo-600 hover:bg-slate-100/70' }}" aria-expanded="false" aria-haspopup="true">
+                        <span>Explore</span>
+                        <svg class="w-3.5 h-3.5 text-slate-400 group-hover:text-indigo-600 transition-transform duration-200 group-hover:rotate-180" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M19 9l-7 7-7-7"/></svg>
+                    </button>
+
+                    <!-- Dropdown Popover Card -->
+                    <div id="exploreDropdownMenu" class="absolute top-full left-1/2 -translate-x-1/2 pt-2.5 opacity-0 pointer-events-none group-hover:opacity-100 group-hover:pointer-events-auto group-focus-within:opacity-100 group-focus-within:pointer-events-auto transition-all duration-200 ease-out z-50">
+                        <div class="w-[490px] bg-white/95 backdrop-blur-xl rounded-2xl border border-slate-200/90 shadow-2xl p-3.5 text-left">
+                            <div class="grid grid-cols-2 gap-1.5">
+                                <!-- Journey -->
+                                <a href="{{ route('journey') }}" class="flex items-start gap-2.5 p-2 rounded-xl hover:bg-indigo-50/70 transition group/item">
+                                    <div class="w-7 h-7 rounded-lg bg-indigo-50 text-indigo-600 flex items-center justify-center shrink-0 group-hover/item:bg-indigo-600 group-hover/item:text-white transition">
+                                        <svg class="w-3.5 h-3.5" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M13 10V3L4 14h7v7l9-11h-7z"/></svg>
+                                    </div>
+                                    <div>
+                                        <div class="text-xs font-bold text-slate-800 group-hover/item:text-indigo-600 transition">Internship Journey</div>
+                                        <div class="text-[11px] text-slate-500 leading-snug">4-step roadmap to certificate</div>
+                                    </div>
+                                </a>
+
+                                <!-- Streams & Subjects -->
+                                <a href="{{ route('subjects') }}" class="flex items-start gap-2.5 p-2 rounded-xl hover:bg-indigo-50/70 transition group/item">
+                                    <div class="w-7 h-7 rounded-lg bg-indigo-50 text-indigo-600 flex items-center justify-center shrink-0 group-hover/item:bg-indigo-600 group-hover/item:text-white transition">
+                                        <svg class="w-3.5 h-3.5" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M12 6.253v13m0-13C10.832 5.477 9.246 5 7.5 5S4.168 5.477 3 6.253v13C4.168 18.477 5.754 18 7.5 18s3.332.477 4.5 1.253m0-13C13.168 5.477 14.754 5 16.5 5c1.747 0 3.332.477 4.5 1.253v13C19.832 18.477 18.247 18 16.5 18c-1.746 0-3.332.477-4.5 1.253"/></svg>
+                                    </div>
+                                    <div>
+                                        <div class="text-xs font-bold text-slate-800 group-hover/item:text-indigo-600 transition">Academic Streams</div>
+                                        <div class="text-[11px] text-slate-500 leading-snug">BA, BSc, BBA, BCA domains</div>
+                                    </div>
+                                </a>
+
+                                <!-- Mentors -->
+                                <a href="{{ route('mentors') }}" class="flex items-start gap-2.5 p-2 rounded-xl hover:bg-indigo-50/70 transition group/item">
+                                    <div class="w-7 h-7 rounded-lg bg-indigo-50 text-indigo-600 flex items-center justify-center shrink-0 group-hover/item:bg-indigo-600 group-hover/item:text-white transition">
+                                        <svg class="w-3.5 h-3.5" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M17 20h5v-2a3 3 0 00-5.356-1.857M17 20H7m10 0v-2c0-.656-.126-1.283-.356-1.857M7 20H2v-2a3 3 0 015.356-1.857M7 20v-2c0-.656.126-1.283.356-1.857m0 0a5.002 5.002 0 019.288 0M15 7a3 3 0 11-6 0 3 3 0 016 0zm6 3a2 2 0 11-4 0 2 2 0 014 0zM7 10a2 2 0 11-4 0 2 2 0 014 0z"/></svg>
+                                    </div>
+                                    <div>
+                                        <div class="text-xs font-bold text-slate-800 group-hover/item:text-indigo-600 transition">Mentors & Advisory</div>
+                                        <div class="text-[11px] text-slate-500 leading-snug">Expert faculty & council</div>
+                                    </div>
+                                </a>
+
+                                <!-- For Colleges -->
+                                <a href="{{ route('colleges') }}" class="flex items-start gap-2.5 p-2 rounded-xl hover:bg-indigo-50/70 transition group/item">
+                                    <div class="w-7 h-7 rounded-lg bg-indigo-50 text-indigo-600 flex items-center justify-center shrink-0 group-hover/item:bg-indigo-600 group-hover/item:text-white transition">
+                                        <svg class="w-3.5 h-3.5" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M19 21V5a2 2 0 00-2-2H7a2 2 0 00-2 2v16m14 0h2m-2 0h-5m-9 0H3m2 0h5M9 7h1m-1 4h1m4-4h1m-1 4h1m-5 10v-5a1 1 0 011-1h2a1 1 0 011 1v5m-4 0h4"/></svg>
+                                    </div>
+                                    <div>
+                                        <div class="text-xs font-bold text-slate-800 group-hover/item:text-indigo-600 transition">For Colleges</div>
+                                        <div class="text-[11px] text-slate-500 leading-snug">Campus MOUs & NEP 2020</div>
+                                    </div>
+                                </a>
+
+                                <!-- Stories -->
+                                <a href="{{ route('stories') }}" class="flex items-start gap-2.5 p-2 rounded-xl hover:bg-indigo-50/70 transition group/item">
+                                    <div class="w-7 h-7 rounded-lg bg-indigo-50 text-indigo-600 flex items-center justify-center shrink-0 group-hover/item:bg-indigo-600 group-hover/item:text-white transition">
+                                        <svg class="w-3.5 h-3.5" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M11.049 2.927c.3-.921 1.603-.921 1.902 0l1.519 4.674a1 1 0 00.95.69h4.915c.969 0 1.371 1.24.588 1.81l-3.976 2.888a1 1 0 00-.363 1.118l1.518 4.674c.3.922-.755 1.688-1.538 1.118l-3.976-2.888a1 1 0 00-1.176 0l-3.976 2.888c-.783.57-1.838-.197-1.538-1.118l1.518-4.674a1 1 0 00-.363-1.118l-3.976-2.888c-.784-.57-.38-1.81.588-1.81h4.914a1 1 0 00.951-.69l1.519-4.674z"/></svg>
+                                    </div>
+                                    <div>
+                                        <div class="text-xs font-bold text-slate-800 group-hover/item:text-indigo-600 transition">Success Stories</div>
+                                        <div class="text-[11px] text-slate-500 leading-snug">Student reviews & outcomes</div>
+                                    </div>
+                                </a>
+
+                                <!-- FAQs -->
+                                <a href="{{ route('faq') }}" class="flex items-start gap-2.5 p-2 rounded-xl hover:bg-indigo-50/70 transition group/item">
+                                    <div class="w-7 h-7 rounded-lg bg-indigo-50 text-indigo-600 flex items-center justify-center shrink-0 group-hover/item:bg-indigo-600 group-hover/item:text-white transition">
+                                        <svg class="w-3.5 h-3.5" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M8.228 9c.549-1.165 2.03-2 3.772-2 2.21 0 4 1.343 4 3 0 1.4-1.278 2.575-3.006 2.907-.542.104-.994.54-.994 1.093m0 3h.01M21 12a9 9 0 11-18 0 9 9 0 0118 0z"/></svg>
+                                    </div>
+                                    <div>
+                                        <div class="text-xs font-bold text-slate-800 group-hover/item:text-indigo-600 transition">Help & FAQs</div>
+                                        <div class="text-[11px] text-slate-500 leading-snug">UGC compliance & answers</div>
+                                    </div>
+                                </a>
+                            </div>
+
+                            <!-- Dropdown Card Footer -->
+                            <div class="mt-2.5 pt-2 border-t border-slate-100 flex items-center justify-between text-[11px] px-1 text-slate-500">
+                                <span>Need guidance on your stream?</span>
+                                <a href="https://wa.me/916204141971" target="_blank" rel="noopener noreferrer" class="font-bold text-emerald-600 hover:text-emerald-700 flex items-center gap-1 hover:underline">
+                                    <span>Chat with Counselor</span>
+                                    <svg class="w-3 h-3" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M14 5l7 7m0 0l-7 7m7-7H3"/></svg>
+                                </a>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+
+                <a href="{{ route('contact') }}" class="px-3.5 py-1.5 rounded-full text-xs font-semibold transition-all {{ request()->routeIs('contact') ? 'bg-indigo-50 text-indigo-700 font-bold' : 'text-slate-700 hover:text-indigo-600 hover:bg-slate-100/70' }}">
+                    Contact
+                </a>
             </div>
 
             <!-- Right Action Buttons -->
-            <div class="hidden sm:flex items-center gap-2.5 shrink-0">
-                <a href="{{ route('verify') }}" class="text-xs font-semibold text-slate-600 hover:text-indigo-600 px-3 py-1.5 rounded-full hover:bg-slate-100 transition flex items-center gap-1.5">
+            <div class="hidden sm:flex items-center gap-2 shrink-0">
+                <a href="{{ route('verify') }}" class="text-xs font-semibold px-3 py-1.5 rounded-full transition flex items-center gap-1.5 {{ request()->routeIs('verify') ? 'bg-indigo-50 text-indigo-700 font-bold' : 'text-slate-600 hover:text-indigo-600 hover:bg-slate-100/80' }}" title="Verify Student Certificate">
                     <svg class="w-3.5 h-3.5 text-indigo-600" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M9 12l2 2 4-4m5.618-4.016A11.955 11.955 0 0112 2.944a11.955 11.955 0 01-8.618 3.04A12.02 12.02 0 003 9c0 5.591 3.824 10.29 9 11.622 5.176-1.332 9-6.03 9-11.622 0-1.042-.133-2.052-.382-3.016z"/></svg>
                     <span>Verify</span>
                 </a>
 
                 @auth
                     @if(auth()->user()->isAdmin())
-                        <a href="{{ route('admin.dashboard') }}" class="text-xs font-semibold text-indigo-700 bg-indigo-50 border border-indigo-200 px-3.5 py-1.5 rounded-full hover:bg-indigo-100 transition">
-                            Admin Portal
+                        <a href="{{ route('admin.dashboard') }}" class="text-xs font-semibold text-indigo-700 bg-indigo-50 border border-indigo-200/80 px-3.5 py-1.5 rounded-full hover:bg-indigo-100 transition flex items-center gap-1.5">
+                            <span class="w-1.5 h-1.5 rounded-full bg-emerald-500"></span>
+                            <span>Admin Portal</span>
                         </a>
                     @else
-                        <a href="{{ route('student.dashboard') }}" class="text-xs font-semibold text-indigo-700 bg-indigo-50 border border-indigo-200 px-3.5 py-1.5 rounded-full hover:bg-indigo-100 transition">
-                            Student Portal
+                        <a href="{{ route('student.dashboard') }}" class="text-xs font-semibold text-indigo-700 bg-indigo-50 border border-indigo-200/80 px-3.5 py-1.5 rounded-full hover:bg-indigo-100 transition flex items-center gap-1.5">
+                            <span class="w-1.5 h-1.5 rounded-full bg-emerald-500"></span>
+                            <span>Student Portal</span>
                         </a>
                     @endif
                 @else
-                    <a href="{{ route('login') }}" class="text-xs font-semibold text-slate-700 hover:text-slate-900 px-3 py-1.5 rounded-full hover:bg-slate-100 transition flex items-center gap-1.5">
+                    <a href="{{ route('login') }}" class="text-xs font-semibold text-slate-700 hover:text-indigo-600 px-3 py-1.5 rounded-full hover:bg-slate-100/80 transition flex items-center gap-1.5">
                         <svg class="w-3.5 h-3.5 text-indigo-600" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M12 15v2m-6 4h12a2 2 0 002-2v-6a2 2 0 00-2-2H6a2 2 0 00-2 2v6a2 2 0 002 2zm10-10V7a4 4 0 00-8 0v4h8z"/></svg>
                         <span>Portal</span>
                     </a>
                 @endauth
 
-                <button onclick="openApplyModal()" class="px-5 py-2 text-xs font-bold text-white bg-indigo-600 hover:bg-indigo-700 rounded-full shadow-lg shadow-indigo-600/25 transition transform hover:-translate-y-0.5 active:scale-95 flex items-center gap-1.5 cursor-pointer">
+                <button onclick="openApplyModal()" class="px-4 sm:px-5 py-2 text-xs font-bold text-white bg-gradient-to-r from-indigo-600 to-indigo-700 hover:from-indigo-500 hover:to-indigo-600 rounded-full shadow-md shadow-indigo-600/25 transition transform hover:-translate-y-0.5 active:scale-95 flex items-center gap-1.5 cursor-pointer">
                     <span>Apply Now</span>
                     <svg class="w-3.5 h-3.5" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M14 5l7 7m0 0l-7 7m7-7H3"/></svg>
                 </button>
             </div>
 
-            <!-- Mobile Hamburger Toggle -->
-            <div class="flex xl:hidden items-center gap-2">
-                <button onclick="openApplyModal()" class="px-3.5 py-1.5 text-xs font-bold text-white bg-indigo-600 rounded-full">
+            <!-- Mobile Action & Hamburger Toggle -->
+            <div class="flex lg:hidden items-center gap-2">
+                <button onclick="openApplyModal()" class="px-3.5 py-1.5 text-xs font-bold text-white bg-indigo-600 rounded-full shadow-xs active:scale-95 transition">
                     Apply
                 </button>
-                <button onclick="toggleMobileNav()" class="p-2 text-slate-700 hover:text-slate-900 rounded-full hover:bg-slate-100 transition">
+                <button onclick="toggleMobileNav()" id="mobileMenuBtn" aria-label="Toggle navigation menu" class="p-2 text-slate-700 hover:text-slate-900 rounded-full hover:bg-slate-100 transition cursor-pointer">
                     <svg class="w-5 h-5" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M4 6h16M4 12h16M4 18h16"/></svg>
                 </button>
             </div>
         </nav>
     </div>
 
-    <!-- Mobile Drawer -->
-    <div id="mobileDrawer" class="hidden fixed inset-x-4 top-20 z-[95] xl:hidden bg-white/95 backdrop-blur-2xl rounded-3xl border border-slate-200/90 p-5 shadow-2xl space-y-4">
-        <div class="grid grid-cols-2 gap-2">
-            <a href="{{ route('home') }}" class="px-3.5 py-2 text-xs font-semibold rounded-2xl text-slate-700 hover:bg-indigo-50 hover:text-indigo-600">Home</a>
-            <a href="{{ route('programs') }}" class="px-3.5 py-2 text-xs font-semibold rounded-2xl text-slate-700 hover:bg-indigo-50 hover:text-indigo-600">Programs</a>
-            <a href="{{ route('journey') }}" class="px-3.5 py-2 text-xs font-semibold rounded-2xl text-slate-700 hover:bg-indigo-50 hover:text-indigo-600">Journey</a>
-            <a href="{{ route('certification') }}" class="px-3.5 py-2 text-xs font-semibold rounded-2xl text-slate-700 hover:bg-indigo-50 hover:text-indigo-600">Certification</a>
-            <a href="{{ route('subjects') }}" class="px-3.5 py-2 text-xs font-semibold rounded-2xl text-slate-700 hover:bg-indigo-50 hover:text-indigo-600">Subjects</a>
-            <a href="{{ route('mentors') }}" class="px-3.5 py-2 text-xs font-semibold rounded-2xl text-slate-700 hover:bg-indigo-50 hover:text-indigo-600">Mentors</a>
-            <a href="{{ route('colleges') }}" class="px-3.5 py-2 text-xs font-semibold rounded-2xl text-slate-700 hover:bg-indigo-50 hover:text-indigo-600">For Colleges</a>
-            <a href="{{ route('stories') }}" class="px-3.5 py-2 text-xs font-semibold rounded-2xl text-slate-700 hover:bg-indigo-50 hover:text-indigo-600">Stories</a>
-            <a href="{{ route('faq') }}" class="px-3.5 py-2 text-xs font-semibold rounded-2xl text-slate-700 hover:bg-indigo-50 hover:text-indigo-600">FAQ</a>
-            <a href="{{ route('contact') }}" class="px-3.5 py-2 text-xs font-semibold rounded-2xl text-slate-700 hover:bg-indigo-50 hover:text-indigo-600">Contact</a>
+    <!-- Mobile Drawer (Clean, Categorized & Non-Cluttered) -->
+    <div id="mobileDrawer" class="hidden fixed inset-x-3 sm:inset-x-6 top-20 z-[95] lg:hidden bg-white/95 backdrop-blur-2xl rounded-3xl border border-slate-200/90 p-5 shadow-2xl space-y-4 max-h-[85vh] overflow-y-auto">
+        <!-- Main Links -->
+        <div class="space-y-1">
+            <div class="text-[10px] font-bold uppercase tracking-wider text-slate-400 px-3 pb-0.5">Quick Links</div>
+            <div class="grid grid-cols-2 gap-1.5">
+                <a href="{{ route('home') }}" class="px-3.5 py-2 text-xs font-semibold rounded-xl text-slate-700 hover:bg-indigo-50 hover:text-indigo-600 {{ request()->routeIs('home') ? 'bg-indigo-50 text-indigo-700 font-bold' : '' }}">Home</a>
+                <a href="{{ route('programs') }}" class="px-3.5 py-2 text-xs font-semibold rounded-xl text-slate-700 hover:bg-indigo-50 hover:text-indigo-600 {{ request()->routeIs('programs') ? 'bg-indigo-50 text-indigo-700 font-bold' : '' }}">Programs</a>
+                <a href="{{ route('certification') }}" class="px-3.5 py-2 text-xs font-semibold rounded-xl text-slate-700 hover:bg-indigo-50 hover:text-indigo-600 {{ request()->routeIs('certification') ? 'bg-indigo-50 text-indigo-700 font-bold' : '' }}">Certification</a>
+                <a href="{{ route('contact') }}" class="px-3.5 py-2 text-xs font-semibold rounded-xl text-slate-700 hover:bg-indigo-50 hover:text-indigo-600 {{ request()->routeIs('contact') ? 'bg-indigo-50 text-indigo-700 font-bold' : '' }}">Contact</a>
+            </div>
         </div>
+
+        <!-- Explore More Links -->
+        <div class="space-y-1 pt-2 border-t border-slate-100">
+            <div class="text-[10px] font-bold uppercase tracking-wider text-slate-400 px-3 pb-0.5">Explore Programs & Guidance</div>
+            <div class="grid grid-cols-2 gap-1.5">
+                <a href="{{ route('journey') }}" class="px-3.5 py-2 text-xs font-medium rounded-xl text-slate-600 hover:bg-indigo-50/60 hover:text-indigo-600">Internship Journey</a>
+                <a href="{{ route('subjects') }}" class="px-3.5 py-2 text-xs font-medium rounded-xl text-slate-600 hover:bg-indigo-50/60 hover:text-indigo-600">Academic Streams</a>
+                <a href="{{ route('mentors') }}" class="px-3.5 py-2 text-xs font-medium rounded-xl text-slate-600 hover:bg-indigo-50/60 hover:text-indigo-600">Mentors & Advisory</a>
+                <a href="{{ route('colleges') }}" class="px-3.5 py-2 text-xs font-medium rounded-xl text-slate-600 hover:bg-indigo-50/60 hover:text-indigo-600">For Colleges & MOUs</a>
+                <a href="{{ route('stories') }}" class="px-3.5 py-2 text-xs font-medium rounded-xl text-slate-600 hover:bg-indigo-50/60 hover:text-indigo-600">Success Stories</a>
+                <a href="{{ route('faq') }}" class="px-3.5 py-2 text-xs font-medium rounded-xl text-slate-600 hover:bg-indigo-50/60 hover:text-indigo-600">Help & FAQs</a>
+            </div>
+        </div>
+
+        <!-- Quick Actions & Auth -->
         <div class="pt-3 border-t border-slate-100 flex flex-col gap-2">
-            <a href="{{ route('verify') }}" class="w-full text-center py-2.5 text-xs font-semibold text-slate-700 bg-slate-100 rounded-full">
-                Verify Certificate
-            </a>
-            <a href="{{ route('login') }}" class="w-full text-center py-2.5 text-xs font-semibold text-indigo-700 bg-indigo-50 border border-indigo-200 rounded-full">
-                Portal Login
-            </a>
-            <button onclick="openApplyModal(); toggleMobileNav();" class="w-full text-center py-2.5 text-xs font-bold text-white bg-indigo-600 rounded-full shadow-lg shadow-indigo-600/30">
-                Online Student Enrollment Form
+            <div class="grid grid-cols-2 gap-2">
+                <a href="{{ route('verify') }}" class="w-full text-center py-2.5 text-xs font-semibold text-slate-700 bg-slate-100 hover:bg-slate-200 rounded-full transition flex items-center justify-center gap-1.5">
+                    <svg class="w-3.5 h-3.5 text-indigo-600" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M9 12l2 2 4-4m5.618-4.016A11.955 11.955 0 0112 2.944a11.955 11.955 0 01-8.618 3.04A12.02 12.02 0 003 9c0 5.591 3.824 10.29 9 11.622 5.176-1.332 9-6.03 9-11.622 0-1.042-.133-2.052-.382-3.016z"/></svg>
+                    <span>Verify Certificate</span>
+                </a>
+                @auth
+                    <a href="{{ auth()->user()->isAdmin() ? route('admin.dashboard') : route('student.dashboard') }}" class="w-full text-center py-2.5 text-xs font-semibold text-indigo-700 bg-indigo-50 border border-indigo-200 rounded-full hover:bg-indigo-100 transition">
+                        My Portal
+                    </a>
+                @else
+                    <a href="{{ route('login') }}" class="w-full text-center py-2.5 text-xs font-semibold text-indigo-700 bg-indigo-50 border border-indigo-200 rounded-full hover:bg-indigo-100 transition">
+                        Portal Login
+                    </a>
+                @endauth
+            </div>
+            <button onclick="openApplyModal(); toggleMobileNav();" class="w-full text-center py-2.5 text-xs font-bold text-white bg-indigo-600 hover:bg-indigo-700 rounded-full shadow-lg shadow-indigo-600/30 transition cursor-pointer">
+                Apply For Internship →
             </button>
         </div>
     </div>
@@ -364,6 +481,47 @@
                 if (drawer) drawer.classList.toggle('hidden');
             };
         }
+
+        // Interactive Dropdown & Accessibility
+        document.addEventListener('DOMContentLoaded', function() {
+            const dropdownBtn = document.getElementById('exploreDropdownBtn');
+            const dropdownMenu = document.getElementById('exploreDropdownMenu');
+            if (dropdownBtn && dropdownMenu) {
+                dropdownBtn.addEventListener('click', function(e) {
+                    e.stopPropagation();
+                    const isVisible = dropdownMenu.classList.contains('opacity-100');
+                    if (isVisible) {
+                        dropdownMenu.classList.remove('opacity-100', 'pointer-events-auto');
+                        dropdownMenu.classList.add('opacity-0', 'pointer-events-none');
+                        dropdownBtn.setAttribute('aria-expanded', 'false');
+                    } else {
+                        dropdownMenu.classList.remove('opacity-0', 'pointer-events-none');
+                        dropdownMenu.classList.add('opacity-100', 'pointer-events-auto');
+                        dropdownBtn.setAttribute('aria-expanded', 'true');
+                    }
+                });
+
+                document.addEventListener('click', function(e) {
+                    if (!dropdownMenu.contains(e.target) && !dropdownBtn.contains(e.target)) {
+                        dropdownMenu.classList.remove('opacity-100', 'pointer-events-auto');
+                        dropdownMenu.classList.add('opacity-0', 'pointer-events-none');
+                        dropdownBtn.setAttribute('aria-expanded', 'false');
+                    }
+                });
+
+                document.addEventListener('keydown', function(e) {
+                    if (e.key === 'Escape') {
+                        dropdownMenu.classList.remove('opacity-100', 'pointer-events-auto');
+                        dropdownMenu.classList.add('opacity-0', 'pointer-events-none');
+                        dropdownBtn.setAttribute('aria-expanded', 'false');
+                        const drawer = document.getElementById('mobileDrawer');
+                        if (drawer && !drawer.classList.contains('hidden')) {
+                            drawer.classList.add('hidden');
+                        }
+                    }
+                });
+            }
+        });
     </script>
     @yield('scripts')
 </body>
