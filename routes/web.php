@@ -38,7 +38,9 @@ Route::middleware('auth')->prefix('student')->name('student.')->group(function (
     Route::get('/dashboard', [StudentPortalController::class, 'dashboard'])->name('dashboard');
     Route::post('/project', [StudentPortalController::class, 'updateProject'])->name('project.update');
     Route::get('/documents/offer-letter', [StudentPortalController::class, 'viewOfferLetter'])->name('offer-letter');
+    Route::get('/documents/consent-letter', [StudentPortalController::class, 'viewConsentLetter'])->name('consent-letter');
     Route::get('/documents/certificate', [StudentPortalController::class, 'viewCertificate'])->name('certificate');
+    Route::get('/documents/lor', [StudentPortalController::class, 'viewLor'])->name('lor');
     Route::get('/documents/marksheet', [StudentPortalController::class, 'viewMarksheet'])->name('marksheet');
 });
 
@@ -48,17 +50,38 @@ Route::middleware(['auth', 'admin'])->prefix('admin')->name('admin.')->group(fun
     Route::get('/dashboard', [AdminPortalController::class, 'dashboard'])->name('dashboard');
     Route::patch('/applications/{id}/status', [AdminPortalController::class, 'updateStatus'])->name('application.status');
     Route::post('/applications/{id}/issue-offer-letter', [AdminPortalController::class, 'issueOfferLetter'])->name('application.offer-letter');
+    Route::post('/applications/{id}/issue-consent-letter', [AdminPortalController::class, 'issueConsentLetter'])->name('application.consent-letter');
     Route::post('/applications/{id}/issue-certificate', [AdminPortalController::class, 'issueCertificate'])->name('application.certificate');
+    Route::post('/applications/{id}/issue-lor', [AdminPortalController::class, 'issueLor'])->name('application.lor');
     Route::post('/applications/{id}/issue-marksheet', [AdminPortalController::class, 'issueMarksheet'])->name('application.marksheet');
     Route::post('/applications/{id}/update-details', [AdminPortalController::class, 'updateDetails'])->name('application.update-details');
+    Route::post('/applications/{id}/update-full', [AdminPortalController::class, 'updateFullApplicant'])->name('application.update-full');
     Route::delete('/applications/{id}', [AdminPortalController::class, 'deleteApplication'])->name('application.delete');
 
+    // Inquiries Desk
     Route::get('/inquiries', [AdminPortalController::class, 'inquiries'])->name('inquiries');
     Route::patch('/inquiries/{id}/status', [AdminPortalController::class, 'updateInquiryStatus'])->name('inquiry.status');
 
+    // Document Direct Print/Views for Admin
     Route::get('/applications/{id}/offer-letter', [AdminPortalController::class, 'viewStudentOfferLetter'])->name('application.view-offer-letter');
+    Route::get('/applications/{id}/consent-letter', [AdminPortalController::class, 'viewStudentConsentLetter'])->name('application.view-consent-letter');
     Route::get('/applications/{id}/certificate', [AdminPortalController::class, 'viewStudentCertificate'])->name('application.view-certificate');
+    Route::get('/applications/{id}/lor', [AdminPortalController::class, 'viewStudentLor'])->name('application.view-lor');
     Route::get('/applications/{id}/marksheet', [AdminPortalController::class, 'viewStudentMarksheet'])->name('application.view-marksheet');
+
+    // Manual Certificate Generation
+    Route::get('/certificate-generator', [AdminPortalController::class, 'certificateGenerator'])->name('certificate-generator');
+    Route::post('/certificate-generator', [AdminPortalController::class, 'generateManualCertificate'])->name('certificate-generator.generate');
+
+    // Manage Internship Streams
+    Route::get('/streams', [AdminPortalController::class, 'streams'])->name('streams');
+    Route::post('/streams', [AdminPortalController::class, 'storeStream'])->name('streams.store');
+    Route::patch('/streams/{id}', [AdminPortalController::class, 'updateStream'])->name('streams.update');
+    Route::post('/streams/{id}/toggle', [AdminPortalController::class, 'toggleStreamStatus'])->name('streams.toggle');
+    Route::delete('/streams/{id}', [AdminPortalController::class, 'deleteStream'])->name('streams.delete');
+
+    // Track Application
+    Route::get('/track/{appNumber?}', [AdminPortalController::class, 'trackApplication'])->name('track');
 });
 
 // Redirect /super-admin to Admin Dashboard

@@ -49,6 +49,18 @@ class StudentPortalController extends Controller
         return view('documents.offer-letter', compact('user', 'profile'));
     }
 
+    public function viewConsentLetter()
+    {
+        $user = Auth::user();
+        $profile = $user->studentProfile;
+
+        if (! $profile || ! $profile->consent_letter_issued) {
+            return back()->with('error', 'Consent letter is not released for this application.');
+        }
+
+        return view('documents.consent-letter', compact('user', 'profile'));
+    }
+
     public function viewCertificate()
     {
         $user = Auth::user();
@@ -59,6 +71,18 @@ class StudentPortalController extends Controller
         }
 
         return view('documents.certificate', compact('user', 'profile'));
+    }
+
+    public function viewLor()
+    {
+        $user = Auth::user();
+        $profile = $user->studentProfile;
+
+        if (! $profile || ! $profile->lor_issued) {
+            return back()->with('error', 'Letter of Recommendation has not been released yet.');
+        }
+
+        return view('documents.lor', compact('user', 'profile'));
     }
 
     public function viewMarksheet()

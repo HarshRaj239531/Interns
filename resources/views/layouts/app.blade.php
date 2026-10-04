@@ -311,12 +311,18 @@
                 </div>
 
                 <div>
-                    <label class="block text-xs font-semibold text-slate-700 mb-1">Preferred Program Domain *</label>
+                    <label class="block text-xs font-semibold text-slate-700 mb-1">Preferred Program Domain Track *</label>
                     <select name="program_domain" required class="w-full px-3.5 py-2 rounded-xl bg-slate-50 border border-slate-200 text-xs focus:ring-2 focus:ring-indigo-500 focus:outline-none">
-                        <option value="Arts, Social Science & Communication">Arts, Social Science & Communication (BA)</option>
-                        <option value="Science, Environment & Data Skills">Science, Environment & Data Skills (BSc)</option>
-                        <option value="Business, Finance & Entrepreneurship">Business, Finance & Entrepreneurship (BBA/BCom)</option>
-                        <option value="Technology, Digital & Web Skills">Technology, Digital & Web Skills (BCA/IT)</option>
+                        @if(isset($activeStreams) && $activeStreams->count() > 0)
+                            @foreach($activeStreams as $stream)
+                                <option value="{{ $stream->title }}">{{ $stream->title }} ({{ $stream->code }})</option>
+                            @endforeach
+                        @else
+                            <option value="Arts, Social Science & Communication">Arts, Social Science & Communication (BA)</option>
+                            <option value="Science, Environment & Data Skills">Science, Environment & Data Skills (BSc)</option>
+                            <option value="Business, Finance & Entrepreneurship">Business, Finance & Entrepreneurship (BBA/BCom)</option>
+                            <option value="Technology, Digital & Web Skills">Technology, Digital & Web Skills (BCA/IT)</option>
+                        @endif
                     </select>
                 </div>
 

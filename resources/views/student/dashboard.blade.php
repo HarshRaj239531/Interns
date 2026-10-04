@@ -127,43 +127,34 @@
     </div>
 
     <!-- Official Documents Releases Section -->
-    <div class="space-y-4">
-        <h3 class="text-2xl font-serif font-bold text-slate-900">Your Official Internship Documents</h3>
-        <p class="text-xs text-slate-500">View and print university-compliant documents as soon as they are approved by the academic board.</p>
-
-        <div class="grid grid-cols-1 md:grid-cols-3 gap-6">
-            <!-- 1. Offer Letter -->
-            <div class="p-6 rounded-[2rem] bg-white border border-slate-200 shadow-xs flex flex-col justify-between">
-                <div>
-                    <div class="w-12 h-12 rounded-xl bg-blue-50 text-blue-700 flex items-center justify-center text-xl font-bold mb-4">
-                        📄
-                    </div>
-                    <h4 class="text-lg font-serif font-bold text-slate-900 mb-1">Offer & Acceptance Letter</h4>
-                    <p class="text-xs text-slate-600 mb-4 font-light">Official enrollment confirmation letter with program dates, domain mapping, and institutional sign-off.</p>
-                </div>
-                <div>
-                    @if($profile->offer_letter_issued)
-                        <span class="text-[10px] font-bold text-emerald-600 block mb-3">Released on {{ $profile->offer_letter_date?->format('M d, Y') }}</span>
-                        <a href="{{ route('student.offer-letter') }}" target="_blank" class="w-full py-2.5 rounded-full bg-indigo-600 hover:bg-indigo-700 text-white font-bold text-xs uppercase tracking-wider flex items-center justify-center gap-1.5 shadow-sm transition">
-                            <span>View / Print Letter</span>
-                            <svg class="w-3.5 h-3.5" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M10 6H6a2 2 0 00-2 2v10a2 2 0 002 2h10a2 2 0 002-2v-4M14 4h6m0 0v6m0-6L10 14"/></svg>
-                        </a>
-                    @else
-                        <span class="text-[11px] text-slate-400 block mb-3">Pending administrator dispatch</span>
-                        <button disabled class="w-full py-2.5 rounded-full bg-slate-100 text-slate-400 font-bold text-xs uppercase tracking-wider cursor-not-allowed">
-                            Not Yet Released
-                        </button>
-                    @endif
-                </div>
+    <div class="space-y-6">
+        <div class="flex flex-col sm:flex-row sm:items-center justify-between gap-2">
+            <div>
+                <h3 class="text-2xl font-serif font-bold text-slate-900">Your Official Internship Documents</h3>
+                <p class="text-xs text-slate-500">Access, preview, and print your verified UGC-compliant documents anytime.</p>
             </div>
+            <div class="flex items-center gap-2">
+                <span class="inline-flex items-center gap-1.5 px-3 py-1 rounded-full bg-emerald-50 border border-emerald-200 text-emerald-700 text-xs font-semibold">
+                    <span class="w-2 h-2 rounded-full bg-emerald-500"></span>
+                    <span>Instant Registration Docs Active</span>
+                </span>
+            </div>
+        </div>
 
-            <!-- 2. Completion Certificate -->
-            <div class="p-6 rounded-[2rem] bg-white border border-slate-200 shadow-xs flex flex-col justify-between">
+        <div class="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-4 gap-6">
+            <!-- 1. Certificate of Internship Completion -->
+            <div class="p-6 rounded-[2rem] bg-white border border-slate-200 shadow-xs flex flex-col justify-between hover:border-emerald-300 transition">
                 <div>
-                    <div class="w-12 h-12 rounded-xl bg-emerald-50 text-emerald-700 flex items-center justify-center text-xl font-bold mb-4">
+                    <div class="w-12 h-12 rounded-2xl bg-emerald-50 text-emerald-700 flex items-center justify-center text-xl font-bold mb-4 shadow-xs">
                         🎖️
                     </div>
-                    <h4 class="text-lg font-serif font-bold text-slate-900 mb-1">Completion Certificate</h4>
+                    <div class="flex items-center justify-between mb-1">
+                        <span class="text-[10px] font-bold uppercase tracking-wider text-emerald-700">Official Award</span>
+                        <span class="text-[10px] px-2 py-0.5 rounded-full {{ $profile->certificate_issued ? 'bg-emerald-100 text-emerald-800' : 'bg-amber-100 text-amber-800' }} font-bold">
+                            {{ $profile->certificate_issued ? 'ISSUED' : 'EVALUATION' }}
+                        </span>
+                    </div>
+                    <h4 class="text-base font-serif font-bold text-slate-900 mb-1">Certificate of Internship Completion</h4>
                     <p class="text-xs text-slate-600 mb-4 font-light">Official UGC-compliant certificate with unique tamper-proof verification serial and QR code.</p>
                 </div>
                 <div>
@@ -188,30 +179,125 @@
                 </div>
             </div>
 
-            <!-- 3. Detailed Marksheet -->
-            <div class="p-6 rounded-[2rem] bg-white border border-slate-200 shadow-xs flex flex-col justify-between">
+            <!-- 2. Internship Acceptance / Offer Letter -->
+            <div class="p-6 rounded-[2rem] bg-white border border-slate-200 shadow-xs flex flex-col justify-between hover:border-blue-300 transition">
                 <div>
-                    <div class="w-12 h-12 rounded-xl bg-purple-50 text-purple-700 flex items-center justify-center text-xl font-bold mb-4">
-                        📊
+                    <div class="w-12 h-12 rounded-2xl bg-blue-50 text-blue-700 flex items-center justify-center text-xl font-bold mb-4 shadow-xs">
+                        📄
                     </div>
-                    <h4 class="text-lg font-serif font-bold text-slate-900 mb-1">Academic Marksheet</h4>
-                    <p class="text-xs text-slate-600 mb-4 font-light">Performance evaluation scorecard with component-wise marks, overall grade, and credit conversion.</p>
+                    <div class="flex items-center justify-between mb-1">
+                        <span class="text-[10px] font-bold uppercase tracking-wider text-blue-700">Immediate Dispatch</span>
+                        <span class="text-[10px] px-2 py-0.5 rounded-full bg-blue-100 text-blue-800 font-bold">
+                            AVAILABLE
+                        </span>
+                    </div>
+                    <h4 class="text-base font-serif font-bold text-slate-900 mb-1">Internship Acceptance / Offer Letter</h4>
+                    <p class="text-xs text-slate-600 mb-4 font-light">Official enrollment acceptance confirmation with program dates, domain mapping, and institutional sign-off.</p>
                 </div>
                 <div>
-                    @if($profile->marksheet_issued)
-                        <span class="text-[10px] font-bold text-purple-700 block mb-1">Grade {{ $profile->marksheet_grade }} ({{ $profile->marksheet_marks }}%)</span>
-                        <span class="text-[10px] text-slate-400 block mb-3">Issued: {{ $profile->marksheet_date?->format('M d, Y') }}</span>
-                        <a href="{{ route('student.marksheet') }}" target="_blank" class="w-full py-2.5 rounded-full bg-purple-600 hover:bg-purple-700 text-white font-bold text-xs uppercase tracking-wider flex items-center justify-center gap-1.5 shadow-sm transition">
-                            <span>View / Print Marksheet</span>
+                    @if($profile->offer_letter_issued)
+                        <span class="text-[10px] font-bold text-emerald-600 block mb-3">Released: {{ $profile->offer_letter_date?->format('M d, Y') ?? 'Instant' }}</span>
+                        <a href="{{ route('student.offer-letter') }}" target="_blank" class="w-full py-2.5 rounded-full bg-indigo-600 hover:bg-indigo-700 text-white font-bold text-xs uppercase tracking-wider flex items-center justify-center gap-1.5 shadow-sm transition">
+                            <span>View / Print Letter</span>
                             <svg class="w-3.5 h-3.5" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M10 6H6a2 2 0 00-2 2v10a2 2 0 002 2h10a2 2 0 002-2v-4M14 4h6m0 0v6m0-6L10 14"/></svg>
                         </a>
                     @else
-                        <span class="text-[11px] text-slate-400 block mb-3">Generated alongside completion review</span>
+                        <span class="text-[11px] text-slate-400 block mb-3">Pending administrator dispatch</span>
                         <button disabled class="w-full py-2.5 rounded-full bg-slate-100 text-slate-400 font-bold text-xs uppercase tracking-wider cursor-not-allowed">
                             Not Yet Released
                         </button>
                     @endif
                 </div>
+            </div>
+
+            <!-- 3. Consent Letter -->
+            <div class="p-6 rounded-[2rem] bg-white border border-slate-200 shadow-xs flex flex-col justify-between hover:border-purple-300 transition">
+                <div>
+                    <div class="w-12 h-12 rounded-2xl bg-purple-50 text-purple-700 flex items-center justify-center text-xl font-bold mb-4 shadow-xs">
+                        ✍️
+                    </div>
+                    <div class="flex items-center justify-between mb-1">
+                        <span class="text-[10px] font-bold uppercase tracking-wider text-purple-700">Immediate Dispatch</span>
+                        <span class="text-[10px] px-2 py-0.5 rounded-full bg-purple-100 text-purple-800 font-bold">
+                            AVAILABLE
+                        </span>
+                    </div>
+                    <h4 class="text-base font-serif font-bold text-slate-900 mb-1">Consent Letter</h4>
+                    <p class="text-xs text-slate-600 mb-4 font-light">Institutional undertaking and candidate compliance consent document required for university records.</p>
+                </div>
+                <div>
+                    @if($profile->consent_letter_issued)
+                        <span class="text-[10px] font-bold text-purple-700 block mb-3">Released: {{ $profile->consent_letter_date?->format('M d, Y') ?? 'Instant' }}</span>
+                        <a href="{{ route('student.consent-letter') }}" target="_blank" class="w-full py-2.5 rounded-full bg-purple-600 hover:bg-purple-700 text-white font-bold text-xs uppercase tracking-wider flex items-center justify-center gap-1.5 shadow-sm transition">
+                            <span>View / Print Consent</span>
+                            <svg class="w-3.5 h-3.5" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M10 6H6a2 2 0 00-2 2v10a2 2 0 002 2h10a2 2 0 002-2v-4M14 4h6m0 0v6m0-6L10 14"/></svg>
+                        </a>
+                    @else
+                        <span class="text-[11px] text-slate-400 block mb-3">Pending registration verification</span>
+                        <button disabled class="w-full py-2.5 rounded-full bg-slate-100 text-slate-400 font-bold text-xs uppercase tracking-wider cursor-not-allowed">
+                            Not Yet Released
+                        </button>
+                    @endif
+                </div>
+            </div>
+
+            <!-- 4. Letter of Recommendation (LOR) -->
+            <div class="p-6 rounded-[2rem] bg-white border border-slate-200 shadow-xs flex flex-col justify-between hover:border-amber-300 transition">
+                <div>
+                    <div class="w-12 h-12 rounded-2xl bg-amber-50 text-amber-700 flex items-center justify-center text-xl font-bold mb-4 shadow-xs">
+                        📜
+                    </div>
+                    <div class="flex items-center justify-between mb-1">
+                        <span class="text-[10px] font-bold uppercase tracking-wider text-amber-700">Faculty Endorsement</span>
+                        <span class="text-[10px] px-2 py-0.5 rounded-full {{ $profile->lor_issued ? 'bg-emerald-100 text-emerald-800' : 'bg-slate-100 text-slate-600' }} font-bold">
+                            {{ $profile->lor_issued ? 'APPROVED' : 'PENDING' }}
+                        </span>
+                    </div>
+                    <h4 class="text-base font-serif font-bold text-slate-900 mb-1">Letter of Recommendation (LOR)</h4>
+                    <p class="text-xs text-slate-600 mb-4 font-light">Faculty advisory letter endorsing your practical skills, professional aptitude, and future academic suitability.</p>
+                </div>
+                <div>
+                    @if($profile->lor_issued)
+                        <span class="text-[10px] font-mono font-bold text-amber-700 block mb-1">Ref: {{ $profile->lor_number }}</span>
+                        <span class="text-[10px] text-slate-400 block mb-3">Issued: {{ $profile->lor_date?->format('M d, Y') }}</span>
+                        <a href="{{ route('student.lor') }}" target="_blank" class="w-full py-2.5 rounded-full bg-amber-600 hover:bg-amber-700 text-white font-bold text-xs uppercase tracking-wider flex items-center justify-center gap-1.5 shadow-sm transition">
+                            <span>View / Print LOR</span>
+                            <svg class="w-3.5 h-3.5" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M10 6H6a2 2 0 00-2 2v10a2 2 0 002 2h10a2 2 0 002-2v-4M14 4h6m0 0v6m0-6L10 14"/></svg>
+                        </a>
+                    @else
+                        <span class="text-[11px] text-slate-400 block mb-3">Granted upon mentor & admin review</span>
+                        <button disabled class="w-full py-2.5 rounded-full bg-slate-100 text-slate-400 font-bold text-xs uppercase tracking-wider cursor-not-allowed">
+                            Awaiting Evaluation
+                        </button>
+                    @endif
+                </div>
+            </div>
+        </div>
+
+        <!-- 5. Evaluation Marksheet Bonus Docket -->
+        <div class="p-6 rounded-[2rem] bg-slate-900 text-white shadow-xl flex flex-col md:flex-row md:items-center justify-between gap-6">
+            <div class="flex items-center gap-4">
+                <div class="w-12 h-12 rounded-2xl bg-white/10 text-white flex items-center justify-center text-xl font-bold shrink-0">
+                    📊
+                </div>
+                <div>
+                    <span class="text-[10px] text-indigo-300 uppercase font-bold tracking-widest block">Academic Transcript Dossier</span>
+                    <h4 class="text-base font-bold text-white">Undergraduate Performance Scorecard & Marksheet</h4>
+                    <p class="text-xs text-slate-400 font-light mt-0.5">Component-wise scoring for Lab Practicals, Viva Voce, and NEP-2020 4.0 Academic Credit Transfer.</p>
+                </div>
+            </div>
+            <div class="shrink-0 flex items-center gap-3">
+                @if($profile->marksheet_issued)
+                    <div class="text-right hidden sm:block">
+                        <span class="text-xs font-bold text-emerald-400 block">Grade {{ $profile->marksheet_grade }} ({{ $profile->marksheet_marks }}%)</span>
+                        <span class="text-[10px] text-slate-400">Issued {{ $profile->marksheet_date?->format('M d, Y') }}</span>
+                    </div>
+                    <a href="{{ route('student.marksheet') }}" target="_blank" class="px-6 py-2.5 rounded-full bg-white text-slate-900 hover:bg-slate-100 font-bold text-xs uppercase tracking-wider transition shadow-md">
+                        Print Marksheet ↗
+                    </a>
+                @else
+                    <span class="text-xs text-slate-400 italic">Scorecard will be published upon final capstone audit</span>
+                @endif
             </div>
         </div>
     </div>

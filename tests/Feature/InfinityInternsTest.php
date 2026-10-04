@@ -195,4 +195,117 @@ class InfinityInternsTest extends TestCase
         $inqResponse->assertStatus(200);
         $inqResponse->assertSee('Partnership Desks');
     }
+
+    public function test_student_gets_instant_offer_and_consent_letters(): void
+    {
+        $user = User::create([
+            'name' => 'Kavita Singh',
+            'email' => 'kavita@example.com',
+            'password' => bcrypt('Student@123'),
+            'role' => 'STUDENT',
+        ]);
+
+        $profile = StudentProfile::create([
+            'user_id' => $user->id,
+            'application_number' => 'INF-2026-8888',
+            'degree' => 'BSc',
+            'college' => 'Patna Science College',
+            'semester' => '5th Semester',
+            'program_domain' => 'Technology, Digital & Web Skills',
+            'status' => 'APPROVED',
+            'offer_letter_issued' => true,
+            'offer_letter_date' => now(),
+            'consent_letter_issued' => true,
+            'consent_letter_date' => now(),
+        ]);
+
+        $this->actingAs($user);
+
+        // Offer Letter
+        $offerRes = $this->get(route('student.offer-letter'));
+        $offerRes->assertStatus(200);
+        $offerRes->assertSee('OFFER & ACCEPTANCE LETTER', false);
+
+        // Consent Letter
+        $consentRes = $this->get(route('student.consent-letter'));
+        $consentRes->assertStatus(200);
+        $consentRes->assertSee('Consent & Institutional Undertaking Letter', false);
+    }
+
+    public function test_admin_can_manage_internship_streams(): void
+    {
+        $admin = User::create([
+            'name' => 'Super Admin',
+            'email' => 'superadmin@infinityinterns.com',
+            'password' => bcrypt('Admin@123'),
+            'role' => 'ADMIN',
+        ]);
+
+        $this->actingAs($admin);
+
+        // List streams
+        $listRes = $this->get(route('admin.streams'));
+        $listRes->assertStatus(200);
+        $listRes->assertSee('Internship Streams &amp; Tracks', false);
+
+        // Create stream
+        $createRes = $this->post(route('admin.streams.store'), [
+            'title' => 'Cybersecurity & Ethical Hacking',
+            'code' => 'CYBER-SEC',
+            'category' => 'TECHNOLOGY',
+            'duration' => '8 Weeks (120 Contact Hours)',
+            'credits' => '4.0 NHEQF Credits',
+            'description' => 'Applied penetration testing, network defense, threat analysis, and digital forensics.',
+            'is_active' => '1',
+        ]);
+
+        $createRes->assertSessionHas('success');
+        $this->assertDatabaseHas('internship_streams', [
+            'code' => 'CYBER-SEC',
+            'title' => 'Cybersecurity & Ethical Hacking',
+        ]);
+    }
+
+    public function test_admin_can_track_application_lifecycle(): void
+    {
+        $admin = User::create([
+            'name' => 'Tracking Admin',
+            'email' => 'track.admin@infinityinterns.com',
+            'password' => bcrypt('Admin@123'),
+            'role' => 'ADMIN',
+        ]);
+
+        $user = User::create([
+            'name' => 'Manish Kumar',
+            'email' => 'manish@example.com',
+            'password' => bcrypt('Student@123'),
+            'role' => 'STUDENT',
+        ]);
+
+        $profile = StudentProfile::create([
+            'user_id' => $user->id,
+            'application_number' => 'INF-2026-7777',
+            'degree' => 'BCA',
+            'college' => 'Patna College',
+            'semester' => '6th Semester',
+            'program_domain' => 'AI, Machine Learning & Data Science',
+            'status' => 'COMPLETED',
+            'attendance_rate' => 92,
+            'certificate_issued' => true,
+            'certificate_number' => 'UGC-INF-777777',
+            'certificate_date' => now(),
+            'lor_issued' => true,
+            'lor_number' => 'INF-LOR-2026-7777',
+            'lor_date' => now(),
+        ]);
+
+        $this->actingAs($admin);
+
+        $trackRes = $this->get(route('admin.track', ['search' => 'INF-2026-7777']));
+        $trackRes->assertStatus(200);
+        $trackRes->assertSee('INF-2026-7777');
+        $trackRes->assertSee('Manish Kumar');
+        $trackRes->assertSee('UGC-INF-777777');
+        $trackRes->assertSee('INF-LOR-2026-7777');
+    }
 }
