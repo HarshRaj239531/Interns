@@ -8,6 +8,8 @@
     @vite(['resources/css/app.css', 'resources/js/app.js'])
 </head>
 <body class="h-full bg-[#FAFBF9] text-slate-800 font-sans antialiased flex flex-col">
+    <!-- Top Scroll Progress Indicator (Framer Motion) -->
+    <div id="scrollProgress" class="fixed top-0 left-0 right-0 h-[3px] bg-gradient-to-r from-indigo-500 via-purple-500 to-emerald-400 z-[999] origin-left scale-x-0 pointer-events-none"></div>
 
     <!-- Top Student Navigation -->
     <header class="bg-white border-b border-slate-200/80 sticky top-0 z-50">
@@ -36,7 +38,7 @@
 
                 <form action="{{ route('logout') }}" method="POST">
                     @csrf
-                    <button type="submit" class="px-3.5 py-1.5 rounded-full bg-slate-100 hover:bg-rose-50 text-slate-700 hover:text-rose-700 border border-slate-200 text-xs font-semibold transition cursor-pointer">
+                    <button type="submit" class="px-3.5 py-1.5 rounded-full bg-slate-100 hover:bg-rose-50 text-slate-700 hover:text-rose-700 border border-slate-200 text-xs font-semibold transition cursor-pointer motion-btn-spring">
                         Logout
                     </button>
                 </form>

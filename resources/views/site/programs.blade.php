@@ -6,20 +6,20 @@
 <!-- Hero -->
 <section class="relative min-h-[45vh] flex items-center justify-center pt-24 pb-16 overflow-hidden bg-[#0A1128] text-white">
     <div class="absolute inset-0 z-0 pointer-events-none">
-        <div class="absolute top-1/2 left-1/2 -translate-x-1/2 -translate-y-1/2 w-[600px] h-[500px] bg-indigo-500/15 rounded-full blur-[140px]"></div>
+        <div class="absolute top-1/2 left-1/2 -translate-x-1/2 -translate-y-1/2 w-[600px] h-[500px] bg-indigo-500/15 rounded-full blur-[140px] motion-orb"></div>
         <div class="absolute inset-0 bg-[radial-gradient(#ffffff_1px,transparent_1px)] [background-size:24px_24px] opacity-10"></div>
     </div>
 
     <div class="relative z-10 max-w-5xl mx-auto px-4 text-center">
-        <div class="inline-flex items-center gap-2 px-4 py-1.5 rounded-full border border-indigo-400/30 bg-indigo-500/10 backdrop-blur-md mb-6">
+        <div class="inline-flex items-center gap-2 px-4 py-1.5 rounded-full border border-indigo-400/30 bg-indigo-500/10 backdrop-blur-md mb-6 motion-hero-badge">
             <span class="text-indigo-400 text-xs">✦</span>
             <span class="text-[11px] font-bold tracking-[0.3em] uppercase text-indigo-300">Curriculum & Programs</span>
         </div>
-        <h1 class="text-4xl sm:text-6xl md:text-7xl font-serif text-white leading-tight mb-6">
+        <h1 class="text-4xl sm:text-6xl md:text-7xl font-serif text-white leading-tight mb-6 motion-hero-title">
             Undergraduate Internship <br>
             <span class="text-indigo-400 italic">Programs Catalog.</span>
         </h1>
-        <p class="max-w-2xl mx-auto text-base sm:text-lg text-indigo-100/80 font-light leading-relaxed">
+        <p class="max-w-2xl mx-auto text-base sm:text-lg text-indigo-100/80 font-light leading-relaxed motion-hero-sub">
             Explore our specialized UGC-aligned internship tracks crafted for BA, BSc, BBA, BCA, and BCom students. Learn practical tools, execute live projects, and earn accredited certification.
         </p>
     </div>
@@ -29,16 +29,16 @@
 <section class="py-16 px-4 sm:px-6 lg:px-8 max-w-7xl mx-auto">
     <!-- Stream Filter Controls -->
     <div class="flex flex-wrap items-center justify-center gap-2 mb-14" id="catFilter">
-        <button onclick="filterPrograms('all')" class="cat-btn px-5 py-2.5 rounded-full text-xs font-bold transition bg-indigo-600 text-white shadow-md">All Streams</button>
-        <button onclick="filterPrograms('arts')" class="cat-btn px-5 py-2.5 rounded-full text-xs font-bold transition bg-white text-slate-700 border border-slate-200 hover:bg-slate-100">BA & Humanities</button>
-        <button onclick="filterPrograms('science')" class="cat-btn px-5 py-2.5 rounded-full text-xs font-bold transition bg-white text-slate-700 border border-slate-200 hover:bg-slate-100">BSc & Environment</button>
-        <button onclick="filterPrograms('business')" class="cat-btn px-5 py-2.5 rounded-full text-xs font-bold transition bg-white text-slate-700 border border-slate-200 hover:bg-slate-100">BBA & Commerce</button>
-        <button onclick="filterPrograms('tech')" class="cat-btn px-5 py-2.5 rounded-full text-xs font-bold transition bg-white text-slate-700 border border-slate-200 hover:bg-slate-100">BCA & Computer Tech</button>
+        <button onclick="filterPrograms('all')" class="cat-btn px-5 py-2.5 rounded-full text-xs font-bold transition bg-indigo-600 text-white shadow-md motion-btn-spring">All Streams</button>
+        <button onclick="filterPrograms('arts')" class="cat-btn px-5 py-2.5 rounded-full text-xs font-bold transition bg-white text-slate-700 border border-slate-200 hover:bg-slate-100 motion-btn-spring">BA & Humanities</button>
+        <button onclick="filterPrograms('science')" class="cat-btn px-5 py-2.5 rounded-full text-xs font-bold transition bg-white text-slate-700 border border-slate-200 hover:bg-slate-100 motion-btn-spring">BSc & Environment</button>
+        <button onclick="filterPrograms('business')" class="cat-btn px-5 py-2.5 rounded-full text-xs font-bold transition bg-white text-slate-700 border border-slate-200 hover:bg-slate-100 motion-btn-spring">BBA & Commerce</button>
+        <button onclick="filterPrograms('tech')" class="cat-btn px-5 py-2.5 rounded-full text-xs font-bold transition bg-white text-slate-700 border border-slate-200 hover:bg-slate-100 motion-btn-spring">BCA & Computer Tech</button>
     </div>
 
     <div class="space-y-12">
         <!-- BA -->
-        <div class="program-card arts p-8 sm:p-12 rounded-[2.5rem] bg-white border border-slate-200/90 shadow-xs hover:shadow-xl transition">
+        <div class="program-card arts p-8 sm:p-12 rounded-[2.5rem] bg-white border border-slate-200/90 shadow-xs hover:shadow-xl transition motion-reveal">
             <div class="grid grid-cols-1 lg:grid-cols-12 gap-8 items-start">
                 <div class="lg:col-span-7 space-y-5">
                     <div class="flex flex-wrap items-center gap-3">
@@ -82,7 +82,7 @@
                             <li>• Policy Analyst</li>
                         </ul>
                     </div>
-                    <button onclick="openApplyModal()" class="w-full h-12 rounded-full bg-indigo-600 hover:bg-indigo-700 text-white font-bold text-xs uppercase tracking-wider flex items-center justify-center gap-2 shadow-md cursor-pointer">
+                    <button onclick="openApplyModal()" class="w-full h-12 rounded-full bg-indigo-600 hover:bg-indigo-700 text-white font-bold text-xs uppercase tracking-wider flex items-center justify-center gap-2 shadow-md cursor-pointer motion-btn-spring">
                         <span>Enroll in BA Track</span>
                         <svg class="w-4 h-4" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M14 5l7 7m0 0l-7 7m7-7H3"/></svg>
                     </button>
@@ -91,7 +91,7 @@
         </div>
 
         <!-- BSc -->
-        <div class="program-card science p-8 sm:p-12 rounded-[2.5rem] bg-white border border-slate-200/90 shadow-xs hover:shadow-xl transition">
+        <div class="program-card science p-8 sm:p-12 rounded-[2.5rem] bg-white border border-slate-200/90 shadow-xs hover:shadow-xl transition motion-reveal">
             <div class="grid grid-cols-1 lg:grid-cols-12 gap-8 items-start">
                 <div class="lg:col-span-7 space-y-5">
                     <div class="flex flex-wrap items-center gap-3">
@@ -135,7 +135,7 @@
                             <li>• Quality Control Trainee</li>
                         </ul>
                     </div>
-                    <button onclick="openApplyModal()" class="w-full h-12 rounded-full bg-cyan-600 hover:bg-cyan-700 text-white font-bold text-xs uppercase tracking-wider flex items-center justify-center gap-2 shadow-md cursor-pointer">
+                    <button onclick="openApplyModal()" class="w-full h-12 rounded-full bg-cyan-600 hover:bg-cyan-700 text-white font-bold text-xs uppercase tracking-wider flex items-center justify-center gap-2 shadow-md cursor-pointer motion-btn-spring">
                         <span>Enroll in BSc Track</span>
                         <svg class="w-4 h-4" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M14 5l7 7m0 0l-7 7m7-7H3"/></svg>
                     </button>
@@ -144,7 +144,7 @@
         </div>
 
         <!-- BBA -->
-        <div class="program-card business p-8 sm:p-12 rounded-[2.5rem] bg-white border border-slate-200/90 shadow-xs hover:shadow-xl transition">
+        <div class="program-card business p-8 sm:p-12 rounded-[2.5rem] bg-white border border-slate-200/90 shadow-xs hover:shadow-xl transition motion-reveal">
             <div class="grid grid-cols-1 lg:grid-cols-12 gap-8 items-start">
                 <div class="lg:col-span-7 space-y-5">
                     <div class="flex flex-wrap items-center gap-3">
@@ -188,7 +188,7 @@
                             <li>• Operations Associate</li>
                         </ul>
                     </div>
-                    <button onclick="openApplyModal()" class="w-full h-12 rounded-full bg-purple-600 hover:bg-purple-700 text-white font-bold text-xs uppercase tracking-wider flex items-center justify-center gap-2 shadow-md cursor-pointer">
+                    <button onclick="openApplyModal()" class="w-full h-12 rounded-full bg-purple-600 hover:bg-purple-700 text-white font-bold text-xs uppercase tracking-wider flex items-center justify-center gap-2 shadow-md cursor-pointer motion-btn-spring">
                         <span>Enroll in BBA Track</span>
                         <svg class="w-4 h-4" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M14 5l7 7m0 0l-7 7m7-7H3"/></svg>
                     </button>
@@ -197,7 +197,7 @@
         </div>
 
         <!-- BCA -->
-        <div class="program-card tech p-8 sm:p-12 rounded-[2.5rem] bg-white border border-slate-200/90 shadow-xs hover:shadow-xl transition">
+        <div class="program-card tech p-8 sm:p-12 rounded-[2.5rem] bg-white border border-slate-200/90 shadow-xs hover:shadow-xl transition motion-reveal">
             <div class="grid grid-cols-1 lg:grid-cols-12 gap-8 items-start">
                 <div class="lg:col-span-7 space-y-5">
                     <div class="flex flex-wrap items-center gap-3">
@@ -241,7 +241,7 @@
                             <li>• Technical Support Specialist</li>
                         </ul>
                     </div>
-                    <button onclick="openApplyModal()" class="w-full h-12 rounded-full bg-emerald-600 hover:bg-emerald-700 text-white font-bold text-xs uppercase tracking-wider flex items-center justify-center gap-2 shadow-md cursor-pointer">
+                    <button onclick="openApplyModal()" class="w-full h-12 rounded-full bg-emerald-600 hover:bg-emerald-700 text-white font-bold text-xs uppercase tracking-wider flex items-center justify-center gap-2 shadow-md cursor-pointer motion-btn-spring">
                         <span>Enroll in BCA Track</span>
                         <svg class="w-4 h-4" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M14 5l7 7m0 0l-7 7m7-7H3"/></svg>
                     </button>

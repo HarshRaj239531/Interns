@@ -5,7 +5,7 @@
 @section('content')
 <div class="space-y-6">
     <!-- Header Banner -->
-    <div class="relative overflow-hidden rounded-3xl adm-banner p-6 md:p-8 flex flex-col md:flex-row md:items-center justify-between gap-4 shadow-xl">
+    <div class="relative overflow-hidden rounded-3xl adm-banner p-6 md:p-8 flex flex-col md:flex-row md:items-center justify-between gap-4 shadow-xl motion-reveal">
         <div class="relative z-10">
             <div class="inline-flex items-center gap-2 px-3 py-1 rounded-full bg-white/10 text-white text-xs font-semibold mb-3 border border-white/20 backdrop-blur-md">
                 <span class="w-1.5 h-1.5 rounded-full bg-purple-400"></span>
@@ -15,7 +15,7 @@
             <p class="text-indigo-100 dark:text-slate-300 text-xs sm:text-sm font-light">Review institutional partnership proposals, Dean requests, and direct student inquiries.</p>
         </div>
         <div class="relative z-10 shrink-0">
-            <a href="https://wa.me/916204141971" target="_blank" rel="noopener noreferrer" class="px-4 py-2.5 rounded-xl bg-emerald-600 hover:bg-emerald-500 text-white text-xs font-bold transition flex items-center gap-2 shadow-lg shadow-emerald-600/30">
+            <a href="https://wa.me/916204141971" target="_blank" rel="noopener noreferrer" class="px-4 py-2.5 rounded-xl bg-emerald-600 hover:bg-emerald-500 text-white text-xs font-bold transition flex items-center gap-2 shadow-lg shadow-emerald-600/30 motion-btn-spring">
                 <svg class="w-4 h-4" fill="currentColor" viewBox="0 0 24 24"><path d="M.057 24l1.687-6.163c-1.041-1.804-1.588-3.849-1.587-5.946.003-6.556 5.338-11.891 11.893-11.891 3.181.001 6.167 1.24 8.413 3.488 2.245 2.248 3.481 5.236 3.48 8.414-.003 6.557-5.338 11.892-11.893 11.892-1.99-.001-3.951-.5-5.688-1.448l-6.305 1.654zm6.597-3.807c1.676.995 3.276 1.591 5.392 1.592 5.448 0 9.886-4.434 9.889-9.885.002-5.462-4.415-9.89-9.881-9.892-5.452 0-9.887 4.434-9.889 9.884-.001 2.225.651 3.891 1.746 5.634l-.999 3.648 3.742-.981z"/></svg>
                 <span>Direct WhatsApp Helpline</span>
             </a>
@@ -23,7 +23,7 @@
     </div>
 
     <!-- Inquiries Table Card -->
-    <div class="rounded-3xl adm-card overflow-hidden shadow-xl">
+    <div class="rounded-3xl adm-card overflow-hidden shadow-xl motion-reveal">
         <div class="overflow-x-auto">
             <table class="w-full text-left text-xs">
                 <thead class="adm-table-head uppercase text-[10px] tracking-wider border-b">

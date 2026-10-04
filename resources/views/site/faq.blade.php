@@ -6,25 +6,25 @@
 <!-- Hero -->
 <section class="relative min-h-[45vh] flex items-center justify-center pt-24 pb-16 overflow-hidden bg-[#0A1128] text-white">
     <div class="absolute inset-0 z-0 pointer-events-none">
-        <div class="absolute top-1/2 left-1/2 -translate-x-1/2 -translate-y-1/2 w-[600px] h-[500px] bg-indigo-500/15 rounded-full blur-[140px]"></div>
+        <div class="absolute top-1/2 left-1/2 -translate-x-1/2 -translate-y-1/2 w-[600px] h-[500px] bg-indigo-500/15 rounded-full blur-[140px] motion-orb"></div>
         <div class="absolute inset-0 bg-[radial-gradient(#ffffff_1px,transparent_1px)] [background-size:24px_24px] opacity-10"></div>
     </div>
 
     <div class="relative z-10 max-w-5xl mx-auto px-4 text-center">
-        <div class="inline-flex items-center gap-2 px-4 py-1.5 rounded-full border border-indigo-400/30 bg-indigo-500/10 backdrop-blur-md mb-6">
+        <div class="inline-flex items-center gap-2 px-4 py-1.5 rounded-full border border-indigo-400/30 bg-indigo-500/10 backdrop-blur-md mb-6 motion-hero-badge">
             <span class="text-indigo-400 text-xs">✦</span>
             <span class="text-[11px] font-bold tracking-[0.3em] uppercase text-indigo-300">Knowledge Base & Support</span>
         </div>
-        <h1 class="text-4xl sm:text-6xl md:text-7xl font-serif text-white leading-tight mb-6">
+        <h1 class="text-4xl sm:text-6xl md:text-7xl font-serif text-white leading-tight mb-6 motion-hero-title">
             Frequently Asked <br>
             <span class="text-indigo-400 italic">Questions.</span>
         </h1>
-        <p class="max-w-2xl mx-auto text-base sm:text-lg text-indigo-100/80 font-light leading-relaxed mb-8">
+        <p class="max-w-2xl mx-auto text-base sm:text-lg text-indigo-100/80 font-light leading-relaxed mb-8 motion-hero-sub">
             Everything you need to know regarding UGC internship guidelines, eligibility, college approvals, session formats, and verified marksheet issuance.
         </p>
 
         <!-- Search input -->
-        <div class="max-w-xl mx-auto relative">
+        <div class="max-w-xl mx-auto relative motion-reveal">
             <input type="text" id="faqSearch" oninput="searchFaqs()" placeholder="Search by keyword (e.g. credits, certificate, BA, fees)..." class="w-full h-14 pl-6 pr-6 rounded-full bg-white text-slate-900 placeholder-slate-400 text-sm focus:outline-none focus:ring-2 focus:ring-indigo-500 shadow-xl">
         </div>
     </div>
@@ -33,11 +33,11 @@
 <!-- Filter Tabs & Accordion -->
 <section class="py-20 px-4 sm:px-6 lg:px-8 max-w-4xl mx-auto">
     <div class="flex flex-wrap items-center justify-center gap-2 mb-12">
-        <button onclick="filterFaqCategory('all')" class="faq-cat-btn px-4 py-2 rounded-full text-xs font-bold transition bg-indigo-600 text-white shadow-md">All Questions</button>
-        <button onclick="filterFaqCategory('eligibility')" class="faq-cat-btn px-4 py-2 rounded-full text-xs font-bold transition bg-white text-slate-700 border border-slate-200 hover:bg-slate-100">Eligibility & Streams</button>
-        <button onclick="filterFaqCategory('ugc')" class="faq-cat-btn px-4 py-2 rounded-full text-xs font-bold transition bg-white text-slate-700 border border-slate-200 hover:bg-slate-100">UGC & Credits</button>
-        <button onclick="filterFaqCategory('learning')" class="faq-cat-btn px-4 py-2 rounded-full text-xs font-bold transition bg-white text-slate-700 border border-slate-200 hover:bg-slate-100">Learning Format</button>
-        <button onclick="filterFaqCategory('certification')" class="faq-cat-btn px-4 py-2 rounded-full text-xs font-bold transition bg-white text-slate-700 border border-slate-200 hover:bg-slate-100">Certificates</button>
+        <button onclick="filterFaqCategory('all')" class="faq-cat-btn px-4 py-2 rounded-full text-xs font-bold transition bg-indigo-600 text-white shadow-md motion-btn-spring">All Questions</button>
+        <button onclick="filterFaqCategory('eligibility')" class="faq-cat-btn px-4 py-2 rounded-full text-xs font-bold transition bg-white text-slate-700 border border-slate-200 hover:bg-slate-100 motion-btn-spring">Eligibility & Streams</button>
+        <button onclick="filterFaqCategory('ugc')" class="faq-cat-btn px-4 py-2 rounded-full text-xs font-bold transition bg-white text-slate-700 border border-slate-200 hover:bg-slate-100 motion-btn-spring">UGC & Credits</button>
+        <button onclick="filterFaqCategory('learning')" class="faq-cat-btn px-4 py-2 rounded-full text-xs font-bold transition bg-white text-slate-700 border border-slate-200 hover:bg-slate-100 motion-btn-spring">Learning Format</button>
+        <button onclick="filterFaqCategory('certification')" class="faq-cat-btn px-4 py-2 rounded-full text-xs font-bold transition bg-white text-slate-700 border border-slate-200 hover:bg-slate-100 motion-btn-spring">Certificates</button>
     </div>
 
     @php
@@ -54,9 +54,9 @@
     ];
     @endphp
 
-    <div class="space-y-4" id="faqList">
+    <div class="space-y-4 motion-stagger" id="faqList">
         @foreach($faqs as $idx => $f)
-        <details class="faq-item group p-6 rounded-2xl bg-white border border-slate-200/80 shadow-xs [&_summary::-webkit-details-marker]:none" data-cat="{{ $f['cat'] }}">
+        <details class="faq-item group p-6 rounded-2xl bg-white border border-slate-200/80 shadow-xs motion-card-hover [&_summary::-webkit-details-marker]:none" data-cat="{{ $f['cat'] }}">
             <summary class="flex items-center justify-between cursor-pointer font-serif text-base sm:text-lg text-slate-900 hover:text-indigo-700 font-medium">
                 <span class="faq-q">{{ $f['q'] }}</span>
                 <span class="ml-4 shrink-0 rounded-full bg-slate-100 p-1.5 text-slate-900 group-open:-rotate-180 transition">

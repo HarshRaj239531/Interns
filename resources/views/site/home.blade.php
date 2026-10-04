@@ -6,21 +6,21 @@
 <!-- Hero Section -->
 <section id="home" class="relative min-h-[90vh] pt-24 pb-20 flex flex-col items-center justify-center overflow-hidden bg-[#F6F8F5]">
     <div class="absolute inset-0 z-0 pointer-events-none">
-        <div class="absolute top-1/4 left-1/2 -translate-x-1/2 -translate-y-1/2 w-[700px] h-[500px] bg-indigo-100/50 rounded-full blur-[120px]"></div>
-        <div class="absolute top-1/3 right-10 w-[450px] h-[450px] bg-purple-100/40 rounded-full blur-[130px]"></div>
-        <div class="absolute bottom-10 left-10 w-[500px] h-[400px] bg-emerald-100/40 rounded-full blur-[140px]"></div>
+        <div class="motion-orb absolute top-1/4 left-1/2 -translate-x-1/2 -translate-y-1/2 w-[700px] h-[500px] bg-indigo-100/50 rounded-full blur-[120px]"></div>
+        <div class="motion-orb absolute top-1/3 right-10 w-[450px] h-[450px] bg-purple-100/40 rounded-full blur-[130px]"></div>
+        <div class="motion-orb absolute bottom-10 left-10 w-[500px] h-[400px] bg-emerald-100/40 rounded-full blur-[140px]"></div>
         <div class="absolute inset-0 bg-[radial-gradient(#94a3b8_1px,transparent_1px)] [background-size:28px_28px] opacity-15"></div>
     </div>
 
     <div class="relative z-10 text-center px-4 w-full max-w-5xl mx-auto">
         <!-- UGC Badge -->
-        <div class="inline-flex items-center gap-2 px-4 py-1.5 rounded-full bg-white border border-indigo-100 shadow-xs text-indigo-700 mb-8">
+        <div class="motion-hero-badge inline-flex items-center gap-2 px-4 py-1.5 rounded-full bg-white border border-indigo-100 shadow-xs text-indigo-700 mb-8">
             <svg class="w-4 h-4 text-indigo-600" fill="currentColor" viewBox="0 0 20 20"><path d="M9.049 2.927c.3-.921 1.603-.921 1.902 0l1.07 3.292a1 1 0 00.95.69h3.462c.969 0 1.371 1.24.588 1.81l-2.8 2.034a1 1 0 00-.364 1.118l1.07 3.292c.3.921-.755 1.688-1.54 1.118l-2.8-2.034a1 1 0 00-1.175 0l-2.8 2.034c-.784.57-1.838-.197-1.539-1.118l1.07-3.292a1 1 0 00-.364-1.118L2.98 8.72c-.783-.57-.38-1.81.588-1.81h3.461a1 1 0 00.951-.69l1.07-3.292z"/></svg>
             <span class="text-xs font-bold tracking-[0.2em] uppercase">UGC-Focused Internship Program</span>
         </div>
 
         <!-- Headline -->
-        <h1 class="text-4xl sm:text-6xl md:text-7xl font-serif leading-[1.08] tracking-tight mb-8 text-slate-900">
+        <h1 class="motion-hero-title text-4xl sm:text-6xl md:text-7xl font-serif leading-[1.08] tracking-tight mb-8 text-slate-900">
             Learn In-Demand Skills & <br class="hidden sm:block">
             <span class="text-indigo-700 italic pr-3 relative inline-block">
                 Get Certified
@@ -32,29 +32,29 @@
         </h1>
 
         <!-- Subheading -->
-        <p class="max-w-3xl mx-auto text-base sm:text-lg text-slate-600 font-light mb-10 leading-relaxed px-4">
+        <p class="motion-hero-sub max-w-3xl mx-auto text-base sm:text-lg text-slate-600 font-light mb-10 leading-relaxed px-4">
             <strong class="text-slate-800 font-semibold">Internships are an essential milestone in your college degree.</strong>
             Turn university requirements into a real career advantage with hands-on skill development and UGC-aligned internship programs designed for undergraduate students.
         </p>
 
         <!-- Highlights Grid -->
-        <div class="grid grid-cols-2 sm:grid-cols-4 gap-3 max-w-3xl mx-auto mb-10 text-left">
-            <div class="flex flex-col p-4 bg-white/95 backdrop-blur-sm rounded-2xl border border-slate-200/80 shadow-xs hover:shadow-md transition">
+        <div class="motion-hero-cards grid grid-cols-2 sm:grid-cols-4 gap-3 max-w-3xl mx-auto mb-10 text-left">
+            <div class="motion-card-hover flex flex-col p-4 bg-white/95 backdrop-blur-sm rounded-2xl border border-slate-200/80 shadow-xs hover:shadow-md transition">
                 <span class="text-indigo-600 mb-1 text-lg">🎖️</span>
                 <span class="text-[10px] font-bold uppercase tracking-wider text-slate-400">UGC Focus</span>
                 <span class="text-slate-900 font-semibold text-xs sm:text-sm">Undergraduate</span>
             </div>
-            <div class="flex flex-col p-4 bg-white/95 backdrop-blur-sm rounded-2xl border border-slate-200/80 shadow-xs hover:shadow-md transition">
+            <div class="motion-card-hover flex flex-col p-4 bg-white/95 backdrop-blur-sm rounded-2xl border border-slate-200/80 shadow-xs hover:shadow-md transition">
                 <span class="text-emerald-600 mb-1 text-lg">⚡</span>
                 <span class="text-[10px] font-bold uppercase tracking-wider text-slate-400">Methodology</span>
                 <span class="text-slate-900 font-semibold text-xs sm:text-sm">Hands-on Projects</span>
             </div>
-            <div class="flex flex-col p-4 bg-white/95 backdrop-blur-sm rounded-2xl border border-slate-200/80 shadow-xs hover:shadow-md transition">
+            <div class="motion-card-hover flex flex-col p-4 bg-white/95 backdrop-blur-sm rounded-2xl border border-slate-200/80 shadow-xs hover:shadow-md transition">
                 <span class="text-purple-600 mb-1 text-lg">📜</span>
                 <span class="text-[10px] font-bold uppercase tracking-wider text-slate-400">Accreditation</span>
                 <span class="text-slate-900 font-semibold text-xs sm:text-sm">Verified Certificate</span>
             </div>
-            <div class="flex flex-col p-4 bg-white/95 backdrop-blur-sm rounded-2xl border border-slate-200/80 shadow-xs hover:shadow-md transition">
+            <div class="motion-card-hover flex flex-col p-4 bg-white/95 backdrop-blur-sm rounded-2xl border border-slate-200/80 shadow-xs hover:shadow-md transition">
                 <span class="text-cyan-600 mb-1 text-lg">🤝</span>
                 <span class="text-[10px] font-bold uppercase tracking-wider text-slate-400">Support</span>
                 <span class="text-slate-900 font-semibold text-xs sm:text-sm">Mentor Guided</span>
@@ -62,20 +62,20 @@
         </div>
 
         <!-- CTA Buttons -->
-        <div class="flex flex-col sm:flex-row items-center justify-center gap-4">
-            <button onclick="openApplyModal()" class="w-full sm:w-auto h-13 px-8 text-sm font-bold text-white bg-indigo-600 hover:bg-indigo-700 rounded-full shadow-xl shadow-indigo-600/25 hover:shadow-indigo-600/40 transition-all flex items-center justify-center gap-2 group cursor-pointer active:scale-95">
+        <div class="motion-hero-cta flex flex-col sm:flex-row items-center justify-center gap-4">
+            <button onclick="openApplyModal()" class="motion-btn-spring w-full sm:w-auto h-13 px-8 text-sm font-bold text-white bg-indigo-600 hover:bg-indigo-700 rounded-full shadow-xl shadow-indigo-600/25 hover:shadow-indigo-600/40 transition-all flex items-center justify-center gap-2 group cursor-pointer active:scale-95">
                 <span>Start Your Journey</span>
                 <svg class="w-4 h-4 transition-transform group-hover:translate-x-1" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M14 5l7 7m0 0l-7 7m7-7H3"/></svg>
             </button>
 
-            <a href="#journey" class="w-full sm:w-auto h-13 px-8 text-sm font-semibold text-slate-700 hover:text-slate-900 bg-white hover:bg-slate-50 border border-slate-200/90 rounded-full shadow-xs hover:shadow-md transition-all flex items-center justify-center gap-2 cursor-pointer active:scale-95">
+            <a href="#journey" class="motion-btn-spring w-full sm:w-auto h-13 px-8 text-sm font-semibold text-slate-700 hover:text-slate-900 bg-white hover:bg-slate-50 border border-slate-200/90 rounded-full shadow-xs hover:shadow-md transition-all flex items-center justify-center gap-2 cursor-pointer active:scale-95">
                 <span>How It Works</span>
                 <svg class="w-4 h-4 text-slate-400" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M19 9l-7 7-7-7"/></svg>
             </a>
         </div>
 
         <!-- Stream Badges -->
-        <div class="pt-10 flex flex-wrap items-center justify-center gap-2 text-xs text-slate-500 font-medium">
+        <div class="motion-reveal pt-10 flex flex-wrap items-center justify-center gap-2 text-xs text-slate-500 font-medium">
             <span>Programs Tailored For:</span>
             @foreach(['BA', 'BSc', 'BBA', 'BCA', 'BCom'] as $deg)
                 <span class="px-2.5 py-0.5 rounded-full bg-white border border-slate-200 text-slate-800 font-semibold shadow-xs">{{ $deg }}</span>
@@ -85,11 +85,47 @@
     </div>
 </section>
 
-<!-- Stats Section -->
-<section class="py-16 bg-white border-y border-slate-100">
+<!-- Live Impact Stats Strip with Framer Motion Animated Numbers -->
+<section class="py-10 bg-white/90 backdrop-blur-md border-y border-slate-200/80 relative z-20 shadow-xs">
     <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
-        <div class="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-4 gap-6">
-            <div class="p-6 rounded-3xl bg-[#FAFBF9] border border-slate-200/70 hover:border-slate-300 shadow-xs hover:shadow-md transition">
+        <div class="motion-stagger grid grid-cols-2 lg:grid-cols-4 gap-4 sm:gap-6 text-center">
+            <div class="p-5 rounded-3xl bg-[#FAFBF9] border border-slate-200/80 motion-card-hover shadow-xs">
+                <div class="text-3xl sm:text-4xl font-serif font-extrabold text-indigo-600 mb-1 motion-counter" data-target="{{ $stats['total_students'] ?? 1420 }}" data-suffix="+">
+                    {{ number_format($stats['total_students'] ?? 1420) }}+
+                </div>
+                <div class="text-xs font-bold text-slate-800">Undergraduate Learners</div>
+                <div class="text-[10px] text-slate-500 uppercase tracking-wider mt-0.5">Enrolled Nationwide</div>
+            </div>
+            <div class="p-5 rounded-3xl bg-[#FAFBF9] border border-slate-200/80 motion-card-hover shadow-xs">
+                <div class="text-3xl sm:text-4xl font-serif font-extrabold text-emerald-600 mb-1 motion-counter" data-target="{{ $stats['active_interns'] ?? 890 }}" data-suffix="+">
+                    {{ number_format($stats['active_interns'] ?? 890) }}+
+                </div>
+                <div class="text-xs font-bold text-slate-800">Active Live Interns</div>
+                <div class="text-[10px] text-slate-500 uppercase tracking-wider mt-0.5">Executing Capstones</div>
+            </div>
+            <div class="p-5 rounded-3xl bg-[#FAFBF9] border border-slate-200/80 motion-card-hover shadow-xs">
+                <div class="text-3xl sm:text-4xl font-serif font-extrabold text-purple-600 mb-1 motion-counter" data-target="{{ $stats['certificates_issued'] ?? 520 }}" data-suffix="+">
+                    {{ number_format($stats['certificates_issued'] ?? 520) }}+
+                </div>
+                <div class="text-xs font-bold text-slate-800">Verified Certificates</div>
+                <div class="text-[10px] text-slate-500 uppercase tracking-wider mt-0.5">Issued & Accredited</div>
+            </div>
+            <div class="p-5 rounded-3xl bg-[#FAFBF9] border border-slate-200/80 motion-card-hover shadow-xs">
+                <div class="text-3xl sm:text-4xl font-serif font-extrabold text-cyan-600 mb-1 motion-counter" data-target="{{ $stats['partner_colleges'] ?? 24 }}" data-suffix="+">
+                    {{ $stats['partner_colleges'] ?? 24 }}+
+                </div>
+                <div class="text-xs font-bold text-slate-800">Partner Institutions</div>
+                <div class="text-[10px] text-slate-500 uppercase tracking-wider mt-0.5">College & University MoUs</div>
+            </div>
+        </div>
+    </div>
+</section>
+
+<!-- Values / Pillars Section -->
+<section class="py-16 bg-[#FAFBF9] border-b border-slate-200/60">
+    <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
+        <div class="motion-stagger grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-4 gap-6">
+            <div class="p-6 rounded-3xl bg-white border border-slate-200/70 hover:border-slate-300 shadow-xs hover:shadow-md transition motion-card-hover">
                 <div class="flex items-center gap-3 mb-3">
                     <div class="p-3 rounded-2xl bg-indigo-50 border border-indigo-100 text-indigo-600 text-xl font-bold">UGC</div>
                     <h3 class="text-base font-bold text-slate-900 font-serif">UGC Focused</h3>
@@ -98,7 +134,7 @@
                     Designed strictly around undergraduate college guidelines and NEP-2020 semester credit requirements.
                 </p>
             </div>
-            <div class="p-6 rounded-3xl bg-[#FAFBF9] border border-slate-200/70 hover:border-slate-300 shadow-xs hover:shadow-md transition">
+            <div class="p-6 rounded-3xl bg-white border border-slate-200/70 hover:border-slate-300 shadow-xs hover:shadow-md transition motion-card-hover">
                 <div class="flex items-center gap-3 mb-3">
                     <div class="p-3 rounded-2xl bg-emerald-50 border border-emerald-100 text-emerald-600 text-xl font-bold">PR</div>
                     <h3 class="text-base font-bold text-slate-900 font-serif">Practical Work</h3>
@@ -107,7 +143,7 @@
                     Hands-on activities, real deliverables, and domain-specific capstone projects for verifiable competency.
                 </p>
             </div>
-            <div class="p-6 rounded-3xl bg-[#FAFBF9] border border-slate-200/70 hover:border-slate-300 shadow-xs hover:shadow-md transition">
+            <div class="p-6 rounded-3xl bg-white border border-slate-200/70 hover:border-slate-300 shadow-xs hover:shadow-md transition motion-card-hover">
                 <div class="flex items-center gap-3 mb-3">
                     <div class="p-3 rounded-2xl bg-purple-50 border border-purple-100 text-purple-600 text-xl font-bold">06</div>
                     <h3 class="text-base font-bold text-slate-900 font-serif">Structured Journey</h3>
@@ -116,7 +152,7 @@
                     Predictable 6-step roadmap from simple registration to certified completion and marksheet issuance.
                 </p>
             </div>
-            <div class="p-6 rounded-3xl bg-[#FAFBF9] border border-slate-200/70 hover:border-slate-300 shadow-xs hover:shadow-md transition">
+            <div class="p-6 rounded-3xl bg-white border border-slate-200/70 hover:border-slate-300 shadow-xs hover:shadow-md transition motion-card-hover">
                 <div class="flex items-center gap-3 mb-3">
                     <div class="p-3 rounded-2xl bg-cyan-50 border border-cyan-100 text-cyan-600 text-xl font-bold">24h</div>
                     <h3 class="text-base font-bold text-slate-900 font-serif">Student First</h3>
@@ -132,7 +168,7 @@
 <!-- Programs Section -->
 <section id="programs" class="py-24 px-4 sm:px-6 lg:px-8 bg-white">
     <div class="max-w-7xl mx-auto">
-        <div class="mb-16 md:mb-20 md:flex justify-between items-end gap-8 border-b border-slate-100 pb-8">
+        <div class="motion-reveal mb-16 md:mb-20 md:flex justify-between items-end gap-8 border-b border-slate-100 pb-8">
             <div>
                 <span class="text-indigo-600 font-bold text-xs tracking-[0.3em] uppercase mb-4 block">Program Categories</span>
                 <h2 class="text-4xl md:text-5xl font-serif text-slate-900 leading-tight">
@@ -145,9 +181,9 @@
             </p>
         </div>
 
-        <div class="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-4 gap-6">
+        <div class="motion-stagger grid grid-cols-1 md:grid-cols-2 lg:grid-cols-4 gap-6">
             <!-- BA Card -->
-            <div class="group rounded-[2.2rem] bg-[#FAFBF9] border border-slate-200/80 p-7 flex flex-col justify-between hover:shadow-2xl hover:shadow-slate-200/60 transition-all duration-300">
+            <div class="motion-card-hover group rounded-[2.2rem] bg-[#FAFBF9] border border-slate-200/80 p-7 flex flex-col justify-between hover:shadow-2xl hover:shadow-slate-200/60 transition-all duration-300">
                 <div>
                     <div class="flex items-center justify-between mb-5">
                         <div class="w-12 h-12 rounded-2xl bg-white border border-slate-200 flex items-center justify-center font-extrabold text-sm text-indigo-700 shadow-xs">
@@ -178,7 +214,7 @@
             </div>
 
             <!-- BSc Card -->
-            <div class="group rounded-[2.2rem] bg-[#FAFBF9] border border-slate-200/80 p-7 flex flex-col justify-between hover:shadow-2xl hover:shadow-slate-200/60 transition-all duration-300">
+            <div class="motion-card-hover group rounded-[2.2rem] bg-[#FAFBF9] border border-slate-200/80 p-7 flex flex-col justify-between hover:shadow-2xl hover:shadow-slate-200/60 transition-all duration-300">
                 <div>
                     <div class="flex items-center justify-between mb-5">
                         <div class="w-12 h-12 rounded-2xl bg-white border border-slate-200 flex items-center justify-center font-extrabold text-sm text-cyan-700 shadow-xs">
@@ -209,7 +245,7 @@
             </div>
 
             <!-- BBA Card -->
-            <div class="group rounded-[2.2rem] bg-[#FAFBF9] border border-slate-200/80 p-7 flex flex-col justify-between hover:shadow-2xl hover:shadow-slate-200/60 transition-all duration-300">
+            <div class="motion-card-hover group rounded-[2.2rem] bg-[#FAFBF9] border border-slate-200/80 p-7 flex flex-col justify-between hover:shadow-2xl hover:shadow-slate-200/60 transition-all duration-300">
                 <div>
                     <div class="flex items-center justify-between mb-5">
                         <div class="w-12 h-12 rounded-2xl bg-white border border-slate-200 flex items-center justify-center font-extrabold text-sm text-purple-700 shadow-xs">
@@ -240,7 +276,7 @@
             </div>
 
             <!-- BCA Card -->
-            <div class="group rounded-[2.2rem] bg-[#FAFBF9] border border-slate-200/80 p-7 flex flex-col justify-between hover:shadow-2xl hover:shadow-slate-200/60 transition-all duration-300">
+            <div class="motion-card-hover group rounded-[2.2rem] bg-[#FAFBF9] border border-slate-200/80 p-7 flex flex-col justify-between hover:shadow-2xl hover:shadow-slate-200/60 transition-all duration-300">
                 <div>
                     <div class="flex items-center justify-between mb-5">
                         <div class="w-12 h-12 rounded-2xl bg-white border border-slate-200 flex items-center justify-center font-extrabold text-sm text-emerald-700 shadow-xs">
@@ -276,7 +312,7 @@
 <!-- Journey Section -->
 <section id="journey" class="py-24 px-4 sm:px-6 lg:px-8 bg-[#F6F8F5] border-y border-slate-200/80">
     <div class="max-w-7xl mx-auto">
-        <div class="text-center max-w-2xl mx-auto mb-16">
+        <div class="motion-reveal text-center max-w-2xl mx-auto mb-16">
             <span class="text-indigo-600 font-bold text-xs tracking-[0.3em] uppercase mb-4 block">Professional Training Journey</span>
             <h2 class="text-4xl md:text-5xl font-serif text-slate-900 leading-tight mb-4">
                 From Registration to <span class="text-indigo-700 italic">Completion.</span>
@@ -286,7 +322,7 @@
             </p>
         </div>
 
-        <div class="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-6">
+        <div class="motion-stagger grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-6">
             @php
             $steps = [
                 ['step' => '01', 'title' => 'Quick Registration', 'duration' => '2 minutes', 'desc' => 'Complete your student profile with basic and academic details and choose your preferred area.', 'items' => ['Profile creation', 'Basic details', 'Course selection', 'Digital enrollment']],
@@ -299,7 +335,7 @@
             @endphp
 
             @foreach($steps as $s)
-            <div class="p-8 rounded-[2.2rem] bg-white border border-slate-200/80 hover:border-slate-300 shadow-xs hover:shadow-xl transition-all flex flex-col justify-between group">
+            <div class="motion-card-hover p-8 rounded-[2.2rem] bg-white border border-slate-200/80 hover:border-slate-300 shadow-xs hover:shadow-xl transition-all flex flex-col justify-between group">
                 <div>
                     <div class="flex items-center justify-between mb-5">
                         <span class="font-serif text-4xl font-extrabold text-indigo-600/70 group-hover:text-indigo-700 transition">{{ $s['step'] }}</span>
@@ -323,12 +359,12 @@
             @endforeach
         </div>
 
-        <div class="mt-14 p-8 rounded-[2rem] bg-white border border-slate-200 shadow-sm flex flex-col sm:flex-row items-center justify-between gap-6 text-center sm:text-left">
+        <div class="motion-reveal mt-14 p-8 rounded-[2rem] bg-white border border-slate-200 shadow-sm flex flex-col sm:flex-row items-center justify-between gap-6 text-center sm:text-left">
             <div>
                 <h4 class="text-xl font-serif text-slate-900">Ready to start your undergraduate internship?</h4>
                 <p class="text-xs text-slate-600 mt-1 font-light">Registration takes less than 2 minutes through our online portal.</p>
             </div>
-            <button onclick="openApplyModal()" class="px-8 py-3.5 rounded-full bg-indigo-600 hover:bg-indigo-700 text-white text-xs font-bold transition shadow-lg shadow-indigo-600/25 shrink-0 flex items-center gap-2 cursor-pointer active:scale-95">
+            <button onclick="openApplyModal()" class="motion-btn-spring px-8 py-3.5 rounded-full bg-indigo-600 hover:bg-indigo-700 text-white text-xs font-bold transition shadow-lg shadow-indigo-600/25 shrink-0 flex items-center gap-2 cursor-pointer active:scale-95">
                 <span>Register Now</span>
                 <svg class="w-4 h-4" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M14 5l7 7m0 0l-7 7m7-7H3"/></svg>
             </button>
@@ -339,7 +375,7 @@
 <!-- Documents Section -->
 <section id="documents" class="py-24 px-4 sm:px-6 lg:px-8 bg-white">
     <div class="max-w-7xl mx-auto">
-        <div class="mb-16 md:mb-20 md:flex justify-between items-end gap-8 border-b border-slate-100 pb-8">
+        <div class="motion-reveal mb-16 md:mb-20 md:flex justify-between items-end gap-8 border-b border-slate-100 pb-8">
             <div>
                 <span class="text-indigo-600 font-bold text-xs tracking-[0.3em] uppercase mb-4 block">Internship Documentation</span>
                 <h2 class="text-4xl md:text-5xl font-serif text-slate-900 leading-tight">
@@ -352,8 +388,8 @@
             </p>
         </div>
 
-        <div class="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-4 gap-6">
-            <div class="p-8 rounded-[2.2rem] bg-[#FAFBF9] border border-slate-200/80 hover:border-slate-300 hover:shadow-xl transition flex flex-col justify-between group">
+        <div class="motion-stagger grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-4 gap-6">
+            <div class="motion-card-hover p-8 rounded-[2.2rem] bg-[#FAFBF9] border border-slate-200/80 hover:border-slate-300 hover:shadow-xl transition flex flex-col justify-between group">
                 <div>
                     <div class="w-14 h-14 rounded-2xl bg-white border border-slate-200 flex items-center justify-center text-indigo-700 text-2xl font-bold mb-6 shadow-xs group-hover:scale-105 transition">
                         ✦
@@ -371,7 +407,7 @@
                 </div>
             </div>
 
-            <div class="p-8 rounded-[2.2rem] bg-[#FAFBF9] border border-slate-200/80 hover:border-slate-300 hover:shadow-xl transition flex flex-col justify-between group">
+            <div class="motion-card-hover p-8 rounded-[2.2rem] bg-[#FAFBF9] border border-slate-200/80 hover:border-slate-300 hover:shadow-xl transition flex flex-col justify-between group">
                 <div>
                     <div class="w-14 h-14 rounded-2xl bg-white border border-slate-200 flex items-center justify-center text-emerald-700 text-2xl font-bold mb-6 shadow-xs group-hover:scale-105 transition">
                         ▤
@@ -389,7 +425,7 @@
                 </div>
             </div>
 
-            <div class="p-8 rounded-[2.2rem] bg-[#FAFBF9] border border-slate-200/80 hover:border-slate-300 hover:shadow-xl transition flex flex-col justify-between group">
+            <div class="motion-card-hover p-8 rounded-[2.2rem] bg-[#FAFBF9] border border-slate-200/80 hover:border-slate-300 hover:shadow-xl transition flex flex-col justify-between group">
                 <div>
                     <div class="w-14 h-14 rounded-2xl bg-white border border-slate-200 flex items-center justify-center text-purple-700 text-2xl font-bold mb-6 shadow-xs group-hover:scale-105 transition">
                         ▣
@@ -407,7 +443,7 @@
                 </div>
             </div>
 
-            <div class="p-8 rounded-[2.2rem] bg-[#FAFBF9] border border-slate-200/80 hover:border-slate-300 hover:shadow-xl transition flex flex-col justify-between group">
+            <div class="motion-card-hover p-8 rounded-[2.2rem] bg-[#FAFBF9] border border-slate-200/80 hover:border-slate-300 hover:shadow-xl transition flex flex-col justify-between group">
                 <div>
                     <div class="w-14 h-14 rounded-2xl bg-white border border-slate-200 flex items-center justify-center text-cyan-700 text-2xl font-bold mb-6 shadow-xs group-hover:scale-105 transition">
                         □
@@ -431,7 +467,7 @@
 <!-- Subjects Section -->
 <section id="subjects" class="py-24 px-4 sm:px-6 lg:px-8 bg-[#F6F8F5] border-y border-slate-200/80">
     <div class="max-w-7xl mx-auto">
-        <div class="text-center max-w-2xl mx-auto mb-16">
+        <div class="motion-reveal text-center max-w-2xl mx-auto mb-16">
             <span class="text-indigo-600 font-bold text-xs tracking-[0.3em] uppercase mb-4 block">Multidisciplinary Learning</span>
             <h2 class="text-4xl md:text-5xl font-serif text-slate-900 leading-tight mb-4">
                 Specialized Learning <span class="text-indigo-700 italic">Domains.</span>
@@ -441,8 +477,8 @@
             </p>
         </div>
 
-        <div class="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-4 gap-6">
-            <div class="p-8 rounded-[2.2rem] bg-white border border-slate-200/80 shadow-xs">
+        <div class="motion-stagger grid grid-cols-1 md:grid-cols-2 lg:grid-cols-4 gap-6">
+            <div class="motion-card-hover p-8 rounded-[2.2rem] bg-white border border-slate-200/80 shadow-xs">
                 <h3 class="text-lg font-serif font-bold text-slate-900 mb-4 pb-2 border-b border-slate-100">Technology & Digital</h3>
                 <ul class="space-y-2.5 text-xs text-slate-600 font-medium">
                     <li class="flex items-center gap-2"><span class="w-1.5 h-1.5 rounded-full bg-indigo-600"></span> Web Development & Design</li>
@@ -452,7 +488,7 @@
                 </ul>
             </div>
 
-            <div class="p-8 rounded-[2.2rem] bg-white border border-slate-200/80 shadow-xs">
+            <div class="motion-card-hover p-8 rounded-[2.2rem] bg-white border border-slate-200/80 shadow-xs">
                 <h3 class="text-lg font-serif font-bold text-slate-900 mb-4 pb-2 border-b border-slate-100">Social Sciences & Policy</h3>
                 <ul class="space-y-2.5 text-xs text-slate-600 font-medium">
                     <li class="flex items-center gap-2"><span class="w-1.5 h-1.5 rounded-full bg-purple-600"></span> Political Science & Policy</li>
@@ -462,7 +498,7 @@
                 </ul>
             </div>
 
-            <div class="p-8 rounded-[2.2rem] bg-white border border-slate-200/80 shadow-xs">
+            <div class="motion-card-hover p-8 rounded-[2.2rem] bg-white border border-slate-200/80 shadow-xs">
                 <h3 class="text-lg font-serif font-bold text-slate-900 mb-4 pb-2 border-b border-slate-100">Professional & Business</h3>
                 <ul class="space-y-2.5 text-xs text-slate-600 font-medium">
                     <li class="flex items-center gap-2"><span class="w-1.5 h-1.5 rounded-full bg-emerald-600"></span> Personality & Soft Skills</li>
@@ -472,7 +508,7 @@
                 </ul>
             </div>
 
-            <div class="p-8 rounded-[2.2rem] bg-white border border-slate-200/80 shadow-xs">
+            <div class="motion-card-hover p-8 rounded-[2.2rem] bg-white border border-slate-200/80 shadow-xs">
                 <h3 class="text-lg font-serif font-bold text-slate-900 mb-4 pb-2 border-b border-slate-100">Environment & Agri</h3>
                 <ul class="space-y-2.5 text-xs text-slate-600 font-medium">
                     <li class="flex items-center gap-2"><span class="w-1.5 h-1.5 rounded-full bg-cyan-600"></span> Environmental Science & Audits</li>
@@ -483,7 +519,7 @@
             </div>
         </div>
 
-        <div class="text-center mt-10">
+        <div class="motion-reveal text-center mt-10">
             <a href="{{ route('subjects') }}" class="inline-flex items-center gap-2 text-xs font-bold text-indigo-600 hover:text-indigo-800 uppercase tracking-wider">
                 <span>View Full Syllabus for all 16 Subjects →</span>
             </a>
@@ -495,10 +531,10 @@
 <section id="mentors" class="py-24 px-4 sm:px-6 lg:px-8 bg-white">
     <div class="max-w-7xl mx-auto">
         <div class="grid grid-cols-1 lg:grid-cols-12 gap-8 items-stretch">
-            <div class="lg:col-span-7 p-8 md:p-12 rounded-[2.5rem] bg-[#FAFBF9] border border-slate-200/80 shadow-xs flex flex-col justify-between">
+            <div class="motion-reveal-left lg:col-span-7 p-8 md:p-12 rounded-[2.5rem] bg-[#FAFBF9] border border-slate-200/80 shadow-xs flex flex-col justify-between">
                 <div>
                     <div class="flex items-center gap-4 mb-6">
-                        <div class="w-14 h-14 rounded-2xl bg-indigo-50 border border-indigo-100 text-indigo-700 font-serif text-2xl font-bold flex items-center justify-center">
+                        <div class="w-14 h-14 rounded-2xl bg-indigo-50 border border-indigo-100 text-indigo-700 font-serif text-2xl font-bold flex items-center justify-center shadow-xs">
                             M
                         </div>
                         <div>
@@ -511,34 +547,34 @@
                     </p>
                 </div>
                 <div class="grid grid-cols-2 sm:grid-cols-4 gap-3 pt-6 border-t border-slate-200/60">
-                    <div class="p-3.5 rounded-2xl bg-white border border-slate-200">
+                    <div class="motion-card-hover p-3.5 rounded-2xl bg-white border border-slate-200">
                         <span class="font-serif text-xs font-bold text-indigo-700 block mb-1">01</span>
                         <span class="text-xs font-semibold text-slate-800 block">Concept Guidance</span>
                     </div>
-                    <div class="p-3.5 rounded-2xl bg-white border border-slate-200">
+                    <div class="motion-card-hover p-3.5 rounded-2xl bg-white border border-slate-200">
                         <span class="font-serif text-xs font-bold text-indigo-700 block mb-1">02</span>
                         <span class="text-xs font-semibold text-slate-800 block">Activity Support</span>
                     </div>
-                    <div class="p-3.5 rounded-2xl bg-white border border-slate-200">
+                    <div class="motion-card-hover p-3.5 rounded-2xl bg-white border border-slate-200">
                         <span class="font-serif text-xs font-bold text-indigo-700 block mb-1">03</span>
                         <span class="text-xs font-semibold text-slate-800 block">Project Feedback</span>
                     </div>
-                    <div class="p-3.5 rounded-2xl bg-white border border-slate-200">
+                    <div class="motion-card-hover p-3.5 rounded-2xl bg-white border border-slate-200">
                         <span class="font-serif text-xs font-bold text-indigo-700 block mb-1">04</span>
                         <span class="text-xs font-semibold text-slate-800 block">Completion Review</span>
                     </div>
                 </div>
             </div>
 
-            <div class="lg:col-span-5 flex flex-col gap-6">
-                <div class="p-8 rounded-[2.2rem] bg-white border border-slate-200/80 shadow-xs flex-1 flex flex-col justify-center">
+            <div class="motion-reveal-right lg:col-span-5 flex flex-col gap-6">
+                <div class="motion-card-hover p-8 rounded-[2.2rem] bg-white border border-slate-200/80 shadow-xs flex-1 flex flex-col justify-center">
                     <div class="w-12 h-12 rounded-2xl bg-indigo-50 text-indigo-700 flex items-center justify-center mb-4 text-xl">💬</div>
                     <h4 class="text-xl font-serif text-slate-900 mb-2">Ask. Understand. Improve.</h4>
                     <p class="text-xs text-slate-600 font-light leading-relaxed">
                         Live interactive Q&A and doubt-clearing sessions empower you to grasp practical methods and execute tasks smoothly.
                     </p>
                 </div>
-                <div class="p-8 rounded-[2.2rem] bg-indigo-900 text-white shadow-xl shadow-indigo-900/10 flex-1 flex flex-col justify-center">
+                <div class="motion-card-hover p-8 rounded-[2.2rem] bg-indigo-900 text-white shadow-xl shadow-indigo-900/10 flex-1 flex flex-col justify-center">
                     <div class="w-12 h-12 rounded-2xl bg-white/10 text-white flex items-center justify-center mb-4 text-xl">🚀</div>
                     <h4 class="text-xl font-serif text-white mb-2">Career-Minded Learning</h4>
                     <p class="text-xs text-indigo-100/90 font-light leading-relaxed">
@@ -554,7 +590,7 @@
 <section id="colleges" class="py-24 px-4 sm:px-6 lg:px-8 bg-[#F6F8F5] border-y border-slate-200/80">
     <div class="max-w-7xl mx-auto">
         <div class="grid grid-cols-1 lg:grid-cols-12 gap-12 items-center">
-            <div class="lg:col-span-7 space-y-6">
+            <div class="motion-reveal-left lg:col-span-7 space-y-6">
                 <span class="text-indigo-600 font-bold text-xs tracking-[0.3em] uppercase block">For Colleges & Institutions</span>
                 <h2 class="text-4xl md:text-5xl font-serif text-slate-900 leading-tight">
                     Make Student Internship Coordination <span class="text-indigo-700 italic">Simpler.</span>
@@ -569,15 +605,15 @@
                     <div class="flex items-center gap-2"><span class="w-5 h-5 rounded-full bg-indigo-100 text-indigo-700 flex items-center justify-center text-xs">✓</span> Formal institutional MOU desk</div>
                 </div>
                 <div class="pt-4">
-                    <a href="{{ route('colleges') }}" class="inline-flex items-center gap-2 h-13 px-8 rounded-full bg-slate-900 hover:bg-slate-800 text-white font-bold text-xs tracking-wider uppercase shadow-md transition cursor-pointer">
+                    <a href="{{ route('colleges') }}" class="motion-btn-spring inline-flex items-center gap-2 h-13 px-8 rounded-full bg-slate-900 hover:bg-slate-800 text-white font-bold text-xs tracking-wider uppercase shadow-md transition cursor-pointer">
                         <span>Request Institutional Partnership</span>
                         <svg class="w-4 h-4" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M14 5l7 7m0 0l-7 7m7-7H3"/></svg>
                     </a>
                 </div>
             </div>
 
-            <div class="lg:col-span-5">
-                <div class="p-8 md:p-10 rounded-[2.5rem] bg-white border border-slate-200/90 shadow-xl">
+            <div class="motion-reveal-right lg:col-span-5">
+                <div class="motion-card-hover p-8 md:p-10 rounded-[2.5rem] bg-white border border-slate-200/90 shadow-xl">
                     <div class="flex items-center justify-between mb-6 pb-4 border-b border-slate-100">
                         <div class="flex items-center gap-2.5">
                             <div class="w-9 h-9 rounded-xl bg-indigo-50 text-indigo-700 font-bold flex items-center justify-center">∞</div>
@@ -614,7 +650,7 @@
 <!-- Student Stories Section -->
 <section id="stories" class="py-24 px-4 sm:px-6 lg:px-8 bg-white">
     <div class="max-w-7xl mx-auto">
-        <div class="mb-16 md:mb-20 md:flex justify-between items-end gap-8 border-b border-slate-100 pb-8">
+        <div class="motion-reveal mb-16 md:mb-20 md:flex justify-between items-end gap-8 border-b border-slate-100 pb-8">
             <div>
                 <span class="text-indigo-600 font-bold text-xs tracking-[0.3em] uppercase mb-4 block">Student Stories</span>
                 <h2 class="text-4xl md:text-5xl font-serif text-slate-900 leading-tight">
@@ -627,8 +663,8 @@
             </p>
         </div>
 
-        <div class="grid grid-cols-1 md:grid-cols-3 gap-6">
-            <div class="p-8 rounded-[2.2rem] bg-[#FAFBF9] border border-slate-200/80 hover:border-slate-300 shadow-xs hover:shadow-xl transition flex flex-col justify-between">
+        <div class="motion-stagger grid grid-cols-1 md:grid-cols-3 gap-6">
+            <div class="motion-card-hover p-8 rounded-[2.2rem] bg-[#FAFBF9] border border-slate-200/80 hover:border-slate-300 shadow-xs hover:shadow-xl transition flex flex-col justify-between">
                 <div>
                     <div class="flex items-center justify-between mb-6">
                         <div class="w-12 h-12 rounded-2xl font-serif font-bold text-sm flex items-center justify-center border text-indigo-700 bg-indigo-50 border-indigo-100 shadow-xs">
@@ -651,7 +687,7 @@
                 </div>
             </div>
 
-            <div class="p-8 rounded-[2.2rem] bg-[#FAFBF9] border border-slate-200/80 hover:border-slate-300 shadow-xs hover:shadow-xl transition flex flex-col justify-between">
+            <div class="motion-card-hover p-8 rounded-[2.2rem] bg-[#FAFBF9] border border-slate-200/80 hover:border-slate-300 shadow-xs hover:shadow-xl transition flex flex-col justify-between">
                 <div>
                     <div class="flex items-center justify-between mb-6">
                         <div class="w-12 h-12 rounded-2xl font-serif font-bold text-sm flex items-center justify-center border text-emerald-700 bg-emerald-50 border-emerald-100 shadow-xs">
@@ -674,7 +710,7 @@
                 </div>
             </div>
 
-            <div class="p-8 rounded-[2.2rem] bg-[#FAFBF9] border border-slate-200/80 hover:border-slate-300 shadow-xs hover:shadow-xl transition flex flex-col justify-between">
+            <div class="motion-card-hover p-8 rounded-[2.2rem] bg-[#FAFBF9] border border-slate-200/80 hover:border-slate-300 shadow-xs hover:shadow-xl transition flex flex-col justify-between">
                 <div>
                     <div class="flex items-center justify-between mb-6">
                         <div class="w-12 h-12 rounded-2xl font-serif font-bold text-sm flex items-center justify-center border text-purple-700 bg-purple-50 border-purple-100 shadow-xs">
@@ -703,14 +739,14 @@
 <!-- FAQ Section -->
 <section id="faq" class="py-24 px-4 sm:px-6 lg:px-8 bg-[#F6F8F5] border-y border-slate-200/80">
     <div class="max-w-4xl mx-auto">
-        <div class="text-center mb-16">
+        <div class="motion-reveal text-center mb-16">
             <span class="text-indigo-600 font-bold text-xs tracking-[0.3em] uppercase mb-4 block">Knowledge Base</span>
             <h2 class="text-4xl md:text-5xl font-serif text-slate-900 leading-tight mb-4">
                 Frequently Asked <span class="text-indigo-700 italic">Questions.</span>
             </h2>
         </div>
 
-        <div class="space-y-4">
+        <div class="motion-reveal space-y-4">
             <details class="group p-6 rounded-2xl bg-white border border-slate-200/80 shadow-xs [&_summary::-webkit-details-marker]:none">
                 <summary class="flex items-center justify-between cursor-pointer font-serif text-base sm:text-lg text-slate-900 hover:text-indigo-700 font-medium">
                     <span>Who can apply for Infinity Interns?</span>
@@ -766,7 +802,7 @@
 <section id="contact" class="py-24 px-4 sm:px-6 lg:px-8 bg-white">
     <div class="max-w-7xl mx-auto">
         <div class="grid grid-cols-1 lg:grid-cols-12 gap-12 items-center">
-            <div class="lg:col-span-7 space-y-6">
+            <div class="motion-reveal-left lg:col-span-7 space-y-6">
                 <span class="text-indigo-600 font-bold text-xs tracking-[0.3em] uppercase block">Get in Touch</span>
                 <h2 class="text-4xl md:text-5xl font-serif text-slate-900 leading-tight">
                     We're Here to <br>
@@ -776,29 +812,29 @@
                     Have questions regarding undergraduate degree eligibility, program duration, or institutional MoUs? Reach out to our student helpline directly.
                 </p>
                 <div class="grid grid-cols-1 sm:grid-cols-2 gap-4 pt-2">
-                    <a href="mailto:info@infinityinterns.com" class="p-5 rounded-2xl bg-[#FAFBF9] border border-slate-200/80 hover:border-slate-300 transition flex items-center gap-3.5">
-                        <div class="w-12 h-12 rounded-xl bg-white text-indigo-700 flex items-center justify-center shrink-0 border border-slate-200 text-xl">✉️</div>
+                    <a href="mailto:info@infinityinterns.com" class="motion-card-hover p-5 rounded-2xl bg-[#FAFBF9] border border-slate-200/80 hover:border-slate-300 transition flex items-center gap-3.5">
+                        <div class="w-12 h-12 rounded-xl bg-white text-indigo-700 flex items-center justify-center shrink-0 border border-slate-200 text-xl shadow-xs">✉️</div>
                         <div class="overflow-hidden">
                             <span class="text-[10px] text-slate-400 uppercase tracking-wider block font-bold">Email Desk</span>
                             <span class="text-xs font-bold text-slate-900 truncate block">info@infinityinterns.com</span>
                         </div>
                     </a>
-                    <a href="tel:+916204141971" class="p-5 rounded-2xl bg-[#FAFBF9] border border-slate-200/80 hover:border-slate-300 transition flex items-center gap-3.5">
-                        <div class="w-12 h-12 rounded-xl bg-white text-emerald-700 flex items-center justify-center shrink-0 border border-slate-200 text-xl">📞</div>
+                    <a href="tel:+916204141971" class="motion-card-hover p-5 rounded-2xl bg-[#FAFBF9] border border-slate-200/80 hover:border-slate-300 transition flex items-center gap-3.5">
+                        <div class="w-12 h-12 rounded-xl bg-white text-emerald-700 flex items-center justify-center shrink-0 border border-slate-200 text-xl shadow-xs">📞</div>
                         <div class="overflow-hidden">
                             <span class="text-[10px] text-slate-400 uppercase tracking-wider block font-bold">Helpline & WhatsApp</span>
                             <span class="text-xs font-bold text-slate-900 truncate block">+91 6204141971</span>
                         </div>
                     </a>
-                    <a href="tel:+916204221832" class="p-5 rounded-2xl bg-[#FAFBF9] border border-slate-200/80 hover:border-slate-300 transition flex items-center gap-3.5">
-                        <div class="w-12 h-12 rounded-xl bg-white text-emerald-700 flex items-center justify-center shrink-0 border border-slate-200 text-xl">📞</div>
+                    <a href="tel:+916204221832" class="motion-card-hover p-5 rounded-2xl bg-[#FAFBF9] border border-slate-200/80 hover:border-slate-300 transition flex items-center gap-3.5">
+                        <div class="w-12 h-12 rounded-xl bg-white text-emerald-700 flex items-center justify-center shrink-0 border border-slate-200 text-xl shadow-xs">📞</div>
                         <div class="overflow-hidden">
                             <span class="text-[10px] text-slate-400 uppercase tracking-wider block font-bold">Alternate Line</span>
                             <span class="text-xs font-bold text-slate-900 truncate block">+91 6204221832</span>
                         </div>
                     </a>
-                    <div class="p-5 rounded-2xl bg-[#FAFBF9] border border-slate-200/80 flex items-center gap-3.5">
-                        <div class="w-12 h-12 rounded-2xl bg-white text-rose-600 flex items-center justify-center shrink-0 border border-slate-200 text-xl">📍</div>
+                    <div class="motion-card-hover p-5 rounded-2xl bg-[#FAFBF9] border border-slate-200/80 flex items-center gap-3.5">
+                        <div class="w-12 h-12 rounded-2xl bg-white text-rose-600 flex items-center justify-center shrink-0 border border-slate-200 text-xl shadow-xs">📍</div>
                         <div class="overflow-hidden">
                             <span class="text-[10px] text-slate-400 uppercase tracking-wider block font-bold">Operational Center</span>
                             <span class="text-xs font-bold text-slate-900 truncate block">Patna, Bihar, India</span>
@@ -808,8 +844,8 @@
             </div>
 
             <!-- Interactive Direct Inquiry Form -->
-            <div class="lg:col-span-5">
-                <div class="p-8 md:p-10 rounded-[2.5rem] bg-gradient-to-b from-indigo-900 to-slate-900 text-white shadow-2xl">
+            <div class="motion-reveal-right lg:col-span-5">
+                <div class="motion-card-hover p-8 md:p-10 rounded-[2.5rem] bg-gradient-to-b from-indigo-900 to-slate-900 text-white shadow-2xl">
                     <span class="text-[10px] font-bold tracking-widest text-indigo-300 uppercase block mb-1">Instant Support</span>
                     <h3 class="text-2xl font-serif text-white mb-2 font-bold">Send Direct Inquiry</h3>
                     <p class="text-xs text-indigo-200/80 mb-6 font-light">Have a quick question? Send it to our student advisory desk.</p>
@@ -830,7 +866,7 @@
                         <div>
                             <textarea name="message" required rows="3" placeholder="Your Query / Requirements..." class="w-full px-4 py-2.5 rounded-xl bg-white/10 border border-white/20 text-xs text-white placeholder-slate-400 focus:outline-none focus:ring-2 focus:ring-indigo-400"></textarea>
                         </div>
-                        <button type="submit" class="w-full py-3 rounded-full bg-white hover:bg-slate-100 text-slate-900 font-bold text-xs uppercase tracking-wider transition shadow-md cursor-pointer">
+                        <button type="submit" class="motion-btn-spring w-full py-3 rounded-full bg-white hover:bg-slate-100 text-slate-900 font-bold text-xs uppercase tracking-wider transition shadow-md cursor-pointer">
                             Submit Inquiry
                         </button>
                     </form>
@@ -842,7 +878,7 @@
 
 <!-- Bottom CTA Strip -->
 <section class="py-16 bg-gradient-to-r from-indigo-900 via-indigo-800 to-slate-900 text-white text-center px-4">
-    <div class="max-w-4xl mx-auto space-y-4">
+    <div class="motion-reveal max-w-4xl mx-auto space-y-4">
         <h2 class="text-3xl sm:text-4xl md:text-5xl font-serif">
             Turn Your College Requirement into a <span class="text-indigo-300 italic">Career Advantage.</span>
         </h2>
@@ -850,10 +886,10 @@
             Join thousands of undergraduate learners from BA, BSc, BBA, BCA, and BCom. Start your practical internship journey today.
         </p>
         <div class="pt-2 flex flex-wrap justify-center gap-3">
-            <button onclick="openApplyModal()" class="px-8 py-3.5 rounded-full bg-white hover:bg-slate-100 text-slate-900 font-bold text-xs uppercase tracking-wider transition shadow-xl cursor-pointer">
+            <button onclick="openApplyModal()" class="motion-btn-spring px-8 py-3.5 rounded-full bg-white hover:bg-slate-100 text-slate-900 font-bold text-xs uppercase tracking-wider transition shadow-xl cursor-pointer">
                 Enroll in Upcoming Cohort
             </button>
-            <a href="https://wa.me/916204141971" target="_blank" rel="noopener noreferrer" class="px-7 py-3.5 rounded-full bg-emerald-600 hover:bg-emerald-500 text-white font-bold text-xs uppercase tracking-wider transition shadow-xl flex items-center gap-2">
+            <a href="https://wa.me/916204141971" target="_blank" rel="noopener noreferrer" class="motion-btn-spring px-7 py-3.5 rounded-full bg-emerald-600 hover:bg-emerald-500 text-white font-bold text-xs uppercase tracking-wider transition shadow-xl flex items-center gap-2">
                 <span>WhatsApp Counselor</span>
             </a>
         </div>

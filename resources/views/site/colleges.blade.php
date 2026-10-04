@@ -6,20 +6,20 @@
 <!-- Hero -->
 <section class="relative min-h-[45vh] flex items-center justify-center pt-24 pb-16 overflow-hidden bg-[#0A1128] text-white">
     <div class="absolute inset-0 z-0 pointer-events-none">
-        <div class="absolute top-1/2 left-1/2 -translate-x-1/2 -translate-y-1/2 w-[600px] h-[500px] bg-indigo-500/15 rounded-full blur-[140px]"></div>
+        <div class="absolute top-1/2 left-1/2 -translate-x-1/2 -translate-y-1/2 w-[600px] h-[500px] bg-indigo-500/15 rounded-full blur-[140px] motion-orb"></div>
         <div class="absolute inset-0 bg-[radial-gradient(#ffffff_1px,transparent_1px)] [background-size:24px_24px] opacity-10"></div>
     </div>
 
     <div class="relative z-10 max-w-5xl mx-auto px-4 text-center">
-        <div class="inline-flex items-center gap-2 px-4 py-1.5 rounded-full border border-indigo-400/30 bg-indigo-500/10 backdrop-blur-md mb-6">
+        <div class="inline-flex items-center gap-2 px-4 py-1.5 rounded-full border border-indigo-400/30 bg-indigo-500/10 backdrop-blur-md mb-6 motion-hero-badge">
             <span class="text-indigo-400 text-xs">✦</span>
             <span class="text-[11px] font-bold tracking-[0.3em] uppercase text-indigo-300">Institutional Partnership Desk</span>
         </div>
-        <h1 class="text-4xl sm:text-6xl md:text-7xl font-serif text-white leading-tight mb-6">
+        <h1 class="text-4xl sm:text-6xl md:text-7xl font-serif text-white leading-tight mb-6 motion-hero-title">
             College & University <br>
             <span class="text-indigo-400 italic">Internship Coordination.</span>
         </h1>
-        <p class="max-w-2xl mx-auto text-base sm:text-lg text-indigo-100/80 font-light leading-relaxed">
+        <p class="max-w-2xl mx-auto text-base sm:text-lg text-indigo-100/80 font-light leading-relaxed motion-hero-sub">
             Streamline semester internship requirements for your undergraduate departments. We partner with colleges across Bihar, UP, and Jharkhand to deliver structured, verifiable training.
         </p>
     </div>
@@ -27,8 +27,8 @@
 
 <!-- Institutional Overview & Working Inquiry Form -->
 <section class="py-20 px-4 sm:px-6 lg:px-8 max-w-7xl mx-auto">
-    <div class="grid grid-cols-1 md:grid-cols-3 gap-8 mb-20">
-        <div class="p-8 sm:p-10 rounded-[2.5rem] bg-white border border-slate-200/90 shadow-xs space-y-4">
+    <div class="grid grid-cols-1 md:grid-cols-3 gap-8 mb-20 motion-stagger">
+        <div class="p-8 sm:p-10 rounded-[2.5rem] bg-white border border-slate-200/90 shadow-xs space-y-4 motion-card-hover">
             <div class="w-12 h-12 rounded-2xl bg-indigo-50 text-indigo-700 flex items-center justify-center text-xl">👥</div>
             <h3 class="text-2xl font-serif text-slate-900">Bulk Student Onboarding</h3>
             <p class="text-xs text-slate-600 font-light leading-relaxed">
@@ -36,7 +36,7 @@
             </p>
         </div>
 
-        <div class="p-8 sm:p-10 rounded-[2.5rem] bg-white border border-slate-200/90 shadow-xs space-y-4">
+        <div class="p-8 sm:p-10 rounded-[2.5rem] bg-white border border-slate-200/90 shadow-xs space-y-4 motion-card-hover">
             <div class="w-12 h-12 rounded-2xl bg-emerald-50 text-emerald-700 flex items-center justify-center text-xl">📋</div>
             <h3 class="text-2xl font-serif text-slate-900">HOD Attendance & Progress Logs</h3>
             <p class="text-xs text-slate-600 font-light leading-relaxed">
@@ -44,7 +44,7 @@
             </p>
         </div>
 
-        <div class="p-8 sm:p-10 rounded-[2.5rem] bg-white border border-slate-200/90 shadow-xs space-y-4">
+        <div class="p-8 sm:p-10 rounded-[2.5rem] bg-white border border-slate-200/90 shadow-xs space-y-4 motion-card-hover">
             <div class="w-12 h-12 rounded-2xl bg-purple-50 text-purple-700 flex items-center justify-center text-xl">🤝</div>
             <h3 class="text-2xl font-serif text-slate-900">Formal MOU Agreements</h3>
             <p class="text-xs text-slate-600 font-light leading-relaxed">
@@ -54,7 +54,7 @@
     </div>
 
     <!-- Partnership Request Form -->
-    <div class="p-8 sm:p-12 rounded-[2.8rem] bg-white border border-slate-200/90 shadow-xl">
+    <div class="p-8 sm:p-12 rounded-[2.8rem] bg-white border border-slate-200/90 shadow-xl motion-reveal">
         <div class="grid grid-cols-1 lg:grid-cols-12 gap-12 items-center">
             <div class="lg:col-span-5 space-y-6">
                 <span class="text-indigo-600 font-bold text-xs tracking-[0.3em] uppercase block">Direct Partnership Desk</span>
@@ -134,7 +134,7 @@
                         <textarea name="notes" rows="2" placeholder="Any specific requirements regarding semester timeline or stream mappings..." class="w-full px-4 py-2.5 rounded-xl bg-white border border-slate-200 text-xs text-slate-900 focus:outline-none focus:ring-2 focus:ring-indigo-500"></textarea>
                     </div>
 
-                    <button type="submit" class="w-full h-12 rounded-full bg-slate-900 hover:bg-slate-800 text-white font-bold text-xs uppercase tracking-wider transition shadow-md cursor-pointer">
+                    <button type="submit" class="w-full h-12 rounded-full bg-slate-900 hover:bg-slate-800 text-white font-bold text-xs uppercase tracking-wider transition shadow-md cursor-pointer motion-btn-spring">
                         Submit Institutional Request
                     </button>
                 </form>

@@ -6,20 +6,20 @@
 <!-- Hero -->
 <section class="relative min-h-[45vh] flex items-center justify-center pt-24 pb-16 overflow-hidden bg-[#0A1128] text-white">
     <div class="absolute inset-0 z-0 pointer-events-none">
-        <div class="absolute top-1/2 left-1/2 -translate-x-1/2 -translate-y-1/2 w-[600px] h-[500px] bg-indigo-500/15 rounded-full blur-[140px]"></div>
+        <div class="absolute top-1/2 left-1/2 -translate-x-1/2 -translate-y-1/2 w-[600px] h-[500px] bg-indigo-500/15 rounded-full blur-[140px] motion-orb"></div>
         <div class="absolute inset-0 bg-[radial-gradient(#ffffff_1px,transparent_1px)] [background-size:24px_24px] opacity-10"></div>
     </div>
 
     <div class="relative z-10 max-w-5xl mx-auto px-4 text-center">
-        <div class="inline-flex items-center gap-2 px-4 py-1.5 rounded-full border border-indigo-400/30 bg-indigo-500/10 backdrop-blur-md mb-6">
+        <div class="inline-flex items-center gap-2 px-4 py-1.5 rounded-full border border-indigo-400/30 bg-indigo-500/10 backdrop-blur-md mb-6 motion-hero-badge">
             <span class="text-indigo-400 text-xs">✦</span>
             <span class="text-[11px] font-bold tracking-[0.3em] uppercase text-indigo-300">Student Experiences</span>
         </div>
-        <h1 class="text-4xl sm:text-6xl md:text-7xl font-serif text-white leading-tight mb-6">
+        <h1 class="text-4xl sm:text-6xl md:text-7xl font-serif text-white leading-tight mb-6 motion-hero-title">
             Student Stories & <br>
             <span class="text-indigo-400 italic">Practical Transformations.</span>
         </h1>
-        <p class="max-w-2xl mx-auto text-base sm:text-lg text-indigo-100/80 font-light leading-relaxed">
+        <p class="max-w-2xl mx-auto text-base sm:text-lg text-indigo-100/80 font-light leading-relaxed motion-hero-sub">
             Read how undergraduate learners from BA, BSc, BBA, BCA, and BCom bridged the gap between theoretical classroom learning and verifiable workplace capabilities.
         </p>
     </div>
@@ -72,9 +72,9 @@
     ];
     @endphp
 
-    <div class="grid grid-cols-1 md:grid-cols-2 gap-8 mb-16">
+    <div class="grid grid-cols-1 md:grid-cols-2 gap-8 mb-16 motion-stagger">
         @foreach($studentStories as $s)
-        <article class="p-8 sm:p-10 rounded-[2.5rem] bg-white border border-slate-200/90 shadow-xs hover:shadow-xl transition flex flex-col justify-between">
+        <article class="p-8 sm:p-10 rounded-[2.5rem] bg-white border border-slate-200/90 shadow-xs hover:shadow-xl transition flex flex-col justify-between motion-card-hover">
             <div>
                 <div class="flex items-center justify-between mb-6">
                     <div class="flex items-center gap-3.5">

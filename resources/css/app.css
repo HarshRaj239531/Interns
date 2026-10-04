@@ -306,3 +306,154 @@ h1, h2, h3, .font-serif {
         color: black !important;
     }
 }
+
+/* =========================================================
+   PROFESSIONAL ANIMATIONS & SPRING PHYSICS
+   - Content is NEVER hidden by default (guaranteed zero blank screen)
+   - GPU-accelerated spring curves and keyframe choreography
+   ========================================================= */
+
+/* Hero Entrance Animations */
+@keyframes heroEntrance {
+    0% {
+        opacity: 0;
+        transform: translateY(24px);
+    }
+    100% {
+        opacity: 1;
+        transform: translateY(0);
+    }
+}
+
+@keyframes heroBadgeEntrance {
+    0% {
+        opacity: 0;
+        transform: translateY(-16px) scale(0.94);
+    }
+    100% {
+        opacity: 1;
+        transform: translateY(0) scale(1);
+    }
+}
+
+.motion-hero-badge {
+    animation: heroBadgeEntrance 0.7s cubic-bezier(0.16, 1, 0.3, 1) both;
+}
+
+.motion-hero-title {
+    animation: heroEntrance 0.8s cubic-bezier(0.16, 1, 0.3, 1) 0.1s both;
+}
+
+.motion-hero-sub {
+    animation: heroEntrance 0.8s cubic-bezier(0.16, 1, 0.3, 1) 0.2s both;
+}
+
+.motion-hero-cards {
+    animation: heroEntrance 0.8s cubic-bezier(0.16, 1, 0.3, 1) 0.3s both;
+}
+
+.motion-hero-cta {
+    animation: heroEntrance 0.8s cubic-bezier(0.16, 1, 0.3, 1) 0.4s both;
+}
+
+/* Floating Ambient Orbs (GPU compositor thread) */
+@keyframes floatOrb1 {
+    0%, 100% { transform: translate(0, 0) scale(1); }
+    50% { transform: translate(30px, -25px) scale(1.08); }
+}
+
+@keyframes floatOrb2 {
+    0%, 100% { transform: translate(0, 0) scale(1); }
+    50% { transform: translate(-25px, 30px) scale(0.94); }
+}
+
+.motion-orb {
+    will-change: transform;
+    pointer-events: none;
+    animation: floatOrb1 14s ease-in-out infinite;
+}
+
+.motion-orb:nth-child(even) {
+    animation: floatOrb2 18s ease-in-out infinite;
+}
+
+/* Interactive Card Spring Physics */
+.motion-card-hover {
+    transition: transform 0.28s cubic-bezier(0.34, 1.4, 0.64, 1), box-shadow 0.28s ease, border-color 0.28s ease;
+    will-change: transform, box-shadow;
+}
+
+.motion-card-hover:hover {
+    transform: translateY(-5px) scale(1.015);
+    box-shadow: 0 20px 25px -5px rgba(99, 102, 241, 0.12), 0 8px 10px -6px rgba(0, 0, 0, 0.04);
+}
+
+/* Button Spring Feedback */
+.motion-btn-spring {
+    transition: transform 0.22s cubic-bezier(0.34, 1.56, 0.64, 1), box-shadow 0.22s ease;
+    will-change: transform;
+}
+
+.motion-btn-spring:hover {
+    transform: scale(1.035);
+}
+
+.motion-btn-spring:active {
+    transform: scale(0.96);
+}
+
+/* Scroll Viewport InView Animation */
+@keyframes revealInView {
+    0% {
+        opacity: 0;
+        transform: translateY(22px);
+    }
+    100% {
+        opacity: 1;
+        transform: translateY(0);
+    }
+}
+
+.motion-inview {
+    animation: revealInView 0.65s cubic-bezier(0.16, 1, 0.3, 1) both;
+}
+
+/* Staggered Children */
+.motion-stagger.motion-inview > *:nth-child(1) { animation: revealInView 0.6s cubic-bezier(0.16, 1, 0.3, 1) 0.05s both; }
+.motion-stagger.motion-inview > *:nth-child(2) { animation: revealInView 0.6s cubic-bezier(0.16, 1, 0.3, 1) 0.12s both; }
+.motion-stagger.motion-inview > *:nth-child(3) { animation: revealInView 0.6s cubic-bezier(0.16, 1, 0.3, 1) 0.19s both; }
+.motion-stagger.motion-inview > *:nth-child(4) { animation: revealInView 0.6s cubic-bezier(0.16, 1, 0.3, 1) 0.26s both; }
+.motion-stagger.motion-inview > *:nth-child(5) { animation: revealInView 0.6s cubic-bezier(0.16, 1, 0.3, 1) 0.33s both; }
+.motion-stagger.motion-inview > *:nth-child(6) { animation: revealInView 0.6s cubic-bezier(0.16, 1, 0.3, 1) 0.40s both; }
+
+/* Modal Spring Popup */
+@keyframes modalPopup {
+    0% {
+        opacity: 0;
+        transform: scale(0.94) translateY(12px);
+    }
+    100% {
+        opacity: 1;
+        transform: scale(1) translateY(0);
+    }
+}
+
+.motion-modal {
+    animation: modalPopup 0.32s cubic-bezier(0.16, 1, 0.3, 1) both;
+}
+
+/* Scroll progress bar */
+#scrollProgress {
+    transition: transform 0.08s linear;
+    will-change: transform;
+}
+
+/* Accessibility: Respect Reduced Motion */
+@media (prefers-reduced-motion: reduce) {
+    *, ::before, ::after {
+        animation-duration: 0.01ms !important;
+        animation-iteration-count: 1 !important;
+        transition-duration: 0.01ms !important;
+    }
+}
+

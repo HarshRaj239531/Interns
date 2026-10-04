@@ -6,7 +6,7 @@
 <div class="space-y-6">
 
     <!-- Top Header -->
-    <div class="p-6 md:p-8 rounded-3xl adm-card shadow-xl flex flex-col md:flex-row md:items-center justify-between gap-4">
+    <div class="p-6 md:p-8 rounded-3xl adm-card shadow-xl flex flex-col md:flex-row md:items-center justify-between gap-4 motion-reveal">
         <div>
             <div class="inline-flex items-center gap-2 px-3 py-1 rounded-full bg-indigo-50 dark:bg-indigo-950/60 text-indigo-700 dark:text-indigo-400 text-xs font-semibold mb-2 border border-indigo-200 dark:border-indigo-800">
                 <span>✦ Dynamic Academic Domain Catalog</span>
@@ -18,14 +18,14 @@
         </div>
 
         <div class="flex items-center gap-3">
-            <button type="button" onclick="openAddStreamModal()" class="px-5 py-2.5 rounded-xl bg-indigo-600 hover:bg-indigo-700 text-white text-xs font-bold transition shadow-md shadow-indigo-600/30 cursor-pointer">
+            <button type="button" onclick="openAddStreamModal()" class="px-5 py-2.5 rounded-xl bg-indigo-600 hover:bg-indigo-700 text-white text-xs font-bold transition shadow-md shadow-indigo-600/30 cursor-pointer motion-btn-spring">
                 + Add New Stream
             </button>
         </div>
     </div>
 
     <!-- Streams Table Card -->
-    <div class="rounded-3xl adm-card overflow-hidden shadow-xl">
+    <div class="rounded-3xl adm-card overflow-hidden shadow-xl motion-reveal">
         <div class="p-5 border-b border-slate-200 dark:border-slate-800 flex items-center justify-between">
             <div>
                 <h3 class="font-serif font-bold text-base adm-text">Configured Specialization Tracks ({{ $streams->count() }})</h3>
@@ -80,7 +80,7 @@
                         <td class="py-4 px-4">
                             <form action="{{ route('admin.streams.toggle', $stream->id) }}" method="POST" class="inline">
                                 @csrf
-                                <button type="submit" class="px-2.5 py-1 rounded-full text-[10px] font-bold transition cursor-pointer {{ $stream->is_active ? 'bg-emerald-100 dark:bg-emerald-950 text-emerald-800 dark:text-emerald-300 border border-emerald-300 dark:border-emerald-800' : 'bg-slate-100 dark:bg-slate-800 text-slate-500 border border-slate-300 dark:border-slate-700' }}" title="Click to Toggle Status">
+                                <button type="submit" class="px-2.5 py-1 rounded-full text-[10px] font-bold transition cursor-pointer motion-btn-spring {{ $stream->is_active ? 'bg-emerald-100 dark:bg-emerald-950 text-emerald-800 dark:text-emerald-300 border border-emerald-300 dark:border-emerald-800' : 'bg-slate-100 dark:bg-slate-800 text-slate-500 border border-slate-300 dark:border-slate-700' }}" title="Click to Toggle Status">
                                     {{ $stream->is_active ? 'ACTIVE' : 'INACTIVE' }}
                                 </button>
                             </form>
@@ -89,14 +89,14 @@
                         <!-- Actions -->
                         <td class="py-4 px-4 text-right">
                             <div class="flex items-center justify-end gap-2">
-                                <button type="button" onclick="openEditStreamModal({{ json_encode($stream) }})" class="px-2.5 py-1 rounded-lg bg-slate-100 dark:bg-slate-800 hover:bg-slate-200 dark:hover:bg-slate-700 text-slate-800 dark:text-slate-200 border border-slate-200 dark:border-slate-700 text-[10px] font-bold transition cursor-pointer">
+                                <button type="button" onclick="openEditStreamModal({{ json_encode($stream) }})" class="px-2.5 py-1 rounded-lg bg-slate-100 dark:bg-slate-800 hover:bg-slate-200 dark:hover:bg-slate-700 text-slate-800 dark:text-slate-200 border border-slate-200 dark:border-slate-700 text-[10px] font-bold transition cursor-pointer motion-btn-spring">
                                     ✎ Edit
                                 </button>
 
                                 <form action="{{ route('admin.streams.delete', $stream->id) }}" method="POST" onsubmit="return confirm('Are you sure you want to delete stream {{ $stream->title }}?')" class="inline">
                                     @csrf
                                     @method('DELETE')
-                                    <button type="submit" class="p-1 rounded-lg text-slate-400 hover:text-rose-500 hover:bg-rose-50 dark:hover:bg-rose-950/40 transition cursor-pointer" title="Delete Stream">
+                                    <button type="submit" class="p-1 rounded-lg text-slate-400 hover:text-rose-500 hover:bg-rose-50 dark:hover:bg-rose-950/40 transition cursor-pointer motion-btn-spring" title="Delete Stream">
                                         <svg class="w-4 h-4" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M19 7l-.867 12.142A2 2 0 0116.138 21H7.862a2 2 0 01-1.995-1.858L5 7m5 4v6m4-6v6m1-10V4a1 1 0 00-1-1h-4a1 1 0 00-1 1v3M4 7h16"/></svg>
                                     </button>
                                 </form>
@@ -119,7 +119,7 @@
 
 <!-- Modal: Add New Stream -->
 <div id="addStreamModal" class="hidden fixed inset-0 z-50 flex items-center justify-center p-4 bg-black/60 backdrop-blur-sm">
-    <div class="w-full max-w-lg rounded-3xl adm-card p-6 sm:p-8 shadow-2xl space-y-4">
+    <div class="w-full max-w-lg rounded-3xl adm-card p-6 sm:p-8 shadow-2xl space-y-4 motion-modal">
         <div class="flex items-center justify-between pb-3 border-b border-slate-200 dark:border-slate-800">
             <h3 class="text-base font-bold adm-text">Add New Internship Specialization Stream</h3>
             <button onclick="closeAddStreamModal()" class="adm-text-muted hover:adm-text font-bold text-lg cursor-pointer">&times;</button>
@@ -171,8 +171,8 @@
             </div>
 
             <div class="flex justify-end gap-2 pt-2 border-t border-slate-200 dark:border-slate-800">
-                <button type="button" onclick="closeAddStreamModal()" class="px-4 py-2 rounded-xl bg-slate-200 dark:bg-slate-800 hover:opacity-80 adm-text text-xs font-semibold transition cursor-pointer">Cancel</button>
-                <button type="submit" class="px-5 py-2 rounded-xl bg-indigo-600 hover:bg-indigo-700 text-white text-xs font-bold transition shadow-lg shadow-indigo-600/30 cursor-pointer">Save New Stream</button>
+                <button type="button" onclick="closeAddStreamModal()" class="px-4 py-2 rounded-xl bg-slate-200 dark:bg-slate-800 hover:opacity-80 adm-text text-xs font-semibold transition cursor-pointer motion-btn-spring">Cancel</button>
+                <button type="submit" class="px-5 py-2 rounded-xl bg-indigo-600 hover:bg-indigo-700 text-white text-xs font-bold transition shadow-lg shadow-indigo-600/30 cursor-pointer motion-btn-spring">Save New Stream</button>
             </div>
         </form>
     </div>
@@ -180,7 +180,7 @@
 
 <!-- Modal: Edit Stream -->
 <div id="editStreamModal" class="hidden fixed inset-0 z-50 flex items-center justify-center p-4 bg-black/60 backdrop-blur-sm">
-    <div class="w-full max-w-lg rounded-3xl adm-card p-6 sm:p-8 shadow-2xl space-y-4">
+    <div class="w-full max-w-lg rounded-3xl adm-card p-6 sm:p-8 shadow-2xl space-y-4 motion-modal">
         <div class="flex items-center justify-between pb-3 border-b border-slate-200 dark:border-slate-800">
             <h3 class="text-base font-bold adm-text">Edit Internship Stream</h3>
             <button onclick="closeEditStreamModal()" class="adm-text-muted hover:adm-text font-bold text-lg cursor-pointer">&times;</button>
@@ -233,8 +233,8 @@
             </div>
 
             <div class="flex justify-end gap-2 pt-2 border-t border-slate-200 dark:border-slate-800">
-                <button type="button" onclick="closeEditStreamModal()" class="px-4 py-2 rounded-xl bg-slate-200 dark:bg-slate-800 hover:opacity-80 adm-text text-xs font-semibold transition cursor-pointer">Cancel</button>
-                <button type="submit" class="px-5 py-2 rounded-xl bg-indigo-600 hover:bg-indigo-700 text-white text-xs font-bold transition shadow-lg shadow-indigo-600/30 cursor-pointer">Update Stream</button>
+                <button type="button" onclick="closeEditStreamModal()" class="px-4 py-2 rounded-xl bg-slate-200 dark:bg-slate-800 hover:opacity-80 adm-text text-xs font-semibold transition cursor-pointer motion-btn-spring">Cancel</button>
+                <button type="submit" class="px-5 py-2 rounded-xl bg-indigo-600 hover:bg-indigo-700 text-white text-xs font-bold transition shadow-lg shadow-indigo-600/30 cursor-pointer motion-btn-spring">Update Stream</button>
             </div>
         </form>
     </div>

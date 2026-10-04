@@ -9,6 +9,8 @@
     @vite(['resources/css/app.css', 'resources/js/app.js'])
 </head>
 <body class="bg-[#FAFBF9] text-[#1E293B] flex flex-col min-h-screen font-sans selection:bg-indigo-600 selection:text-white">
+    <!-- Top Scroll Progress Indicator (Framer Motion) -->
+    <div id="scrollProgress" class="fixed top-0 left-0 right-0 h-[3px] bg-gradient-to-r from-indigo-500 via-purple-500 to-emerald-400 z-[999] origin-left scale-x-0 pointer-events-none"></div>
 
     <!-- Top Sticky Floating Navbar -->
     <div class="fixed top-0 inset-x-0 z-[100] flex justify-center px-3 sm:px-4 pt-3.5 pointer-events-none">
@@ -342,26 +344,26 @@
         </div>
     </div>
 
-    <!-- UI Scripts -->
+    <!-- UI Fallback Scripts (Delegates to Framer Motion if initialized) -->
     <script>
-        function toggleMobileNav() {
-            const drawer = document.getElementById('mobileDrawer');
-            drawer.classList.toggle('hidden');
+        if (typeof window.openApplyModal === 'undefined') {
+            window.openApplyModal = function() {
+                const modal = document.getElementById('applyModal');
+                if (modal) modal.classList.remove('hidden');
+            };
         }
-
-        function openApplyModal() {
-            document.getElementById('applyModal').classList.remove('hidden');
+        if (typeof window.closeApplyModal === 'undefined') {
+            window.closeApplyModal = function() {
+                const modal = document.getElementById('applyModal');
+                if (modal) modal.classList.add('hidden');
+            };
         }
-
-        function closeApplyModal() {
-            document.getElementById('applyModal').classList.add('hidden');
+        if (typeof window.toggleMobileNav === 'undefined') {
+            window.toggleMobileNav = function() {
+                const drawer = document.getElementById('mobileDrawer');
+                if (drawer) drawer.classList.toggle('hidden');
+            };
         }
-
-        window.addEventListener('keydown', function(e) {
-            if (e.key === 'Escape') {
-                closeApplyModal();
-            }
-        });
     </script>
     @yield('scripts')
 </body>

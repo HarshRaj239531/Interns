@@ -6,7 +6,7 @@
 <div class="space-y-6">
 
     <!-- Top Header -->
-    <div class="p-6 md:p-8 rounded-3xl adm-card shadow-xl flex flex-col md:flex-row md:items-center justify-between gap-4">
+    <div class="p-6 md:p-8 rounded-3xl adm-card shadow-xl flex flex-col md:flex-row md:items-center justify-between gap-4 motion-reveal">
         <div>
             <div class="inline-flex items-center gap-2 px-3 py-1 rounded-full bg-emerald-50 dark:bg-emerald-950/60 text-emerald-700 dark:text-emerald-400 text-xs font-semibold mb-2 border border-emerald-200 dark:border-emerald-800">
                 <span>✦ Authentic UGC Central Credential Registry</span>
@@ -18,10 +18,10 @@
         </div>
 
         <div class="flex items-center gap-3">
-            <a href="{{ route('admin.dashboard') }}" class="px-4 py-2.5 rounded-xl adm-card hover:bg-slate-100 dark:hover:bg-slate-800 text-xs font-semibold transition">
+            <a href="{{ route('admin.dashboard') }}" class="px-4 py-2.5 rounded-xl adm-card hover:bg-slate-100 dark:hover:bg-slate-800 text-xs font-semibold transition motion-btn-spring">
                 ← Back to Dashboard
             </a>
-            <a href="{{ route('verify') }}" target="_blank" class="px-4 py-2.5 rounded-xl bg-indigo-600 hover:bg-indigo-700 text-white text-xs font-bold transition shadow-md shadow-indigo-600/30">
+            <a href="{{ route('verify') }}" target="_blank" class="px-4 py-2.5 rounded-xl bg-indigo-600 hover:bg-indigo-700 text-white text-xs font-bold transition shadow-md shadow-indigo-600/30 motion-btn-spring">
                 Open Public Verifier ↗
             </a>
         </div>
@@ -31,7 +31,7 @@
     <div class="grid grid-cols-1 lg:grid-cols-12 gap-6">
 
         <!-- Form Card (Col 7) -->
-        <div class="lg:col-span-7 rounded-3xl adm-card p-6 sm:p-8 shadow-xl space-y-6">
+        <div class="lg:col-span-7 rounded-3xl adm-card p-6 sm:p-8 shadow-xl space-y-6 motion-reveal">
             <div class="flex items-center justify-between pb-4 border-b border-slate-200 dark:border-slate-800">
                 <h3 class="font-serif font-bold text-lg adm-text">Certificate Issue Parameters</h3>
                 <span class="text-xs px-2.5 py-1 rounded-full bg-emerald-100 dark:bg-emerald-950 text-emerald-800 dark:text-emerald-300 font-bold">
@@ -41,10 +41,10 @@
 
             <!-- Mode Switcher -->
             <div class="flex items-center gap-2 p-1.5 rounded-2xl bg-slate-100 dark:bg-slate-900 border border-slate-200 dark:border-slate-800 text-xs font-bold">
-                <button type="button" onclick="setMode('existing')" id="modeBtnExisting" class="flex-1 py-2 rounded-xl bg-indigo-600 text-white shadow-sm transition">
+                <button type="button" onclick="setMode('existing')" id="modeBtnExisting" class="flex-1 py-2 rounded-xl bg-indigo-600 text-white shadow-sm transition motion-btn-spring">
                     Pick Enrolled Student
                 </button>
-                <button type="button" onclick="setMode('custom')" id="modeBtnCustom" class="flex-1 py-2 rounded-xl text-slate-600 dark:text-slate-400 hover:text-slate-900 dark:hover:text-white transition">
+                <button type="button" onclick="setMode('custom')" id="modeBtnCustom" class="flex-1 py-2 rounded-xl text-slate-600 dark:text-slate-400 hover:text-slate-900 dark:hover:text-white transition motion-btn-spring">
                     Custom / Direct Entry
                 </button>
             </div>
@@ -149,7 +149,7 @@
 
                 <div class="pt-4 flex items-center justify-between border-t border-slate-200 dark:border-slate-800">
                     <span class="text-[11px] adm-text-muted">Generates instant verifiable UGC document.</span>
-                    <button type="submit" class="px-7 py-3 rounded-2xl bg-emerald-600 hover:bg-emerald-500 text-white text-xs font-bold transition shadow-lg shadow-emerald-600/30 cursor-pointer">
+                    <button type="submit" class="px-7 py-3 rounded-2xl bg-emerald-600 hover:bg-emerald-500 text-white text-xs font-bold transition shadow-lg shadow-emerald-600/30 cursor-pointer motion-btn-spring">
                         Authorize & Print Certificate ↗
                     </button>
                 </div>
@@ -159,7 +159,7 @@
         <!-- Live Preview / Info Card (Col 5) -->
         <div class="lg:col-span-5 space-y-6">
             <!-- Simulated Certificate Card -->
-            <div class="p-6 rounded-3xl adm-card border-2 border-indigo-500/30 shadow-2xl relative overflow-hidden space-y-4">
+            <div class="p-6 rounded-3xl adm-card border-2 border-indigo-500/30 shadow-2xl relative overflow-hidden space-y-4 motion-card-hover motion-reveal">
                 <div class="flex items-center justify-between pb-3 border-b border-slate-200 dark:border-slate-800">
                     <span class="text-[10px] font-bold uppercase tracking-wider text-indigo-600 dark:text-indigo-400">Live Preview Sample</span>
                     <span class="w-2.5 h-2.5 rounded-full bg-emerald-500 animate-pulse"></span>
@@ -187,20 +187,20 @@
             </div>
 
             <!-- Recent Issued Certificates List -->
-            <div class="p-6 rounded-3xl adm-card shadow-xl space-y-3">
+            <div class="p-6 rounded-3xl adm-card shadow-xl space-y-3 motion-reveal">
                 <h4 class="font-serif font-bold text-sm adm-text">Recently Issued Certificates</h4>
                 <div class="space-y-2 text-xs">
                     @forelse($recentCertificates as $rc)
-                        <div class="p-3 rounded-xl bg-slate-50 dark:bg-slate-900/60 border border-slate-200 dark:border-slate-800 flex items-center justify-between">
+                        <div class="p-3 rounded-xl bg-slate-50 dark:bg-slate-900/60 border border-slate-200 dark:border-slate-800 flex items-center justify-between motion-card-hover">
                             <div>
                                 <span class="font-bold adm-text block">{{ $rc->user->name ?? 'Candidate' }}</span>
                                 <span class="font-mono text-emerald-600 dark:text-emerald-400 text-[11px]">{{ $rc->certificate_number }}</span>
                             </div>
                             <div class="flex items-center gap-2">
-                                <a href="{{ route('admin.application.view-certificate', $rc->id) }}" target="_blank" class="px-2.5 py-1 rounded-lg bg-indigo-50 dark:bg-indigo-900/40 text-indigo-700 dark:text-indigo-300 text-[10px] font-bold hover:underline">
+                                <a href="{{ route('admin.application.view-certificate', $rc->id) }}" target="_blank" class="px-2.5 py-1 rounded-lg bg-indigo-50 dark:bg-indigo-900/40 text-indigo-700 dark:text-indigo-300 text-[10px] font-bold hover:underline motion-btn-spring">
                                     View ↗
                                 </a>
-                                <a href="{{ route('verify', $rc->certificate_number) }}" target="_blank" class="px-2.5 py-1 rounded-lg bg-emerald-50 dark:bg-emerald-900/40 text-emerald-700 dark:text-emerald-300 text-[10px] font-bold hover:underline">
+                                <a href="{{ route('verify', $rc->certificate_number) }}" target="_blank" class="px-2.5 py-1 rounded-lg bg-emerald-50 dark:bg-emerald-900/40 text-emerald-700 dark:text-emerald-300 text-[10px] font-bold hover:underline motion-btn-spring">
                                     Verify ↗
                                 </a>
                             </div>

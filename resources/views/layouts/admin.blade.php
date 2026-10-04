@@ -19,6 +19,8 @@
     @vite(['resources/css/app.css', 'resources/js/app.js'])
 </head>
 <body class="h-full min-h-screen adm-canvas font-sans antialiased flex flex-col md:flex-row overflow-x-hidden">
+    <!-- Top Scroll Progress Indicator (Framer Motion) -->
+    <div id="scrollProgress" class="fixed top-0 left-0 right-0 h-[3px] bg-gradient-to-r from-indigo-500 via-purple-500 to-emerald-400 z-[999] origin-left scale-x-0 pointer-events-none"></div>
 
     <!-- Sidebar -->
     <aside class="w-full md:w-64 adm-sidebar border-r p-5 flex flex-col justify-between shrink-0 md:h-screen md:sticky md:top-0 z-40">

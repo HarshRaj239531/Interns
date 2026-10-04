@@ -6,27 +6,27 @@
 <!-- Hero -->
 <section class="relative min-h-[45vh] flex items-center justify-center pt-24 pb-16 overflow-hidden bg-[#0A1128] text-white">
     <div class="absolute inset-0 z-0 pointer-events-none">
-        <div class="absolute top-1/2 left-1/2 -translate-x-1/2 -translate-y-1/2 w-[600px] h-[500px] bg-indigo-500/15 rounded-full blur-[140px]"></div>
+        <div class="absolute top-1/2 left-1/2 -translate-x-1/2 -translate-y-1/2 w-[600px] h-[500px] bg-indigo-500/15 rounded-full blur-[140px] motion-orb"></div>
         <div class="absolute inset-0 bg-[radial-gradient(#ffffff_1px,transparent_1px)] [background-size:24px_24px] opacity-10"></div>
     </div>
 
     <div class="relative z-10 max-w-5xl mx-auto px-4 text-center">
-        <div class="inline-flex items-center gap-2 px-4 py-1.5 rounded-full border border-indigo-400/30 bg-indigo-500/10 backdrop-blur-md mb-6">
+        <div class="inline-flex items-center gap-2 px-4 py-1.5 rounded-full border border-indigo-400/30 bg-indigo-500/10 backdrop-blur-md mb-6 motion-hero-badge">
             <span class="text-indigo-400 text-xs">✦</span>
             <span class="text-[11px] font-bold tracking-[0.3em] uppercase text-indigo-300">Step-by-Step Pathway</span>
         </div>
-        <h1 class="text-4xl sm:text-6xl md:text-7xl font-serif text-white leading-tight mb-6">
+        <h1 class="text-4xl sm:text-6xl md:text-7xl font-serif text-white leading-tight mb-6 motion-hero-title">
             The Internship Journey <br>
             <span class="text-indigo-400 italic">from Day 1 to Certification.</span>
         </h1>
-        <p class="max-w-2xl mx-auto text-base sm:text-lg text-indigo-100/80 font-light leading-relaxed">
+        <p class="max-w-2xl mx-auto text-base sm:text-lg text-indigo-100/80 font-light leading-relaxed motion-hero-sub">
             A transparent, predictable process combining organized self-paced modules, interactive mentor webinars, practical project milestones, and UGC document dispatch.
         </p>
     </div>
 </section>
 
 <!-- 6 Stages Deep Dive -->
-<section class="py-20 px-4 sm:px-6 lg:px-8 max-w-6xl mx-auto space-y-12">
+<section class="py-20 px-4 sm:px-6 lg:px-8 max-w-6xl mx-auto space-y-12 motion-stagger">
     @php
     $stages = [
         [
@@ -87,7 +87,7 @@
     @endphp
 
     @foreach($stages as $stage)
-    <div class="p-8 sm:p-12 rounded-[2.5rem] bg-white border border-slate-200/90 shadow-xs hover:shadow-xl transition">
+    <div class="p-8 sm:p-12 rounded-[2.5rem] bg-white border border-slate-200/90 shadow-xs hover:shadow-xl transition motion-card-hover">
         <div class="grid grid-cols-1 lg:grid-cols-12 gap-8 items-start">
             <div class="lg:col-span-4">
                 <span class="font-serif text-6xl sm:text-7xl font-extrabold text-indigo-700/80 block mb-2">{{ $stage['num'] }}</span>
@@ -118,10 +118,10 @@
     </div>
     @endforeach
 
-    <div class="p-10 rounded-[2.5rem] bg-indigo-900 text-white text-center space-y-4">
+    <div class="p-10 rounded-[2.5rem] bg-indigo-900 text-white text-center space-y-4 motion-reveal">
         <h3 class="text-2xl sm:text-3xl font-serif font-bold">Ready to take Step 01?</h3>
         <p class="text-xs sm:text-sm text-indigo-100/90 max-w-lg mx-auto">Registration takes less than 2 minutes and unlocks immediate student orientation instructions.</p>
-        <button onclick="openApplyModal()" class="px-8 py-3.5 rounded-full bg-white hover:bg-slate-100 text-slate-900 font-bold text-xs uppercase tracking-wider shadow-lg transition cursor-pointer">
+        <button onclick="openApplyModal()" class="px-8 py-3.5 rounded-full bg-white hover:bg-slate-100 text-slate-900 font-bold text-xs uppercase tracking-wider shadow-lg transition cursor-pointer motion-btn-spring">
             Start Your Journey Now
         </button>
     </div>

@@ -6,29 +6,29 @@
 <!-- Hero -->
 <section class="relative min-h-[45vh] flex items-center justify-center pt-24 pb-16 overflow-hidden bg-[#0A1128] text-white">
     <div class="absolute inset-0 z-0 pointer-events-none">
-        <div class="absolute top-1/2 left-1/2 -translate-x-1/2 -translate-y-1/2 w-[600px] h-[500px] bg-indigo-500/15 rounded-full blur-[140px]"></div>
+        <div class="absolute top-1/2 left-1/2 -translate-x-1/2 -translate-y-1/2 w-[600px] h-[500px] bg-indigo-500/15 rounded-full blur-[140px] motion-orb"></div>
         <div class="absolute inset-0 bg-[radial-gradient(#ffffff_1px,transparent_1px)] [background-size:24px_24px] opacity-10"></div>
     </div>
 
     <div class="relative z-10 max-w-5xl mx-auto px-4 text-center">
-        <div class="inline-flex items-center gap-2 px-4 py-1.5 rounded-full border border-indigo-400/30 bg-indigo-500/10 backdrop-blur-md mb-6">
+        <div class="inline-flex items-center gap-2 px-4 py-1.5 rounded-full border border-indigo-400/30 bg-indigo-500/10 backdrop-blur-md mb-6 motion-hero-badge">
             <span class="text-indigo-400 text-xs">✦</span>
             <span class="text-[11px] font-bold tracking-[0.3em] uppercase text-indigo-300">Curriculum Architecture</span>
         </div>
-        <h1 class="text-4xl sm:text-6xl md:text-7xl font-serif text-white leading-tight mb-6">
+        <h1 class="text-4xl sm:text-6xl md:text-7xl font-serif text-white leading-tight mb-6 motion-hero-title">
             Learning Domains & <br>
             <span class="text-indigo-400 italic">Specialized Subjects.</span>
         </h1>
-        <p class="max-w-2xl mx-auto text-base sm:text-lg text-indigo-100/80 font-light leading-relaxed">
+        <p class="max-w-2xl mx-auto text-base sm:text-lg text-indigo-100/80 font-light leading-relaxed motion-hero-sub">
             Explore our multidisciplinary subject areas designed to transform university theory into applied workplace competence across 4 core domains.
         </p>
     </div>
 </section>
 
 <!-- 4 Domains In-Depth -->
-<section class="py-20 px-4 sm:px-6 lg:px-8 max-w-7xl mx-auto space-y-16">
+<section class="py-20 px-4 sm:px-6 lg:px-8 max-w-7xl mx-auto space-y-16 motion-stagger">
     <!-- Domain 1: Tech -->
-    <div class="p-8 sm:p-12 rounded-[2.5rem] bg-white border border-slate-200/90 shadow-xs hover:shadow-xl transition">
+    <div class="p-8 sm:p-12 rounded-[2.5rem] bg-white border border-slate-200/90 shadow-xs hover:shadow-xl transition motion-card-hover">
         <div class="flex flex-col lg:flex-row lg:items-start justify-between gap-6 mb-8 pb-6 border-b border-slate-100">
             <div class="flex items-start gap-4">
                 <div class="w-14 h-14 rounded-2xl flex items-center justify-center border text-indigo-700 bg-indigo-50 border-indigo-100 shrink-0 text-2xl font-bold">
@@ -69,7 +69,7 @@
     </div>
 
     <!-- Domain 2: Social Sciences -->
-    <div class="p-8 sm:p-12 rounded-[2.5rem] bg-white border border-slate-200/90 shadow-xs hover:shadow-xl transition">
+    <div class="p-8 sm:p-12 rounded-[2.5rem] bg-white border border-slate-200/90 shadow-xs hover:shadow-xl transition motion-card-hover">
         <div class="flex flex-col lg:flex-row lg:items-start justify-between gap-6 mb-8 pb-6 border-b border-slate-100">
             <div class="flex items-start gap-4">
                 <div class="w-14 h-14 rounded-2xl flex items-center justify-center border text-purple-700 bg-purple-50 border-purple-100 shrink-0 text-2xl font-bold">
@@ -110,7 +110,7 @@
     </div>
 
     <!-- Domain 3: Business -->
-    <div class="p-8 sm:p-12 rounded-[2.5rem] bg-white border border-slate-200/90 shadow-xs hover:shadow-xl transition">
+    <div class="p-8 sm:p-12 rounded-[2.5rem] bg-white border border-slate-200/90 shadow-xs hover:shadow-xl transition motion-card-hover">
         <div class="flex flex-col lg:flex-row lg:items-start justify-between gap-6 mb-8 pb-6 border-b border-slate-100">
             <div class="flex items-start gap-4">
                 <div class="w-14 h-14 rounded-2xl flex items-center justify-center border text-emerald-700 bg-emerald-50 border-emerald-100 shrink-0 text-2xl font-bold">
@@ -151,7 +151,7 @@
     </div>
 
     <!-- Domain 4: Environment -->
-    <div class="p-8 sm:p-12 rounded-[2.5rem] bg-white border border-slate-200/90 shadow-xs hover:shadow-xl transition">
+    <div class="p-8 sm:p-12 rounded-[2.5rem] bg-white border border-slate-200/90 shadow-xs hover:shadow-xl transition motion-card-hover">
         <div class="flex flex-col lg:flex-row lg:items-start justify-between gap-6 mb-8 pb-6 border-b border-slate-100">
             <div class="flex items-start gap-4">
                 <div class="w-14 h-14 rounded-2xl flex items-center justify-center border text-cyan-700 bg-cyan-50 border-cyan-100 shrink-0 text-2xl font-bold">

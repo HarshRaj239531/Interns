@@ -6,8 +6,8 @@
 <div class="space-y-6">
 
     <!-- Top Command Center Banner -->
-    <div class="relative overflow-hidden rounded-3xl adm-banner p-6 md:p-8 shadow-xl">
-        <div class="absolute -right-10 -bottom-10 w-72 h-72 bg-indigo-500/10 rounded-full blur-3xl pointer-events-none"></div>
+    <div class="relative overflow-hidden rounded-3xl adm-banner p-6 md:p-8 shadow-xl motion-reveal">
+        <div class="absolute -right-10 -bottom-10 w-72 h-72 bg-indigo-500/10 rounded-full blur-3xl pointer-events-none motion-orb"></div>
         <div class="absolute top-0 right-0 p-8 opacity-10 pointer-events-none">
             <span class="font-serif text-9xl text-white select-none">∞</span>
         </div>
@@ -25,16 +25,16 @@
             </p>
 
             <div class="mt-4 flex flex-wrap items-center gap-2.5 pt-2">
-                <a href="{{ route('admin.certificate-generator') }}" class="inline-flex items-center gap-2 text-xs font-bold text-white bg-emerald-600 hover:bg-emerald-500 px-4 py-2 rounded-xl transition shadow-md shadow-emerald-900/20">
+                <a href="{{ route('admin.certificate-generator') }}" class="inline-flex items-center gap-2 text-xs font-bold text-white bg-emerald-600 hover:bg-emerald-500 px-4 py-2 rounded-xl transition shadow-md shadow-emerald-900/20 motion-btn-spring">
                     <span>⚡ Manual Certificate Generator</span>
                 </a>
-                <a href="{{ route('admin.streams') }}" class="inline-flex items-center gap-2 text-xs font-semibold text-white bg-white/15 hover:bg-white/25 border border-white/20 px-3.5 py-2 rounded-xl transition">
+                <a href="{{ route('admin.streams') }}" class="inline-flex items-center gap-2 text-xs font-semibold text-white bg-white/15 hover:bg-white/25 border border-white/20 px-3.5 py-2 rounded-xl transition motion-btn-spring">
                     <span>Manage Streams ({{ $stats['total_streams'] }})</span>
                 </a>
-                <a href="{{ route('admin.track') }}" class="inline-flex items-center gap-2 text-xs font-semibold text-white bg-white/15 hover:bg-white/25 border border-white/20 px-3.5 py-2 rounded-xl transition">
+                <a href="{{ route('admin.track') }}" class="inline-flex items-center gap-2 text-xs font-semibold text-white bg-white/15 hover:bg-white/25 border border-white/20 px-3.5 py-2 rounded-xl transition motion-btn-spring">
                     <span>Track Application Lifecycle</span>
                 </a>
-                <a href="{{ route('admin.inquiries') }}" class="inline-flex items-center gap-2 text-xs font-semibold text-white bg-white/10 hover:bg-white/20 border border-white/20 px-3.5 py-2 rounded-xl transition">
+                <a href="{{ route('admin.inquiries') }}" class="inline-flex items-center gap-2 text-xs font-semibold text-white bg-white/10 hover:bg-white/20 border border-white/20 px-3.5 py-2 rounded-xl transition motion-btn-spring">
                     <span>Inquiries Desk ({{ $stats['total_inquiries'] }})</span>
                 </a>
             </div>
@@ -42,64 +42,64 @@
     </div>
 
     <!-- Stats Cards Grid -->
-    <div class="grid grid-cols-2 sm:grid-cols-3 lg:grid-cols-6 gap-3 sm:gap-4">
+    <div class="grid grid-cols-2 sm:grid-cols-3 lg:grid-cols-6 gap-3 sm:gap-4 motion-stagger">
         <!-- Total Applications -->
-        <a href="{{ route('admin.dashboard', ['tab' => 'all']) }}" class="p-4 rounded-2xl adm-card block hover:scale-[1.02] transition {{ $tab === 'all' ? 'ring-2 ring-indigo-500' : '' }}">
+        <a href="{{ route('admin.dashboard', ['tab' => 'all']) }}" class="p-4 rounded-2xl adm-card block hover:scale-[1.02] transition motion-card-hover {{ $tab === 'all' ? 'ring-2 ring-indigo-500' : '' }}">
             <div class="flex items-center justify-between mb-1">
                 <span class="text-[10px] adm-text-muted font-bold uppercase tracking-wider">Total Applications</span>
                 <span class="w-2 h-2 rounded-full bg-indigo-500"></span>
             </div>
-            <div class="text-2xl font-bold adm-text tracking-tight">{{ $stats['total'] }}</div>
+            <div class="text-2xl font-bold adm-text tracking-tight motion-counter" data-target="{{ $stats['total'] }}">{{ $stats['total'] }}</div>
             <span class="text-[10px] text-indigo-600 dark:text-indigo-400 font-medium">All Registrations</span>
         </a>
 
         <!-- Total Enrolled Students -->
-        <a href="{{ route('admin.dashboard', ['tab' => 'enrolled']) }}" class="p-4 rounded-2xl adm-card block hover:scale-[1.02] transition {{ $tab === 'enrolled' ? 'ring-2 ring-blue-500' : '' }}">
+        <a href="{{ route('admin.dashboard', ['tab' => 'enrolled']) }}" class="p-4 rounded-2xl adm-card block hover:scale-[1.02] transition motion-card-hover {{ $tab === 'enrolled' ? 'ring-2 ring-blue-500' : '' }}">
             <div class="flex items-center justify-between mb-1">
                 <span class="text-[10px] text-blue-600 dark:text-blue-400 font-bold uppercase tracking-wider">Enrolled Students</span>
                 <span class="w-2 h-2 rounded-full bg-blue-500"></span>
             </div>
-            <div class="text-2xl font-bold text-blue-600 dark:text-blue-300 tracking-tight">{{ $stats['enrolled'] }}</div>
+            <div class="text-2xl font-bold text-blue-600 dark:text-blue-300 tracking-tight motion-counter" data-target="{{ $stats['enrolled'] }}">{{ $stats['enrolled'] }}</div>
             <span class="text-[10px] adm-text-muted">Active & Approved</span>
         </a>
 
         <!-- Pending Approval -->
-        <div class="p-4 rounded-2xl adm-card">
+        <div class="p-4 rounded-2xl adm-card motion-card-hover">
             <div class="flex items-center justify-between mb-1">
                 <span class="text-[10px] text-amber-600 dark:text-amber-400 font-bold uppercase tracking-wider">Pending Review</span>
                 <span class="w-2 h-2 rounded-full bg-amber-500"></span>
             </div>
-            <div class="text-2xl font-bold text-amber-600 dark:text-amber-300 tracking-tight">{{ $stats['pending'] }}</div>
+            <div class="text-2xl font-bold text-amber-600 dark:text-amber-300 tracking-tight motion-counter" data-target="{{ $stats['pending'] }}">{{ $stats['pending'] }}</div>
             <span class="text-[10px] adm-text-muted">New Submissions</span>
         </div>
 
         <!-- Certificate Approval Access -->
-        <a href="{{ route('admin.dashboard', ['tab' => 'pending_cert']) }}" class="p-4 rounded-2xl adm-card block hover:scale-[1.02] transition {{ $tab === 'pending_cert' ? 'ring-2 ring-emerald-500' : '' }}">
+        <a href="{{ route('admin.dashboard', ['tab' => 'pending_cert']) }}" class="p-4 rounded-2xl adm-card block hover:scale-[1.02] transition motion-card-hover {{ $tab === 'pending_cert' ? 'ring-2 ring-emerald-500' : '' }}">
             <div class="flex items-center justify-between mb-1">
                 <span class="text-[10px] text-emerald-600 dark:text-emerald-400 font-bold uppercase tracking-wider">Cert Pending</span>
                 <span class="w-2 h-2 rounded-full bg-emerald-500"></span>
             </div>
-            <div class="text-2xl font-bold text-emerald-600 dark:text-emerald-300 tracking-tight">{{ $stats['pending_cert'] }}</div>
+            <div class="text-2xl font-bold text-emerald-600 dark:text-emerald-300 tracking-tight motion-counter" data-target="{{ $stats['pending_cert'] }}">{{ $stats['pending_cert'] }}</div>
             <span class="text-[10px] text-emerald-600 dark:text-emerald-400 font-medium">Ready For Approval →</span>
         </a>
 
         <!-- Certificate Issued -->
-        <a href="{{ route('admin.dashboard', ['tab' => 'issued_cert']) }}" class="p-4 rounded-2xl adm-card block hover:scale-[1.02] transition {{ $tab === 'issued_cert' ? 'ring-2 ring-emerald-500' : '' }}">
+        <a href="{{ route('admin.dashboard', ['tab' => 'issued_cert']) }}" class="p-4 rounded-2xl adm-card block hover:scale-[1.02] transition motion-card-hover {{ $tab === 'issued_cert' ? 'ring-2 ring-emerald-500' : '' }}">
             <div class="flex items-center justify-between mb-1">
                 <span class="text-[10px] text-emerald-600 dark:text-emerald-400 font-bold uppercase tracking-wider">Cert Issued</span>
                 <span class="w-2 h-2 rounded-full bg-emerald-500"></span>
             </div>
-            <div class="text-2xl font-bold text-emerald-600 dark:text-emerald-300 tracking-tight">{{ $stats['certificates_issued'] }}</div>
+            <div class="text-2xl font-bold text-emerald-600 dark:text-emerald-300 tracking-tight motion-counter" data-target="{{ $stats['certificates_issued'] }}">{{ $stats['certificates_issued'] }}</div>
             <span class="text-[10px] adm-text-muted">QR Live & Verifiable</span>
         </a>
 
         <!-- LOR Issued -->
-        <div class="p-4 rounded-2xl adm-card">
+        <div class="p-4 rounded-2xl adm-card motion-card-hover">
             <div class="flex items-center justify-between mb-1">
                 <span class="text-[10px] text-purple-600 dark:text-purple-400 font-bold uppercase tracking-wider">LOR Issued</span>
                 <span class="w-2 h-2 rounded-full bg-purple-500"></span>
             </div>
-            <div class="text-2xl font-bold text-purple-600 dark:text-purple-300 tracking-tight">{{ $stats['lor_issued'] }}</div>
+            <div class="text-2xl font-bold text-purple-600 dark:text-purple-300 tracking-tight motion-counter" data-target="{{ $stats['lor_issued'] }}">{{ $stats['lor_issued'] }}</div>
             <span class="text-[10px] adm-text-muted">Recommendation Letters</span>
         </div>
     </div>
