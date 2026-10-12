@@ -5,6 +5,7 @@
 @section('content')
 <div class="space-y-6">
 
+    @if($tab === 'overview')
     <!-- Top Command Center Banner -->
     <div class="relative overflow-hidden rounded-3xl adm-banner p-6 md:p-8 shadow-xl motion-reveal">
         <div class="absolute -right-10 -bottom-10 w-72 h-72 bg-indigo-500/10 rounded-full blur-3xl pointer-events-none motion-orb"></div>
@@ -12,115 +13,368 @@
             <span class="font-serif text-9xl text-white select-none">∞</span>
         </div>
 
-        <div class="relative z-10 max-w-3xl">
+        <div class="relative z-10 max-w-4xl">
             <div class="inline-flex items-center gap-2 px-3 py-1 rounded-full bg-white/10 text-white text-xs font-semibold mb-3 border border-white/20 backdrop-blur-md">
                 <span class="w-1.5 h-1.5 rounded-full bg-emerald-400 animate-pulse"></span>
-                <span>Full Dynamic UGC Internship Control Hub</span>
+                <span>UGC Internship Administration Hub</span>
             </div>
             <h2 class="text-2xl md:text-3xl font-bold text-white mb-2 tracking-tight">
-                Administrator Command Center & Dispatch Hub
+                Administrator Command Center
             </h2>
             <p class="text-indigo-100 dark:text-slate-300 text-xs sm:text-sm leading-relaxed font-light">
-                Complete dynamic management of student enrollments, instant offer letters, verified consent undertakings, capstone evaluation dockets, and tamper-proof UGC completion certificates.
+                Centralized dashboard for tracking student applications, managing active interns, reviewing certificate approvals, and issuing verifiable credentials.
             </p>
 
-            <div class="mt-4 flex flex-wrap items-center gap-2.5 pt-2">
-                <a href="{{ route('admin.certificate-generator') }}" class="inline-flex items-center gap-2 text-xs font-bold text-white bg-emerald-600 hover:bg-emerald-500 px-4 py-2 rounded-xl transition shadow-md shadow-emerald-900/20 motion-btn-spring">
-                    <span>⚡ Manual Certificate Generator</span>
+            <div class="mt-5 flex flex-wrap items-center gap-2.5 pt-1">
+                <button type="button" onclick="openAddApplicantModal()" class="inline-flex items-center gap-2 text-xs font-bold text-white bg-indigo-600 hover:bg-indigo-500 px-4 py-2 rounded-xl transition shadow-md shadow-indigo-900/30 cursor-pointer motion-btn-spring">
+                    <span>+ Add New Applicant</span>
+                </button>
+                <a href="{{ route('admin.certificate-generator') }}" class="inline-flex items-center gap-2 text-xs font-bold text-white bg-emerald-600 hover:bg-emerald-500 px-4 py-2 rounded-xl transition shadow-md shadow-emerald-900/30 motion-btn-spring">
+                    <span>⚡ Certificate Generator</span>
                 </a>
                 <a href="{{ route('admin.streams') }}" class="inline-flex items-center gap-2 text-xs font-semibold text-white bg-white/15 hover:bg-white/25 border border-white/20 px-3.5 py-2 rounded-xl transition motion-btn-spring">
-                    <span>Manage Streams ({{ $stats['total_streams'] }})</span>
+                    <span>Internship Streams ({{ $stats['total_streams'] }})</span>
                 </a>
                 <a href="{{ route('admin.track') }}" class="inline-flex items-center gap-2 text-xs font-semibold text-white bg-white/15 hover:bg-white/25 border border-white/20 px-3.5 py-2 rounded-xl transition motion-btn-spring">
-                    <span>Track Application Lifecycle</span>
+                    <span>Track Lifecycle</span>
+                </a>
+                <a href="{{ route('admin.applications.export', request()->query()) }}" class="inline-flex items-center gap-2 text-xs font-semibold text-white bg-white/10 hover:bg-white/20 border border-white/20 px-3.5 py-2 rounded-xl transition motion-btn-spring" title="Export current dataset to CSV">
+                    <span>📥 Export CSV</span>
                 </a>
                 <a href="{{ route('admin.inquiries') }}" class="inline-flex items-center gap-2 text-xs font-semibold text-white bg-white/10 hover:bg-white/20 border border-white/20 px-3.5 py-2 rounded-xl transition motion-btn-spring">
-                    <span>Inquiries Desk ({{ $stats['total_inquiries'] }})</span>
+                    <span>Inquiries ({{ $stats['total_inquiries'] }})</span>
                 </a>
             </div>
         </div>
     </div>
 
-    <!-- Stats Cards Grid -->
+    <!-- Overview Metric Cards Grid -->
     <div class="grid grid-cols-2 sm:grid-cols-3 lg:grid-cols-6 gap-3 sm:gap-4 motion-stagger">
         <!-- Total Applications -->
-        <a href="{{ route('admin.dashboard', ['tab' => 'all']) }}" class="p-4 rounded-2xl adm-card block hover:scale-[1.02] transition motion-card-hover {{ $tab === 'all' ? 'ring-2 ring-indigo-500' : '' }}">
+        <a href="{{ route('admin.dashboard', ['tab' => 'all']) }}" class="p-4 rounded-2xl adm-card block hover:scale-[1.02] transition motion-card-hover group">
             <div class="flex items-center justify-between mb-1">
-                <span class="text-[10px] adm-text-muted font-bold uppercase tracking-wider">Total Applications</span>
+                <span class="text-[10px] adm-text-muted font-bold uppercase tracking-wider group-hover:text-indigo-600 transition">Applications</span>
                 <span class="w-2 h-2 rounded-full bg-indigo-500"></span>
             </div>
             <div class="text-2xl font-bold adm-text tracking-tight motion-counter" data-target="{{ $stats['total'] }}">{{ $stats['total'] }}</div>
-            <span class="text-[10px] text-indigo-600 dark:text-indigo-400 font-medium">All Registrations</span>
+            <span class="text-[10px] text-indigo-600 dark:text-indigo-400 font-medium">Total Registered</span>
         </a>
 
-        <!-- Total Enrolled Students -->
-        <a href="{{ route('admin.dashboard', ['tab' => 'enrolled']) }}" class="p-4 rounded-2xl adm-card block hover:scale-[1.02] transition motion-card-hover {{ $tab === 'enrolled' ? 'ring-2 ring-blue-500' : '' }}">
+        <!-- Enrolled Students -->
+        <a href="{{ route('admin.dashboard', ['tab' => 'enrolled']) }}" class="p-4 rounded-2xl adm-card block hover:scale-[1.02] transition motion-card-hover group">
             <div class="flex items-center justify-between mb-1">
-                <span class="text-[10px] text-blue-600 dark:text-blue-400 font-bold uppercase tracking-wider">Enrolled Students</span>
+                <span class="text-[10px] text-blue-600 dark:text-blue-400 font-bold uppercase tracking-wider">Enrolled</span>
                 <span class="w-2 h-2 rounded-full bg-blue-500"></span>
             </div>
             <div class="text-2xl font-bold text-blue-600 dark:text-blue-300 tracking-tight motion-counter" data-target="{{ $stats['enrolled'] }}">{{ $stats['enrolled'] }}</div>
-            <span class="text-[10px] adm-text-muted">Active & Approved</span>
+            <span class="text-[10px] adm-text-muted">Approved & Active</span>
         </a>
 
-        <!-- Pending Approval -->
-        <div class="p-4 rounded-2xl adm-card motion-card-hover">
+        <!-- Pending Review -->
+        <a href="{{ route('admin.dashboard', ['tab' => 'all', 'status' => 'PENDING']) }}" class="p-4 rounded-2xl adm-card block hover:scale-[1.02] transition motion-card-hover group">
             <div class="flex items-center justify-between mb-1">
                 <span class="text-[10px] text-amber-600 dark:text-amber-400 font-bold uppercase tracking-wider">Pending Review</span>
                 <span class="w-2 h-2 rounded-full bg-amber-500"></span>
             </div>
             <div class="text-2xl font-bold text-amber-600 dark:text-amber-300 tracking-tight motion-counter" data-target="{{ $stats['pending'] }}">{{ $stats['pending'] }}</div>
-            <span class="text-[10px] adm-text-muted">New Submissions</span>
-        </div>
-
-        <!-- Certificate Approval Access -->
-        <a href="{{ route('admin.dashboard', ['tab' => 'pending_cert']) }}" class="p-4 rounded-2xl adm-card block hover:scale-[1.02] transition motion-card-hover {{ $tab === 'pending_cert' ? 'ring-2 ring-emerald-500' : '' }}">
-            <div class="flex items-center justify-between mb-1">
-                <span class="text-[10px] text-emerald-600 dark:text-emerald-400 font-bold uppercase tracking-wider">Cert Pending</span>
-                <span class="w-2 h-2 rounded-full bg-emerald-500"></span>
-            </div>
-            <div class="text-2xl font-bold text-emerald-600 dark:text-emerald-300 tracking-tight motion-counter" data-target="{{ $stats['pending_cert'] }}">{{ $stats['pending_cert'] }}</div>
-            <span class="text-[10px] text-emerald-600 dark:text-emerald-400 font-medium">Ready For Approval →</span>
+            <span class="text-[10px] adm-text-muted">New Applications</span>
         </a>
 
-        <!-- Certificate Issued -->
-        <a href="{{ route('admin.dashboard', ['tab' => 'issued_cert']) }}" class="p-4 rounded-2xl adm-card block hover:scale-[1.02] transition motion-card-hover {{ $tab === 'issued_cert' ? 'ring-2 ring-emerald-500' : '' }}">
+        <!-- Certificate Approval -->
+        <a href="{{ route('admin.dashboard', ['tab' => 'pending_cert']) }}" class="p-4 rounded-2xl adm-card block hover:scale-[1.02] transition motion-card-hover group">
+            <div class="flex items-center justify-between mb-1">
+                <span class="text-[10px] text-amber-600 dark:text-amber-400 font-bold uppercase tracking-wider">Cert Approvals</span>
+                <span class="w-2 h-2 rounded-full bg-amber-500"></span>
+            </div>
+            <div class="text-2xl font-bold text-amber-600 dark:text-amber-300 tracking-tight motion-counter" data-target="{{ $stats['pending_cert'] }}">{{ $stats['pending_cert'] }}</div>
+            <span class="text-[10px] text-amber-600 dark:text-amber-400 font-medium">Ready for Issue →</span>
+        </a>
+
+        <!-- Certificates Issued -->
+        <a href="{{ route('admin.dashboard', ['tab' => 'issued_cert']) }}" class="p-4 rounded-2xl adm-card block hover:scale-[1.02] transition motion-card-hover group">
             <div class="flex items-center justify-between mb-1">
                 <span class="text-[10px] text-emerald-600 dark:text-emerald-400 font-bold uppercase tracking-wider">Cert Issued</span>
                 <span class="w-2 h-2 rounded-full bg-emerald-500"></span>
             </div>
             <div class="text-2xl font-bold text-emerald-600 dark:text-emerald-300 tracking-tight motion-counter" data-target="{{ $stats['certificates_issued'] }}">{{ $stats['certificates_issued'] }}</div>
-            <span class="text-[10px] adm-text-muted">QR Live & Verifiable</span>
+            <span class="text-[10px] text-emerald-600 dark:text-emerald-400 font-medium">QR Verifiable</span>
         </a>
 
-        <!-- LOR Issued -->
-        <div class="p-4 rounded-2xl adm-card motion-card-hover">
+        <!-- Streams / Tracks -->
+        <a href="{{ route('admin.streams') }}" class="p-4 rounded-2xl adm-card block hover:scale-[1.02] transition motion-card-hover group">
             <div class="flex items-center justify-between mb-1">
-                <span class="text-[10px] text-purple-600 dark:text-purple-400 font-bold uppercase tracking-wider">LOR Issued</span>
+                <span class="text-[10px] text-purple-600 dark:text-purple-400 font-bold uppercase tracking-wider">Streams</span>
                 <span class="w-2 h-2 rounded-full bg-purple-500"></span>
             </div>
-            <div class="text-2xl font-bold text-purple-600 dark:text-purple-300 tracking-tight motion-counter" data-target="{{ $stats['lor_issued'] }}">{{ $stats['lor_issued'] }}</div>
-            <span class="text-[10px] adm-text-muted">Recommendation Letters</span>
-        </div>
+            <div class="text-2xl font-bold text-purple-600 dark:text-purple-300 tracking-tight motion-counter" data-target="{{ $stats['total_streams'] }}">{{ $stats['total_streams'] }}</div>
+            <span class="text-[10px] adm-text-muted">Dynamic Tracks</span>
+        </a>
     </div>
 
-    <!-- Navigation Tabs (Exact Handwritten Feature Tabs) -->
-    <div class="flex items-center gap-2 border-b border-slate-200 dark:border-slate-800 pb-2 overflow-x-auto text-xs font-semibold">
-        <a href="{{ route('admin.dashboard', ['tab' => 'all']) }}" class="px-4 py-2 rounded-xl transition whitespace-nowrap {{ $tab === 'all' ? 'bg-indigo-600 text-white shadow-md shadow-indigo-600/30' : 'adm-card text-slate-600 dark:text-slate-400 hover:text-slate-900 dark:hover:text-white' }}">
-            <span>1. All Applications ({{ $stats['total'] }})</span>
-        </a>
+    <!-- Overview Interactive Screen Body -->
+    <div class="space-y-6 motion-reveal">
+        <!-- Quick Action Dispatch Hub -->
+        <div class="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-4 gap-4">
+            <button type="button" onclick="openAddApplicantModal()" class="p-5 rounded-2xl adm-card border border-indigo-200 dark:border-indigo-800/60 hover:border-indigo-500 text-left transition group shadow-md motion-card-hover cursor-pointer">
+                <div class="w-10 h-10 rounded-xl bg-indigo-100 dark:bg-indigo-900/50 text-indigo-700 dark:text-indigo-300 flex items-center justify-center text-lg font-bold mb-3 group-hover:scale-110 transition">
+                    +
+                </div>
+                <h4 class="font-serif font-bold text-sm adm-text mb-1">Add Student Applicant</h4>
+                <p class="text-[11px] adm-text-muted">Enroll a new student directly into any UGC specialization track.</p>
+            </button>
 
-        <a href="{{ route('admin.dashboard', ['tab' => 'enrolled']) }}" class="px-4 py-2 rounded-xl transition whitespace-nowrap {{ $tab === 'enrolled' ? 'bg-indigo-600 text-white shadow-md shadow-indigo-600/30' : 'adm-card text-slate-600 dark:text-slate-400 hover:text-slate-900 dark:hover:text-white' }}">
-            <span>2. Enrolled Students ({{ $stats['enrolled'] }})</span>
-        </a>
+            <a href="{{ route('admin.certificate-generator') }}" class="p-5 rounded-2xl adm-card border border-emerald-200 dark:border-emerald-800/60 hover:border-emerald-500 text-left transition group shadow-md motion-card-hover">
+                <div class="w-10 h-10 rounded-xl bg-emerald-100 dark:bg-emerald-900/50 text-emerald-700 dark:text-emerald-300 flex items-center justify-center text-lg font-bold mb-3 group-hover:scale-110 transition">
+                    ⚡
+                </div>
+                <h4 class="font-serif font-bold text-sm adm-text mb-1">Manual Certificate Generator</h4>
+                <p class="text-[11px] adm-text-muted">Authorize, customize, and print verifiable UGC completion certificates.</p>
+            </a>
 
-        <a href="{{ route('admin.dashboard', ['tab' => 'pending_cert']) }}" class="px-4 py-2 rounded-xl transition whitespace-nowrap {{ $tab === 'pending_cert' ? 'bg-indigo-600 text-white shadow-md shadow-indigo-600/30' : 'adm-card text-slate-600 dark:text-slate-400 hover:text-slate-900 dark:hover:text-white' }}">
-            <span>3. Certificate Approval Access ({{ $stats['pending_cert'] }})</span>
-        </a>
+            <a href="{{ route('admin.streams') }}" class="p-5 rounded-2xl adm-card border border-purple-200 dark:border-purple-800/60 hover:border-purple-500 text-left transition group shadow-md motion-card-hover">
+                <div class="w-10 h-10 rounded-xl bg-purple-100 dark:bg-purple-900/50 text-purple-700 dark:text-purple-300 flex items-center justify-center text-lg font-bold mb-3 group-hover:scale-110 transition">
+                    📚
+                </div>
+                <h4 class="font-serif font-bold text-sm adm-text mb-1">Add / Manage Streams</h4>
+                <p class="text-[11px] adm-text-muted">Configure academic domains, contact hours, and UGC credit weights.</p>
+            </a>
 
-        <a href="{{ route('admin.dashboard', ['tab' => 'issued_cert']) }}" class="px-4 py-2 rounded-xl transition whitespace-nowrap {{ $tab === 'issued_cert' ? 'bg-indigo-600 text-white shadow-md shadow-indigo-600/30' : 'adm-card text-slate-600 dark:text-slate-400 hover:text-slate-900 dark:hover:text-white' }}">
-            <span>4. Certificates Issued ({{ $stats['certificates_issued'] }})</span>
-        </a>
+            <a href="{{ route('admin.track') }}" class="p-5 rounded-2xl adm-card border border-blue-200 dark:border-blue-800/60 hover:border-blue-500 text-left transition group shadow-md motion-card-hover">
+                <div class="w-10 h-10 rounded-xl bg-blue-100 dark:bg-blue-900/50 text-blue-700 dark:text-blue-300 flex items-center justify-center text-lg font-bold mb-3 group-hover:scale-110 transition">
+                    🔍
+                </div>
+                <h4 class="font-serif font-bold text-sm adm-text mb-1">Track Application Lifecycle</h4>
+                <p class="text-[11px] adm-text-muted">Visual 7-step milestone tracker for any candidate application or serial ID.</p>
+            </a>
+        </div>
+
+        <!-- Dynamic Internship Streams & Specialization Tracks Grid -->
+        <div class="rounded-3xl adm-card p-6 shadow-xl space-y-4">
+            <div class="flex items-center justify-between pb-3 border-b border-slate-200 dark:border-slate-800">
+                <div>
+                    <div class="flex items-center gap-2">
+                        <span class="w-2 h-2 rounded-full bg-indigo-500"></span>
+                        <h3 class="font-serif font-bold text-base adm-text">Specialization Tracks & Stream Enrollment Distribution</h3>
+                    </div>
+                    <p class="text-[11px] adm-text-muted">Dynamic internship specialization domains configured in the central catalog.</p>
+                </div>
+                <a href="{{ route('admin.streams') }}" class="text-xs font-bold text-indigo-600 dark:text-indigo-400 hover:underline">
+                    Manage All Streams ({{ $stats['total_streams'] }}) →
+                </a>
+            </div>
+
+            <div class="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-4 gap-4">
+                @forelse($streamDistribution as $st)
+                <div class="p-4 rounded-2xl bg-slate-50 dark:bg-slate-900/70 border border-slate-200 dark:border-slate-800 space-y-2 hover:border-indigo-400 dark:hover:border-indigo-600 transition">
+                    <div class="flex items-center justify-between">
+                        <span class="px-2 py-0.5 rounded-full text-[10px] font-mono font-bold bg-indigo-100 dark:bg-indigo-900/50 text-indigo-700 dark:text-indigo-300">
+                            {{ $st->code }}
+                        </span>
+                        <span class="text-[10px] px-2 py-0.5 rounded-full font-bold {{ $st->is_active ? 'bg-emerald-100 dark:bg-emerald-950 text-emerald-800 dark:text-emerald-300' : 'bg-slate-200 text-slate-600' }}">
+                            {{ $st->is_active ? 'ACTIVE' : 'INACTIVE' }}
+                        </span>
+                    </div>
+                    <h5 class="font-serif font-bold text-xs adm-text leading-snug line-clamp-1" title="{{ $st->title }}">
+                        {{ $st->title }}
+                    </h5>
+                    <div class="flex items-center justify-between text-[11px] adm-text-muted">
+                        <span>{{ $st->duration }}</span>
+                        <span class="font-semibold text-emerald-600 dark:text-emerald-400">{{ $st->credits }}</span>
+                    </div>
+                    <div class="pt-2 border-t border-slate-200 dark:border-slate-800 flex items-center justify-between text-xs">
+                        <span class="text-[11px] adm-text-muted">Enrolled Interns:</span>
+                        <a href="{{ route('admin.dashboard', ['tab' => 'all', 'domain' => $st->title]) }}" class="font-bold text-indigo-600 dark:text-indigo-400 hover:underline">
+                            {{ $st->student_profiles_count }} Students →
+                        </a>
+                    </div>
+                </div>
+                @empty
+                <div class="col-span-full py-8 text-center adm-text-muted text-xs">
+                    No streams configured yet. Click "Manage Streams" to add internship specialization tracks.
+                </div>
+                @endforelse
+            </div>
+        </div>
+
+        <!-- Split Grid: Recent Applications & Recent Issued Certificates -->
+        <div class="grid grid-cols-1 lg:grid-cols-12 gap-6">
+            <!-- Col 7: Recent Applications Feed -->
+            <div class="lg:col-span-7 rounded-3xl adm-card p-6 shadow-xl space-y-4">
+                <div class="flex items-center justify-between pb-3 border-b border-slate-200 dark:border-slate-800">
+                    <div>
+                        <h4 class="font-serif font-bold text-sm adm-text">Recent Student Registrations</h4>
+                        <p class="text-[11px] adm-text-muted">Latest applicant records received across participating colleges.</p>
+                    </div>
+                    <a href="{{ route('admin.dashboard', ['tab' => 'all']) }}" class="text-xs font-bold text-indigo-600 dark:text-indigo-400 hover:underline">
+                        View All ({{ $stats['total'] }}) →
+                    </a>
+                </div>
+
+                <div class="space-y-3">
+                    @forelse($recentApplications as $rapp)
+                    <div class="p-3.5 rounded-2xl bg-slate-50 dark:bg-slate-900/60 border border-slate-200 dark:border-slate-800 flex items-center justify-between gap-3 hover:border-slate-300 dark:hover:border-slate-700 transition">
+                        <div class="flex items-center gap-3 min-w-0">
+                            <div class="w-9 h-9 rounded-xl bg-indigo-100 dark:bg-indigo-900/40 text-indigo-700 dark:text-indigo-300 font-bold text-xs flex items-center justify-center shrink-0">
+                                {{ substr($rapp->user->name ?? 'S', 0, 1) }}
+                            </div>
+                            <div class="min-w-0">
+                                <div class="flex items-center gap-2">
+                                    <span class="font-bold text-xs adm-text truncate">{{ $rapp->user->name ?? 'Candidate' }}</span>
+                                    <span class="font-mono text-[10px] text-indigo-600 dark:text-indigo-400 font-semibold">{{ $rapp->application_number }}</span>
+                                </div>
+                                <span class="text-[11px] adm-text-muted block truncate">{{ $rapp->college }} • {{ $rapp->program_domain }}</span>
+                            </div>
+                        </div>
+
+                        <div class="flex items-center gap-2 shrink-0">
+                            <span class="px-2 py-0.5 rounded-full text-[10px] font-bold
+                                {{ $rapp->status === 'COMPLETED' ? 'adm-badge-completed' : '' }}
+                                {{ $rapp->status === 'ACTIVE' ? 'adm-badge-active' : '' }}
+                                {{ $rapp->status === 'APPROVED' ? 'adm-badge-approved' : '' }}
+                                {{ $rapp->status === 'PENDING' ? 'adm-badge-pending' : '' }}
+                                {{ $rapp->status === 'REJECTED' ? 'adm-badge-rejected' : '' }}
+                            ">
+                                {{ $rapp->status }}
+                            </span>
+                            <button type="button" onclick="openEditApplicantModal({{ json_encode($rapp) }}, {{ json_encode($rapp->user) }})" class="px-2 py-1 rounded-lg bg-slate-200 dark:bg-slate-800 hover:bg-slate-300 dark:hover:bg-slate-700 text-slate-800 dark:text-slate-200 text-[10px] font-bold transition cursor-pointer">
+                                ✎ Manage
+                            </button>
+                        </div>
+                    </div>
+                    @empty
+                    <p class="py-6 text-center text-xs adm-text-muted">No student applications recorded yet.</p>
+                    @endforelse
+                </div>
+            </div>
+
+            <!-- Col 5: Live Verifiable Issued Certificates -->
+            <div class="lg:col-span-5 rounded-3xl adm-card p-6 shadow-xl space-y-4">
+                <div class="flex items-center justify-between pb-3 border-b border-slate-200 dark:border-slate-800">
+                    <div>
+                        <h4 class="font-serif font-bold text-sm adm-text">Recent Verified Certificates</h4>
+                        <p class="text-[11px] adm-text-muted">Live tamper-proof UGC completion records.</p>
+                    </div>
+                    <a href="{{ route('admin.dashboard', ['tab' => 'issued_cert']) }}" class="text-xs font-bold text-emerald-600 dark:text-emerald-400 hover:underline">
+                        View All ({{ $stats['certificates_issued'] }}) →
+                    </a>
+                </div>
+
+                <div class="space-y-3">
+                    @forelse($recentCertificates as $rcert)
+                    <div class="p-3.5 rounded-2xl bg-emerald-50/50 dark:bg-emerald-950/20 border border-emerald-200 dark:border-emerald-800/40 flex items-center justify-between gap-3">
+                        <div class="min-w-0">
+                            <span class="font-bold text-xs adm-text block truncate">{{ $rcert->user->name ?? 'Candidate' }}</span>
+                            <span class="font-mono text-emerald-700 dark:text-emerald-300 text-[11px] font-bold block">{{ $rcert->certificate_number }}</span>
+                            <span class="text-[10px] text-slate-500 block truncate">{{ $rcert->program_domain }}</span>
+                        </div>
+                        <div class="flex flex-col items-end gap-1 shrink-0">
+                            <a href="{{ route('admin.application.view-certificate', $rcert->id) }}" target="_blank" class="px-2.5 py-1 rounded-lg bg-emerald-600 hover:bg-emerald-500 text-white font-bold text-[10px] transition shadow-xs">
+                                View Cert ↗
+                            </a>
+                            <a href="{{ route('verify', $rcert->certificate_number) }}" target="_blank" class="text-[10px] text-indigo-600 dark:text-indigo-400 hover:underline">
+                                Verify Online ↗
+                            </a>
+                        </div>
+                    </div>
+                    @empty
+                    <div class="py-6 text-center text-xs adm-text-muted space-y-2">
+                        <p>No certificates issued yet.</p>
+                        <a href="{{ route('admin.certificate-generator') }}" class="inline-block text-emerald-600 dark:text-emerald-400 font-bold hover:underline">
+                            Issue First Certificate →
+                        </a>
+                    </div>
+                    @endforelse
+                </div>
+            </div>
+        </div>
+    </div>
+    @else
+    <!-- ========================================================
+         TABLE VIEW: TOTAL APPLICATIONS, ENROLLED STUDENTS, 
+         CERTIFICATE APPROVAL ACCESS, CERTIFICATES ISSUED, MANAGE
+         ======================================================== -->
+
+    <!-- Dedicated Section Page Header -->
+    <div class="p-5 sm:p-6 rounded-3xl adm-card border border-slate-200/80 dark:border-slate-800 flex flex-col sm:flex-row sm:items-center sm:justify-between gap-4 shadow-sm">
+        <div class="flex items-center gap-3.5">
+            <div class="w-11 h-11 rounded-2xl flex items-center justify-center shrink-0
+                {{ $tab === 'pending_cert' ? 'bg-amber-100 dark:bg-amber-950/60 text-amber-600 dark:text-amber-400' : '' }}
+                {{ $tab === 'enrolled' ? 'bg-blue-100 dark:bg-blue-950/60 text-blue-600 dark:text-blue-400' : '' }}
+                {{ $tab === 'issued_cert' ? 'bg-emerald-100 dark:bg-emerald-950/60 text-emerald-600 dark:text-emerald-400' : '' }}
+                {{ in_array($tab, ['all', 'manage']) ? 'bg-indigo-100 dark:bg-indigo-950/60 text-indigo-600 dark:text-indigo-400' : '' }}
+            ">
+                @if($tab === 'pending_cert')
+                    <svg class="w-5 h-5" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M9 12l2 2 4-4m6 2a9 9 0 11-18 0 9 9 0 0118 0z"/></svg>
+                @elseif($tab === 'enrolled')
+                    <svg class="w-5 h-5" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M12 14l9-5-9-5-9 5 9 5zm0 0l6.16-3.422a12.083 12.083 0 01.665 6.479A11.952 11.952 0 0012 20.055a11.952 11.952 0 00-6.824-2.998 12.078 12.078 0 01.665-6.479L12 14z"/></svg>
+                @elseif($tab === 'issued_cert')
+                    <svg class="w-5 h-5" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M9 12l2 2 4-4M7.835 4.697a3.42 3.42 0 001.946-.806 3.42 3.42 0 014.438 0 3.42 3.42 0 001.946.806 3.42 3.42 0 013.138 3.138 3.42 3.42 0 00.806 1.946 3.42 3.42 0 010 4.438 3.42 3.42 0 00-.806 1.946 3.42 3.42 0 01-3.138 3.138 3.42 3.42 0 00-1.946.806 3.42 3.42 0 01-4.438 0 3.42 3.42 0 00-1.946-.806 3.42 3.42 0 01-3.138-3.138 3.42 3.42 0 00-.806-1.946 3.42 3.42 0 010-4.438 3.42 3.42 0 00.806-1.946 3.42 3.42 0 013.138-3.138z"/></svg>
+                @elseif($tab === 'manage')
+                    <svg class="w-5 h-5" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M12 4.354a4 4 0 110 5.292M15 21H3v-1a6 6 0 0112 0v1zm0 0h6v-1a6 6 0 00-9-5.197M13 7a4 4 0 11-8 0 4 4 0 018 0z"/></svg>
+                @else
+                    <svg class="w-5 h-5" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M9 12h6m-6 4h6m2 5H7a2 2 0 01-2-2V5a2 2 0 012-2h5.586a1 1 0 01.707.293l5.414 5.414a1 1 0 01.293.707V19a2 2 0 01-2 2z"/></svg>
+                @endif
+            </div>
+            <div>
+                <div class="flex items-center gap-2.5">
+                    <h2 class="text-base sm:text-lg font-bold font-serif adm-text tracking-tight">
+                        @if($tab === 'pending_cert')
+                            Certificate Approvals
+                        @elseif($tab === 'enrolled')
+                            Enrolled Students
+                        @elseif($tab === 'issued_cert')
+                            Issued Certificates
+                        @elseif($tab === 'manage')
+                            Manage Applicants
+                        @else
+                            All Applications
+                        @endif
+                    </h2>
+                    <span class="text-[11px] px-2.5 py-0.5 rounded-full font-bold
+                        {{ $tab === 'pending_cert' ? 'bg-amber-100 dark:bg-amber-950/60 text-amber-700 dark:text-amber-300' : '' }}
+                        {{ $tab === 'enrolled' ? 'bg-blue-100 dark:bg-blue-950/60 text-blue-700 dark:text-blue-300' : '' }}
+                        {{ $tab === 'issued_cert' ? 'bg-emerald-100 dark:bg-emerald-950/60 text-emerald-700 dark:text-emerald-300' : '' }}
+                        {{ in_array($tab, ['all', 'manage']) ? 'bg-indigo-100 dark:bg-indigo-950/60 text-indigo-700 dark:text-indigo-300' : '' }}
+                    ">
+                        @if($tab === 'pending_cert')
+                            {{ $stats['pending_cert'] }} Ready for Issuance
+                        @elseif($tab === 'enrolled')
+                            {{ $stats['enrolled'] }} Active Interns
+                        @elseif($tab === 'issued_cert')
+                            {{ $stats['certificates_issued'] }} Issued
+                        @elseif($tab === 'manage')
+                            {{ $stats['total'] }} Records
+                        @else
+                            {{ $stats['total'] }} Total Applications
+                        @endif
+                    </span>
+                </div>
+                <p class="text-xs adm-text-muted mt-0.5">
+                    @if($tab === 'pending_cert')
+                        Review candidates eligible for final completion certificate verification and authorized dispatch.
+                    @elseif($tab === 'enrolled')
+                        Active student interns currently undergoing training across colleges and specialization streams.
+                    @elseif($tab === 'issued_cert')
+                        Official verifiable completion certificates issued with public QR verification links.
+                    @elseif($tab === 'manage')
+                        Administrative editing of applicant records, mentor assignments, and documentation status.
+                    @else
+                        Comprehensive registry of all student applicant records, status audits, and dossiers.
+                    @endif
+                </p>
+            </div>
+        </div>
+
+        <div class="flex items-center gap-2.5 shrink-0">
+            <button type="button" onclick="openAddApplicantModal()" class="px-4 py-2.5 rounded-xl bg-indigo-600 hover:bg-indigo-500 text-white text-xs font-bold transition shadow-sm motion-btn-spring cursor-pointer flex items-center gap-1.5">
+                <span>+</span>
+                <span>Add Applicant</span>
+            </button>
+            <a href="{{ route('admin.applications.export', request()->query()) }}" class="px-4 py-2.5 rounded-xl adm-card hover:bg-slate-100 dark:hover:bg-slate-800 text-xs font-semibold adm-text transition flex items-center gap-1.5 motion-btn-spring">
+                <svg class="w-3.5 h-3.5" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M4 16v1a3 3 0 003 3h10a3 3 0 003-3v-1m-4-4l-4 4m0 0l-4-4m4 4V4"/></svg>
+                <span>Export CSV</span>
+            </a>
+        </div>
     </div>
 
     <!-- Filter & Search Toolbar -->
@@ -167,8 +421,8 @@
                     Filter
                 </button>
 
-                @if(request('search') || (request('status') && request('status') !== 'all') || (request('degree') && request('degree') !== 'all') || (request('domain') && request('domain') !== 'all') || $tab !== 'all')
-                    <a href="{{ route('admin.dashboard') }}" class="px-3 py-2.5 rounded-xl bg-slate-200 dark:bg-slate-800 hover:opacity-80 adm-text text-xs font-medium transition">
+                @if(request('search') || (request('status') && request('status') !== 'all') || (request('degree') && request('degree') !== 'all') || (request('domain') && request('domain') !== 'all'))
+                    <a href="{{ route('admin.dashboard', ['tab' => $tab]) }}" class="px-3.5 py-2.5 rounded-xl bg-slate-100 dark:bg-slate-800 hover:bg-slate-200 dark:hover:bg-slate-700 text-slate-700 dark:text-slate-300 border border-slate-300 dark:border-slate-700 text-xs font-semibold transition cursor-pointer">
                         Reset
                     </a>
                 @endif
@@ -180,8 +434,8 @@
     <div class="rounded-3xl adm-card overflow-hidden shadow-xl">
         <div class="p-5 border-b border-slate-200 dark:border-slate-800 flex items-center justify-between">
             <div>
-                <h3 class="font-serif font-bold text-base adm-text">Manage Student Applicants</h3>
-                <p class="text-[11px] adm-text-muted">Full administrative editing of candidate records, dynamic domain mapping, attendance hours, and document releases.</p>
+                <h3 class="font-serif font-bold text-base adm-text">Applicant Records Docket</h3>
+                <p class="text-[11px] adm-text-muted">Dynamic records with real-time status updates, attendance audit, and document release actions.</p>
             </div>
             <span class="text-xs font-semibold px-3 py-1 rounded-full bg-indigo-50 dark:bg-indigo-900/30 text-indigo-700 dark:text-indigo-400 border border-indigo-200 dark:border-indigo-700/50">
                 Showing {{ $applications->total() }} Records
@@ -223,7 +477,7 @@
                         <td class="py-4 px-4">
                             <span class="font-semibold adm-text-secondary block">{{ $app->degree }} • {{ $app->semester }}</span>
                             <span class="adm-text-muted text-[11px] block max-w-xs truncate" title="{{ $app->college }}">{{ $app->college }}</span>
-                            <span class="text-[10px] text-slate-400">Mentor: <strong>{{ $app->mentor_name }}</strong></span>
+                            <span class="text-[10px] adm-text-muted">Mentor: <strong class="adm-text-secondary">{{ $app->mentor_name }}</strong></span>
                         </td>
 
                         <!-- Domain -->
@@ -266,7 +520,7 @@
                                     <span class="text-blue-600 dark:text-blue-400 font-bold">✓</span>
                                     <a href="{{ route('admin.application.view-offer-letter', $app->id) }}" target="_blank" class="text-blue-600 dark:text-blue-300 font-medium hover:underline">Offer Letter ↗</a>
                                 @else
-                                    <span class="text-slate-400 dark:text-slate-600">○</span>
+                                    <span class="text-slate-400 dark:text-slate-500 font-bold">○</span>
                                     <span class="adm-text-muted">Offer Letter</span>
                                 @endif
                             </div>
@@ -277,7 +531,7 @@
                                     <span class="text-purple-600 dark:text-purple-400 font-bold">✓</span>
                                     <a href="{{ route('admin.application.view-consent-letter', $app->id) }}" target="_blank" class="text-purple-600 dark:text-purple-300 font-medium hover:underline">Consent Letter ↗</a>
                                 @else
-                                    <span class="text-slate-400 dark:text-slate-600">○</span>
+                                    <span class="text-slate-400 dark:text-slate-500 font-bold">○</span>
                                     <span class="adm-text-muted">Consent Letter</span>
                                 @endif
                             </div>
@@ -290,7 +544,7 @@
                                         {{ $app->certificate_number }} ↗
                                     </a>
                                 @else
-                                    <span class="text-slate-400 dark:text-slate-600">○</span>
+                                    <span class="text-slate-400 dark:text-slate-500 font-bold">○</span>
                                     <span class="adm-text-muted">Certificate</span>
                                 @endif
                             </div>
@@ -303,7 +557,7 @@
                                         LOR ({{ $app->lor_number }}) ↗
                                     </a>
                                 @else
-                                    <span class="text-slate-400 dark:text-slate-600">○</span>
+                                    <span class="text-slate-400 dark:text-slate-500 font-bold">○</span>
                                     <span class="adm-text-muted">LOR</span>
                                 @endif
                             </div>
@@ -316,7 +570,7 @@
                                         Scorecard ({{ $app->marksheet_grade }} - {{ $app->marksheet_marks }}%) ↗
                                     </a>
                                 @else
-                                    <span class="text-slate-400 dark:text-slate-600">○</span>
+                                    <span class="text-slate-400 dark:text-slate-500 font-bold">○</span>
                                     <span class="adm-text-muted">Scorecard</span>
                                 @endif
                             </div>
@@ -335,12 +589,19 @@
                                     <button type="button" onclick="openCertApprovalModal('{{ $app->id }}', '{{ $app->application_number }}', '{{ addslashes($app->user->name ?? 'Candidate') }}')" class="px-2.5 py-1 rounded-lg bg-emerald-100 dark:bg-emerald-900/40 hover:bg-emerald-200 dark:hover:bg-emerald-800 text-emerald-800 dark:text-emerald-300 border border-emerald-300 dark:border-emerald-700/50 text-[10px] font-bold transition cursor-pointer shadow-xs">
                                         + Cert Approve
                                     </button>
+                                @else
+                                    <form action="{{ route('admin.application.revoke-certificate', $app->id) }}" method="POST" onsubmit="return confirm('Revoke certificate for {{ $app->application_number }}?')" class="inline">
+                                        @csrf
+                                        <button type="submit" class="px-2.5 py-1 rounded-lg bg-rose-50 dark:bg-rose-950/40 hover:bg-rose-100 text-rose-700 dark:text-rose-300 border border-rose-200 dark:border-rose-800/40 text-[10px] font-semibold transition cursor-pointer" title="Revoke Certificate">
+                                            ↩ Revoke Cert
+                                        </button>
+                                    </form>
                                 @endif
 
                                 <!-- 3. Issue LOR Button -->
                                 @if(!$app->lor_issued)
                                     <button type="button" onclick="openLorModal('{{ $app->id }}', '{{ $app->application_number }}', '{{ addslashes($app->user->name ?? 'Candidate') }}')" class="px-2.5 py-1 rounded-lg bg-amber-100 dark:bg-amber-900/40 hover:bg-amber-200 dark:hover:bg-amber-800 text-amber-800 dark:text-amber-300 border border-amber-300 dark:border-amber-700/50 text-[10px] font-bold transition cursor-pointer shadow-xs">
-                                        + Issue LOR
+                                        + LOR
                                     </button>
                                 @endif
 
@@ -380,7 +641,7 @@
                                 <form action="{{ route('admin.application.delete', $app->id) }}" method="POST" onsubmit="return confirm('Are you sure you want to permanently delete this student application and credentials?')" class="inline">
                                     @csrf
                                     @method('DELETE')
-                                    <button type="submit" class="p-1 rounded-lg text-slate-400 hover:text-rose-500 hover:bg-rose-50 dark:hover:bg-rose-950/40 transition cursor-pointer" title="Delete Application">
+                                    <button type="submit" class="p-1 rounded-lg text-slate-500 dark:text-slate-400 hover:text-rose-600 hover:bg-rose-50 dark:hover:bg-rose-950/40 transition cursor-pointer" title="Delete Application">
                                         <svg class="w-4 h-4" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M19 7l-.867 12.142A2 2 0 0116.138 21H7.862a2 2 0 01-1.995-1.858L5 7m5 4v6m4-6v6m1-10V4a1 1 0 00-1-1h-4a1 1 0 00-1 1v3M4 7h16"/></svg>
                                     </button>
                                 </form>
@@ -404,6 +665,7 @@
             </div>
         @endif
     </div>
+    @endif
 
 </div>
 
@@ -411,7 +673,107 @@
      MODALS SECTION
      ======================================================== -->
 
-<!-- 1. Edit Full Applicant Modal -->
+<!-- 1. Add New Applicant Modal -->
+<div id="addApplicantModal" class="hidden fixed inset-0 z-50 flex items-center justify-center p-4 bg-black/60 backdrop-blur-sm overflow-y-auto">
+    <div class="relative w-full max-w-2xl my-8 rounded-3xl adm-card p-6 sm:p-8 shadow-2xl space-y-5">
+        <div class="flex items-center justify-between pb-3 border-b border-slate-200 dark:border-slate-800">
+            <div>
+                <h3 class="text-base font-bold adm-text">+ Add & Enroll New Student Applicant</h3>
+                <p class="text-xs adm-text-muted">Register a candidate directly into the UGC internship registry.</p>
+            </div>
+            <button onclick="closeAddApplicantModal()" class="adm-text-muted hover:adm-text font-bold text-xl cursor-pointer">&times;</button>
+        </div>
+
+        <form action="{{ route('admin.application.store') }}" method="POST" class="space-y-4">
+            @csrf
+            <div class="grid grid-cols-1 sm:grid-cols-3 gap-3">
+                <div>
+                    <label class="block text-xs font-semibold adm-text-secondary mb-1">Full Student Name *</label>
+                    <input type="text" name="name" required placeholder="e.g. Rahul Sharma" class="w-full px-3 py-2 rounded-xl adm-input text-xs">
+                </div>
+                <div>
+                    <label class="block text-xs font-semibold adm-text-secondary mb-1">Email Address *</label>
+                    <input type="email" name="email" required placeholder="rahul@example.com" class="w-full px-3 py-2 rounded-xl adm-input text-xs">
+                </div>
+                <div>
+                    <label class="block text-xs font-semibold adm-text-secondary mb-1">Phone Number *</label>
+                    <input type="text" name="phone" required placeholder="+91 9876543210" class="w-full px-3 py-2 rounded-xl adm-input text-xs">
+                </div>
+            </div>
+
+            <div class="grid grid-cols-1 sm:grid-cols-3 gap-3">
+                <div>
+                    <label class="block text-xs font-semibold adm-text-secondary mb-1">Degree Program *</label>
+                    <select name="degree" required class="w-full px-3 py-2 rounded-xl adm-input text-xs">
+                        <option value="BSc">Bachelor of Science (BSc)</option>
+                        <option value="BA">Bachelor of Arts (BA)</option>
+                        <option value="BBA">Bachelor of Business Admin (BBA)</option>
+                        <option value="BCA">Bachelor of Computer App (BCA)</option>
+                        <option value="BCom">Bachelor of Commerce (BCom)</option>
+                    </select>
+                </div>
+                <div>
+                    <label class="block text-xs font-semibold adm-text-secondary mb-1">Current Semester *</label>
+                    <select name="semester" required class="w-full px-3 py-2 rounded-xl adm-input text-xs">
+                        <option value="1st Semester">1st Semester</option>
+                        <option value="2nd Semester">2nd Semester</option>
+                        <option value="3rd Semester">3rd Semester</option>
+                        <option value="4th Semester">4th Semester</option>
+                        <option value="5th Semester" selected>5th Semester</option>
+                        <option value="6th Semester">6th Semester</option>
+                        <option value="7th/8th Semester">7th/8th Semester</option>
+                    </select>
+                </div>
+                <div>
+                    <label class="block text-xs font-semibold adm-text-secondary mb-1">Initial Status *</label>
+                    <select name="status" required class="w-full px-3 py-2 rounded-xl adm-input text-xs font-bold">
+                        <option value="APPROVED" selected>APPROVED</option>
+                        <option value="ACTIVE">ACTIVE</option>
+                        <option value="PENDING">PENDING</option>
+                        <option value="COMPLETED">COMPLETED</option>
+                    </select>
+                </div>
+            </div>
+
+            <div>
+                <label class="block text-xs font-semibold adm-text-secondary mb-1">College / Institute Name *</label>
+                <input type="text" name="college" required placeholder="e.g. Patna Science College, Patna University" class="w-full px-3 py-2 rounded-xl adm-input text-xs">
+            </div>
+
+            <div>
+                <label class="block text-xs font-semibold adm-text-secondary mb-1">Internship Stream Track *</label>
+                <select name="program_domain" required class="w-full px-3 py-2 rounded-xl adm-input text-xs">
+                    @foreach($streams as $stream)
+                        <option value="{{ $stream->title }}">{{ $stream->title }} ({{ $stream->code }})</option>
+                    @endforeach
+                </select>
+            </div>
+
+            <div class="grid grid-cols-1 sm:grid-cols-2 gap-3">
+                <div>
+                    <label class="block text-xs font-semibold adm-text-secondary mb-1">Assigned Faculty Mentor</label>
+                    <input type="text" name="mentor_name" placeholder="Dr. S. K. Narayan" class="w-full px-3 py-2 rounded-xl adm-input text-xs">
+                </div>
+                <div>
+                    <label class="block text-xs font-semibold adm-text-secondary mb-1">Initial Attendance (%)</label>
+                    <input type="number" name="attendance_rate" value="90" min="0" max="100" class="w-full px-3 py-2 rounded-xl adm-input text-xs">
+                </div>
+            </div>
+
+            <div>
+                <label class="block text-xs font-semibold adm-text-secondary mb-1">Capstone Project Title</label>
+                <input type="text" name="project_title" placeholder="Undergraduate Practical Capstone Project" class="w-full px-3 py-2 rounded-xl adm-input text-xs">
+            </div>
+
+            <div class="flex justify-end gap-2 pt-3 border-t border-slate-200 dark:border-slate-800">
+                <button type="button" onclick="closeAddApplicantModal()" class="px-4 py-2 rounded-xl bg-slate-100 dark:bg-slate-800 hover:bg-slate-200 dark:hover:bg-slate-700 text-slate-700 dark:text-slate-300 border border-slate-300 dark:border-slate-700 text-xs font-semibold transition cursor-pointer">Cancel</button>
+                <button type="submit" class="px-6 py-2 rounded-xl bg-indigo-600 hover:bg-indigo-700 text-white text-xs font-bold transition shadow-lg shadow-indigo-600/30 cursor-pointer">Enroll Applicant</button>
+            </div>
+        </form>
+    </div>
+</div>
+
+<!-- 2. Edit Full Applicant Modal -->
 <div id="editApplicantModal" class="hidden fixed inset-0 z-50 flex items-center justify-center p-4 bg-black/60 backdrop-blur-sm overflow-y-auto">
     <div class="relative w-full max-w-2xl my-8 rounded-3xl adm-card p-6 sm:p-8 shadow-2xl space-y-5">
         <div class="flex items-center justify-between pb-3 border-b border-slate-200 dark:border-slate-800">
@@ -538,14 +900,14 @@
             </div>
 
             <div class="flex justify-end gap-2 pt-2 border-t border-slate-200 dark:border-slate-800">
-                <button type="button" onclick="closeEditApplicantModal()" class="px-4 py-2 rounded-xl bg-slate-200 dark:bg-slate-800 hover:opacity-80 adm-text text-xs font-semibold transition cursor-pointer">Cancel</button>
+                <button type="button" onclick="closeEditApplicantModal()" class="px-4 py-2 rounded-xl bg-slate-100 dark:bg-slate-800 hover:bg-slate-200 dark:hover:bg-slate-700 text-slate-700 dark:text-slate-300 border border-slate-300 dark:border-slate-700 text-xs font-semibold transition cursor-pointer">Cancel</button>
                 <button type="submit" class="px-6 py-2 rounded-xl bg-indigo-600 hover:bg-indigo-700 text-white text-xs font-bold transition shadow-lg shadow-indigo-600/30 cursor-pointer">Save All Changes</button>
             </div>
         </form>
     </div>
 </div>
 
-<!-- 2. Certificate Approval Access Modal -->
+<!-- 3. Certificate Approval Access Modal -->
 <div id="certApprovalModal" class="hidden fixed inset-0 z-50 flex items-center justify-center p-4 bg-black/60 backdrop-blur-sm">
     <div class="w-full max-w-md rounded-3xl adm-card p-6 shadow-2xl space-y-4">
         <div class="flex items-center justify-between pb-3 border-b border-slate-200 dark:border-slate-800">
@@ -559,7 +921,7 @@
             <div>
                 <label class="block text-xs font-semibold adm-text-secondary mb-1">Certificate Serial Number (Unique)</label>
                 <input type="text" name="certificate_number" id="approval_cert_number" required class="w-full px-3 py-2 rounded-xl adm-input text-xs font-mono">
-                <p class="text-[10px] text-slate-400 mt-1">Leave as auto-generated or specify a custom UGC serial.</p>
+                <p class="text-[10px] adm-text-muted mt-1">Leave as auto-generated or specify a custom UGC serial.</p>
             </div>
             <div>
                 <label class="block text-xs font-semibold adm-text-secondary mb-1">Official Issue Date</label>
@@ -569,14 +931,14 @@
                 Approving this certificate will automatically mark the student application status as <strong>COMPLETED</strong> and enable instant QR verification.
             </div>
             <div class="flex justify-end gap-2 pt-2">
-                <button type="button" onclick="closeCertApprovalModal()" class="px-4 py-2 rounded-xl bg-slate-200 dark:bg-slate-800 hover:opacity-80 adm-text text-xs font-semibold transition cursor-pointer">Cancel</button>
+                <button type="button" onclick="closeCertApprovalModal()" class="px-4 py-2 rounded-xl bg-slate-100 dark:bg-slate-800 hover:bg-slate-200 dark:hover:bg-slate-700 text-slate-700 dark:text-slate-300 border border-slate-300 dark:border-slate-700 text-xs font-semibold transition cursor-pointer">Cancel</button>
                 <button type="submit" class="px-5 py-2 rounded-xl bg-emerald-600 hover:bg-emerald-700 text-white text-xs font-bold transition shadow-lg shadow-emerald-600/30 cursor-pointer">Approve & Issue Certificate</button>
             </div>
         </form>
     </div>
 </div>
 
-<!-- 3. Issue LOR Modal -->
+<!-- 4. Issue LOR Modal -->
 <div id="lorModal" class="hidden fixed inset-0 z-50 flex items-center justify-center p-4 bg-black/60 backdrop-blur-sm">
     <div class="w-full max-w-md rounded-3xl adm-card p-6 shadow-2xl space-y-4">
         <div class="flex items-center justify-between pb-3 border-b border-slate-200 dark:border-slate-800">
@@ -600,14 +962,14 @@
                 <textarea name="lor_remarks" rows="2" class="w-full px-3 py-2 rounded-xl adm-input text-xs">Demonstrated exceptional technical aptitude, exemplary teamwork, and consistent commitment to academic deliverables.</textarea>
             </div>
             <div class="flex justify-end gap-2 pt-2">
-                <button type="button" onclick="closeLorModal()" class="px-4 py-2 rounded-xl bg-slate-200 dark:bg-slate-800 hover:opacity-80 adm-text text-xs font-semibold transition cursor-pointer">Cancel</button>
+                <button type="button" onclick="closeLorModal()" class="px-4 py-2 rounded-xl bg-slate-100 dark:bg-slate-800 hover:bg-slate-200 dark:hover:bg-slate-700 text-slate-700 dark:text-slate-300 border border-slate-300 dark:border-slate-700 text-xs font-semibold transition cursor-pointer">Cancel</button>
                 <button type="submit" class="px-5 py-2 rounded-xl bg-amber-600 hover:bg-amber-700 text-white text-xs font-bold transition shadow-lg shadow-amber-600/30 cursor-pointer">Issue LOR</button>
             </div>
         </form>
     </div>
 </div>
 
-<!-- 4. Issue Marksheet Modal -->
+<!-- 5. Issue Marksheet Modal -->
 <div id="marksheetModal" class="hidden fixed inset-0 z-50 flex items-center justify-center p-4 bg-black/60 backdrop-blur-sm">
     <div class="w-full max-w-md rounded-3xl adm-card p-6 shadow-2xl space-y-4">
         <div class="flex items-center justify-between pb-3 border-b border-slate-200 dark:border-slate-800">
@@ -632,7 +994,7 @@
                 <input type="number" name="marksheet_marks" value="94" min="0" max="100" class="w-full px-3 py-2 rounded-xl adm-input text-xs">
             </div>
             <div class="flex justify-end gap-2 pt-2">
-                <button type="button" onclick="closeMarksheetModal()" class="px-4 py-2 rounded-xl bg-slate-200 dark:bg-slate-800 hover:opacity-80 adm-text text-xs font-semibold transition cursor-pointer">Cancel</button>
+                <button type="button" onclick="closeMarksheetModal()" class="px-4 py-2 rounded-xl bg-slate-100 dark:bg-slate-800 hover:bg-slate-200 dark:hover:bg-slate-700 text-slate-700 dark:text-slate-300 border border-slate-300 dark:border-slate-700 text-xs font-semibold transition cursor-pointer">Cancel</button>
                 <button type="submit" class="px-5 py-2 rounded-xl bg-indigo-600 hover:bg-indigo-700 text-white text-xs font-bold transition shadow-lg shadow-indigo-600/30 cursor-pointer">Generate Scorecard</button>
             </div>
         </form>
@@ -642,6 +1004,14 @@
 
 @section('scripts')
 <script>
+    function openAddApplicantModal() {
+        document.getElementById('addApplicantModal').classList.remove('hidden');
+    }
+
+    function closeAddApplicantModal() {
+        document.getElementById('addApplicantModal').classList.add('hidden');
+    }
+
     function openEditApplicantModal(app, user) {
         document.getElementById('editAppNumberLabel').innerText = 'Application: ' + app.application_number;
         document.getElementById('editApplicantForm').action = '/admin/applications/' + app.id + '/update-full';

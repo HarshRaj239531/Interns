@@ -119,7 +119,7 @@
                     <div>
                         <label class="block text-xs font-semibold adm-text-secondary mb-1">Certificate Serial Number</label>
                         <input type="text" name="certificate_number" id="input_cert_number" value="UGC-INF-{{ rand(100000, 999999) }}" class="w-full px-3.5 py-2 rounded-xl adm-input text-xs font-mono font-bold">
-                        <span class="text-[10px] text-slate-400">Unique alphanumeric tamper-proof identifier</span>
+                        <span class="text-[10px] adm-text-muted">Unique alphanumeric tamper-proof identifier</span>
                     </div>
                     <div>
                         <label class="block text-xs font-semibold adm-text-secondary mb-1">Certificate Issue Date *</label>
@@ -172,7 +172,7 @@
                     <p class="text-base font-bold text-indigo-600 dark:text-indigo-400" id="previewName">Candidate Name</p>
                     <p class="text-[11px] adm-text-muted">of <strong id="previewCollege">University / College</strong></p>
                     <p class="text-xs adm-text font-medium">has successfully completed the UGC-Accredited 8-Week Practical Training in <span class="text-indigo-600 dark:text-indigo-400 font-bold" id="previewDomain">Domain Track</span>.</p>
-                    <div class="pt-3 flex items-center justify-between text-[10px] text-slate-400 font-mono border-t border-slate-200 dark:border-slate-800">
+                    <div class="pt-3 flex items-center justify-between text-[10px] adm-text-muted font-mono border-t border-slate-200 dark:border-slate-800">
                         <span id="previewSerial">SERIAL: UGC-INF-XXXXXX</span>
                         <span>QR VERIFIED ✓</span>
                     </div>
@@ -270,5 +270,34 @@
             document.getElementById('previewSerial').innerText = 'SERIAL: ' + cert;
         }
     }
+
+    // Dynamic live typing listeners for real-time preview
+    document.addEventListener('DOMContentLoaded', function() {
+        const customName = document.getElementById('custom_name');
+        const customCollege = document.getElementById('custom_college');
+        const inputDomain = document.getElementById('input_domain');
+        const inputCert = document.getElementById('input_cert_number');
+
+        if (customName) {
+            customName.addEventListener('input', function() {
+                document.getElementById('previewName').innerText = this.value.trim() || 'Candidate Name';
+            });
+        }
+        if (customCollege) {
+            customCollege.addEventListener('input', function() {
+                document.getElementById('previewCollege').innerText = this.value.trim() || 'University / College';
+            });
+        }
+        if (inputDomain) {
+            inputDomain.addEventListener('change', function() {
+                document.getElementById('previewDomain').innerText = this.value || 'Domain Track';
+            });
+        }
+        if (inputCert) {
+            inputCert.addEventListener('input', function() {
+                document.getElementById('previewSerial').innerText = 'SERIAL: ' + (this.value.trim() || 'UGC-INF-XXXXXX');
+            });
+        }
+    });
 </script>
 @endsection

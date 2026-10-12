@@ -20,7 +20,7 @@ class AdminPortalController extends Controller
         $query = StudentProfile::with('user');
 
         // Tab selection filters
-        $tab = $request->input('tab', 'all');
+        $tab = $request->input('tab', 'overview');
         if ($tab === 'enrolled') {
             $query->whereIn('status', ['APPROVED', 'ACTIVE', 'COMPLETED']);
         } elseif ($tab === 'pending_cert') {
@@ -81,8 +81,19 @@ class AdminPortalController extends Controller
         ];
 
         $streams = InternshipStream::orderBy('title')->get();
+        $streamDistribution = InternshipStream::withCount('studentProfiles')->orderBy('title')->get();
+        $recentApplications = StudentProfile::with('user')->latest()->take(6)->get();
+        $recentCertificates = StudentProfile::with('user')->where('certificate_issued', true)->latest('certificate_date')->take(6)->get();
 
-        return view('admin.dashboard', compact('applications', 'stats', 'streams', 'tab'));
+        return view('admin.dashboard', compact(
+            'applications',
+            'stats',
+            'streams',
+            'tab',
+            'streamDistribution',
+            'recentApplications',
+            'recentCertificates'
+        ));
     }
 
     /**
@@ -286,6 +297,144 @@ class AdminPortalController extends Controller
         ]);
 
         return back()->with('success', "Candidate profile & document records updated successfully for {$profile->application_number}!");
+    }
+
+    /**
+     * Store New Student Applicant (Admin Direct Action)
+     */
+    public function storeApplicant(Request $request)
+    {
+        $validated = $request->validate([
+            'name' => ['required', 'string', 'max:255'],
+            'email' => ['required', 'email', 'max:255'],
+            'phone' => ['required', 'string', 'max:50'],
+            'college' => ['required', 'string', 'max:255'],
+            'degree' => ['required', 'string', 'max:50'],
+            'semester' => ['required', 'string', 'max:50'],
+            'program_domain' => ['required', 'string', 'max:255'],
+            'mentor_name' => ['nullable', 'string', 'max:255'],
+            'project_title' => ['nullable', 'string', 'max:255'],
+            'attendance_rate' => ['nullable', 'integer', 'min:0', 'max:100'],
+            'status' => ['required', 'string', 'in:PENDING,APPROVED,ACTIVE,COMPLETED'],
+        ]);
+
+        $user = User::firstOrCreate(
+            ['email' => strtolower(trim($validated['email']))],
+            [
+                'name' => trim($validated['name']),
+                'phone' => trim($validated['phone']),
+                'password' => Hash::make('Student@123'),
+                'role' => 'STUDENT',
+            ]
+        );
+
+        $appNumber = 'INF-2026-'.rand(1000, 9999);
+        while (StudentProfile::where('application_number', $appNumber)->exists()) {
+            $appNumber = 'INF-2026-'.rand(1000, 9999);
+        }
+
+        $profile = StudentProfile::create([
+            'user_id' => $user->id,
+            'application_number' => $appNumber,
+            'college' => trim($validated['college']),
+            'degree' => $validated['degree'],
+            'semester' => $validated['semester'],
+            'program_domain' => $validated['program_domain'],
+            'mentor_name' => ! empty($validated['mentor_name']) ? $validated['mentor_name'] : 'Faculty Advisory Board',
+            'project_title' => ! empty($validated['project_title']) ? $validated['project_title'] : 'Capstone Research Evaluation',
+            'attendance_rate' => $validated['attendance_rate'] ?? 85,
+            'status' => $validated['status'],
+            'offer_letter_issued' => in_array($validated['status'], ['APPROVED', 'ACTIVE', 'COMPLETED']),
+            'offer_letter_date' => in_array($validated['status'], ['APPROVED', 'ACTIVE', 'COMPLETED']) ? now() : null,
+            'consent_letter_issued' => in_array($validated['status'], ['ACTIVE', 'COMPLETED']),
+            'consent_letter_date' => in_array($validated['status'], ['ACTIVE', 'COMPLETED']) ? now() : null,
+        ]);
+
+        return back()->with('success', "New student applicant {$user->name} ({$appNumber}) enrolled successfully!");
+    }
+
+    /**
+     * Revoke Issued Certificate
+     */
+    public function revokeCertificate($id)
+    {
+        $profile = StudentProfile::findOrFail($id);
+        $oldCert = $profile->certificate_number;
+        $profile->update([
+            'certificate_issued' => false,
+            'certificate_date' => null,
+            'status' => 'ACTIVE',
+        ]);
+
+        return back()->with('success', "Certificate {$oldCert} for {$profile->application_number} has been revoked.");
+    }
+
+    /**
+     * Export Filtered Applications as CSV
+     */
+    public function exportApplications(Request $request)
+    {
+        $query = StudentProfile::with('user');
+
+        if ($request->filled('status') && $request->status !== 'all') {
+            $query->where('status', $request->status);
+        }
+        if ($request->filled('degree') && $request->degree !== 'all') {
+            $query->where('degree', $request->degree);
+        }
+        if ($request->filled('domain') && $request->domain !== 'all') {
+            $query->where('program_domain', $request->domain);
+        }
+
+        $profiles = $query->latest()->get();
+
+        $filename = 'infinity_interns_applications_'.date('Ymd_His').'.csv';
+        $headers = [
+            'Content-Type' => 'text/csv',
+            'Content-Disposition' => "attachment; filename=\"{$filename}\"",
+        ];
+
+        $callback = function () use ($profiles) {
+            $file = fopen('php://output', 'w');
+            fputcsv($file, [
+                'Application Number',
+                'Candidate Name',
+                'Email',
+                'Phone',
+                'College',
+                'Degree',
+                'Semester',
+                'Program Domain',
+                'Status',
+                'Attendance %',
+                'Mentor',
+                'Project Title',
+                'Certificate Issued',
+                'Certificate Number',
+            ]);
+
+            foreach ($profiles as $p) {
+                fputcsv($file, [
+                    $p->application_number,
+                    $p->user->name ?? '',
+                    $p->user->email ?? '',
+                    $p->user->phone ?? '',
+                    $p->college,
+                    $p->degree,
+                    $p->semester,
+                    $p->program_domain,
+                    $p->status,
+                    $p->attendance_rate.'%',
+                    $p->mentor_name,
+                    $p->project_title,
+                    $p->certificate_issued ? 'YES' : 'NO',
+                    $p->certificate_number ?? '',
+                ]);
+            }
+            fclose($file);
+        };
+
+        return response()->stream($callback, 200, $headers);
     }
 
     /**

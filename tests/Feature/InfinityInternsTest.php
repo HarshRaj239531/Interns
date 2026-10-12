@@ -308,4 +308,123 @@ class InfinityInternsTest extends TestCase
         $trackRes->assertSee('UGC-INF-777777');
         $trackRes->assertSee('INF-LOR-2026-7777');
     }
+
+    public function test_login_page_renders_cleanly_without_demo_accounts(): void
+    {
+        $response = $this->get(route('login'));
+        $response->assertStatus(200);
+        $response->assertDontSee('Quick One-Click Demo Access');
+        $response->assertDontSee('fillStudentCreds');
+        $response->assertDontSee('fillAdminCreds');
+        $response->assertSee('Portal Login');
+        $response->assertSee('Student Login');
+        $response->assertSee('Admin Login');
+    }
+
+    public function test_admin_dashboard_renders_all_feature_tabs(): void
+    {
+        $admin = User::create([
+            'name' => 'Tabs Admin',
+            'email' => 'tabs.admin@infinityinterns.com',
+            'password' => bcrypt('Admin@123'),
+            'role' => 'ADMIN',
+        ]);
+
+        $this->actingAs($admin);
+
+        foreach (['overview', 'all', 'enrolled', 'pending_cert', 'issued_cert', 'manage'] as $tab) {
+            $response = $this->get(route('admin.dashboard', ['tab' => $tab]));
+            $response->assertStatus(200);
+            $response->assertSee('Administrator Command Center');
+        }
+    }
+
+    public function test_admin_can_store_new_applicant(): void
+    {
+        $admin = User::create([
+            'name' => 'Enrollment Admin',
+            'email' => 'enroll.admin@infinityinterns.com',
+            'password' => bcrypt('Admin@123'),
+            'role' => 'ADMIN',
+        ]);
+
+        $this->actingAs($admin);
+
+        $response = $this->post(route('admin.application.store'), [
+            'name' => 'Rohan Sen',
+            'email' => 'rohan.sen@example.com',
+            'phone' => '+91 9911223344',
+            'college' => 'Patna Science College',
+            'degree' => 'BSc',
+            'semester' => '5th Semester',
+            'program_domain' => 'AI, Machine Learning & Data Science',
+            'mentor_name' => 'Dr. R. K. Vatsa',
+            'attendance_rate' => 95,
+            'status' => 'APPROVED',
+        ]);
+
+        $response->assertSessionHas('success');
+        $this->assertDatabaseHas('users', ['email' => 'rohan.sen@example.com']);
+        $this->assertDatabaseHas('student_profiles', [
+            'college' => 'Patna Science College',
+            'program_domain' => 'AI, Machine Learning & Data Science',
+            'status' => 'APPROVED',
+        ]);
+    }
+
+    public function test_admin_can_revoke_issued_certificate(): void
+    {
+        $admin = User::create([
+            'name' => 'Revoke Admin',
+            'email' => 'revoke.admin@infinityinterns.com',
+            'password' => bcrypt('Admin@123'),
+            'role' => 'ADMIN',
+        ]);
+
+        $user = User::create([
+            'name' => 'Pooja Roy',
+            'email' => 'pooja.roy@example.com',
+            'password' => bcrypt('Student@123'),
+            'role' => 'STUDENT',
+        ]);
+
+        $profile = StudentProfile::create([
+            'user_id' => $user->id,
+            'application_number' => 'INF-2026-9991',
+            'degree' => 'BCA',
+            'college' => 'Patna Women\'s College',
+            'semester' => '6th Semester',
+            'program_domain' => 'Technology, Digital & Web Skills',
+            'status' => 'COMPLETED',
+            'attendance_rate' => 90,
+            'certificate_issued' => true,
+            'certificate_number' => 'UGC-INF-999111',
+            'certificate_date' => now(),
+        ]);
+
+        $this->actingAs($admin);
+
+        $response = $this->post(route('admin.application.revoke-certificate', $profile->id));
+        $response->assertSessionHas('success');
+
+        $profile->refresh();
+        $this->assertFalse($profile->certificate_issued);
+        $this->assertEquals('ACTIVE', $profile->status);
+    }
+
+    public function test_admin_can_export_applications_csv(): void
+    {
+        $admin = User::create([
+            'name' => 'Export Admin',
+            'email' => 'export.admin@infinityinterns.com',
+            'password' => bcrypt('Admin@123'),
+            'role' => 'ADMIN',
+        ]);
+
+        $this->actingAs($admin);
+
+        $response = $this->get(route('admin.applications.export'));
+        $response->assertStatus(200);
+        $response->assertHeader('Content-Type', 'text/csv; charset=UTF-8');
+    }
 }

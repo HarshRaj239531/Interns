@@ -56,6 +56,9 @@ Route::middleware(['auth', 'admin'])->prefix('admin')->name('admin.')->group(fun
     Route::post('/applications/{id}/issue-marksheet', [AdminPortalController::class, 'issueMarksheet'])->name('application.marksheet');
     Route::post('/applications/{id}/update-details', [AdminPortalController::class, 'updateDetails'])->name('application.update-details');
     Route::post('/applications/{id}/update-full', [AdminPortalController::class, 'updateFullApplicant'])->name('application.update-full');
+    Route::post('/applications/store', [AdminPortalController::class, 'storeApplicant'])->name('application.store');
+    Route::get('/applications/export', [AdminPortalController::class, 'exportApplications'])->name('applications.export');
+    Route::post('/applications/{id}/revoke-certificate', [AdminPortalController::class, 'revokeCertificate'])->name('application.revoke-certificate');
     Route::delete('/applications/{id}', [AdminPortalController::class, 'deleteApplication'])->name('application.delete');
 
     // Inquiries Desk

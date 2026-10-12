@@ -95,7 +95,7 @@
             </div>
 
             <div class="pt-4 border-t border-slate-200 dark:border-slate-800 space-y-2">
-                <span class="text-[10px] font-bold uppercase tracking-wider text-slate-400 block">Available Documents</span>
+                <span class="text-[10px] font-bold uppercase tracking-wider adm-text-muted block">Available Documents</span>
                 <div class="grid grid-cols-2 gap-2 text-xs">
                     @if($profile->offer_letter_issued)
                         <a href="{{ route('admin.application.view-offer-letter', $profile->id) }}" target="_blank" class="p-2 rounded-xl bg-blue-50 dark:bg-blue-950/40 text-blue-700 dark:text-blue-300 font-semibold text-center hover:underline motion-btn-spring">

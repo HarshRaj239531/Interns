@@ -375,23 +375,37 @@
                 </p>
             </div>
 
+            @if($errors->any())
+                <div class="mb-4 p-3 rounded-2xl bg-rose-50 border border-rose-200 text-rose-700 text-xs">
+                    <div class="font-bold mb-1 flex items-center gap-1.5">
+                        <span>✕</span>
+                        <span>Please fix the following:</span>
+                    </div>
+                    <ul class="list-disc pl-5 space-y-0.5 text-[11px]">
+                        @foreach($errors->all() as $error)
+                            <li>{{ $error }}</li>
+                        @endforeach
+                    </ul>
+                </div>
+            @endif
+
             <form action="{{ route('apply') }}" method="POST" class="space-y-3.5">
                 @csrf
                 <div class="grid grid-cols-1 sm:grid-cols-2 gap-3">
                     <div>
                         <label class="block text-xs font-semibold text-slate-700 mb-1">Full Student Name *</label>
-                        <input type="text" name="name" required placeholder="e.g. Rahul Sharma" class="w-full px-3.5 py-2 rounded-xl bg-slate-50 border border-slate-200 text-xs focus:ring-2 focus:ring-indigo-500 focus:outline-none">
+                        <input type="text" name="name" value="{{ old('name') }}" required placeholder="e.g. Rahul Sharma" class="w-full px-3.5 py-2 rounded-xl bg-slate-50 border border-slate-200 text-xs focus:ring-2 focus:ring-indigo-500 focus:outline-none">
                     </div>
                     <div>
                         <label class="block text-xs font-semibold text-slate-700 mb-1">Mobile / WhatsApp *</label>
-                        <input type="tel" name="phone" required placeholder="+91 9876543210" class="w-full px-3.5 py-2 rounded-xl bg-slate-50 border border-slate-200 text-xs focus:ring-2 focus:ring-indigo-500 focus:outline-none">
+                        <input type="tel" name="phone" value="{{ old('phone') }}" required placeholder="+91 9876543210" class="w-full px-3.5 py-2 rounded-xl bg-slate-50 border border-slate-200 text-xs focus:ring-2 focus:ring-indigo-500 focus:outline-none">
                     </div>
                 </div>
 
                 <div class="grid grid-cols-1 sm:grid-cols-2 gap-3">
                     <div>
                         <label class="block text-xs font-semibold text-slate-700 mb-1">Email Address (Login) *</label>
-                        <input type="email" name="email" required placeholder="rahul@example.com" class="w-full px-3.5 py-2 rounded-xl bg-slate-50 border border-slate-200 text-xs focus:ring-2 focus:ring-indigo-500 focus:outline-none">
+                        <input type="email" name="email" value="{{ old('email') }}" required placeholder="rahul@example.com" class="w-full px-3.5 py-2 rounded-xl bg-slate-50 border border-slate-200 text-xs focus:ring-2 focus:ring-indigo-500 focus:outline-none">
                     </div>
                     <div>
                         <label class="block text-xs font-semibold text-slate-700 mb-1">Set Password *</label>
@@ -403,30 +417,30 @@
                     <div>
                         <label class="block text-xs font-semibold text-slate-700 mb-1">Undergraduate Degree *</label>
                         <select name="degree" required class="w-full px-3.5 py-2 rounded-xl bg-slate-50 border border-slate-200 text-xs focus:ring-2 focus:ring-indigo-500 focus:outline-none">
-                            <option value="BA">Bachelor of Arts (BA)</option>
-                            <option value="BSc">Bachelor of Science (BSc)</option>
-                            <option value="BBA">Bachelor of Business Admin (BBA)</option>
-                            <option value="BCA">Bachelor of Computer App (BCA)</option>
-                            <option value="BCom">Bachelor of Commerce (BCom)</option>
+                            <option value="BA" {{ old('degree') === 'BA' ? 'selected' : '' }}>Bachelor of Arts (BA)</option>
+                            <option value="BSc" {{ old('degree') === 'BSc' ? 'selected' : '' }}>Bachelor of Science (BSc)</option>
+                            <option value="BBA" {{ old('degree') === 'BBA' ? 'selected' : '' }}>Bachelor of Business Admin (BBA)</option>
+                            <option value="BCA" {{ old('degree') === 'BCA' ? 'selected' : '' }}>Bachelor of Computer App (BCA)</option>
+                            <option value="BCom" {{ old('degree') === 'BCom' ? 'selected' : '' }}>Bachelor of Commerce (BCom)</option>
                         </select>
                     </div>
                     <div>
                         <label class="block text-xs font-semibold text-slate-700 mb-1">Current Semester *</label>
                         <select name="semester" required class="w-full px-3.5 py-2 rounded-xl bg-slate-50 border border-slate-200 text-xs focus:ring-2 focus:ring-indigo-500 focus:outline-none">
-                            <option value="1st Semester">1st Semester</option>
-                            <option value="2nd Semester">2nd Semester</option>
-                            <option value="3rd Semester">3rd Semester</option>
-                            <option value="4th Semester">4th Semester</option>
-                            <option value="5th Semester" selected>5th Semester</option>
-                            <option value="6th Semester">6th Semester</option>
-                            <option value="7th/8th Semester">7th/8th Semester</option>
+                            <option value="1st Semester" {{ old('semester') === '1st Semester' ? 'selected' : '' }}>1st Semester</option>
+                            <option value="2nd Semester" {{ old('semester') === '2nd Semester' ? 'selected' : '' }}>2nd Semester</option>
+                            <option value="3rd Semester" {{ old('semester') === '3rd Semester' ? 'selected' : '' }}>3rd Semester</option>
+                            <option value="4th Semester" {{ old('semester') === '4th Semester' ? 'selected' : '' }}>4th Semester</option>
+                            <option value="5th Semester" {{ old('semester', '5th Semester') === '5th Semester' ? 'selected' : '' }}>5th Semester</option>
+                            <option value="6th Semester" {{ old('semester') === '6th Semester' ? 'selected' : '' }}>6th Semester</option>
+                            <option value="7th/8th Semester" {{ old('semester') === '7th/8th Semester' ? 'selected' : '' }}>7th/8th Semester</option>
                         </select>
                     </div>
                 </div>
 
                 <div>
                     <label class="block text-xs font-semibold text-slate-700 mb-1">College / University Name *</label>
-                    <input type="text" name="college" required placeholder="e.g. Patna Science College, Patna University" class="w-full px-3.5 py-2 rounded-xl bg-slate-50 border border-slate-200 text-xs focus:ring-2 focus:ring-indigo-500 focus:outline-none">
+                    <input type="text" name="college" value="{{ old('college') }}" required placeholder="e.g. Patna Science College, Patna University" class="w-full px-3.5 py-2 rounded-xl bg-slate-50 border border-slate-200 text-xs focus:ring-2 focus:ring-indigo-500 focus:outline-none">
                 </div>
 
                 <div>
@@ -434,7 +448,9 @@
                     <select name="program_domain" required class="w-full px-3.5 py-2 rounded-xl bg-slate-50 border border-slate-200 text-xs focus:ring-2 focus:ring-indigo-500 focus:outline-none">
                         @if(isset($activeStreams) && $activeStreams->count() > 0)
                             @foreach($activeStreams as $stream)
-                                <option value="{{ $stream->title }}">{{ $stream->title }} ({{ $stream->code }})</option>
+                                <option value="{{ $stream->title }}" {{ old('program_domain') === $stream->title ? 'selected' : '' }}>
+                                    {{ $stream->title }} ({{ $stream->code }})
+                                </option>
                             @endforeach
                         @else
                             <option value="Arts, Social Science & Communication">Arts, Social Science & Communication (BA)</option>
@@ -522,6 +538,14 @@
                 });
             }
         });
+
+        @if($errors->any())
+        document.addEventListener('DOMContentLoaded', function() {
+            if (typeof window.openApplyModal === 'function') {
+                window.openApplyModal();
+            }
+        });
+        @endif
     </script>
     @yield('scripts')
 </body>

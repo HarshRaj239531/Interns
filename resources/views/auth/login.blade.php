@@ -51,22 +51,7 @@
             </button>
         </form>
 
-        <!-- Quick Demo Account Fillers (Only Admin and Student) -->
-        <div class="mt-8 pt-6 border-t border-slate-100 text-center">
-            <span class="text-[10px] font-bold text-slate-400 uppercase tracking-wider block mb-3">Quick One-Click Demo Access</span>
-            <div class="flex flex-col gap-2 text-xs">
-                <button type="button" onclick="fillStudentCreds()" class="w-full py-2.5 px-3.5 rounded-xl bg-emerald-50 hover:bg-emerald-100 text-emerald-800 font-semibold border border-emerald-200 transition cursor-pointer text-left flex items-center justify-between motion-btn-spring">
-                    <span class="flex items-center gap-2"><span>🎓</span> <span>Student Portal</span></span>
-                    <span class="text-[10px] font-mono text-emerald-600">aditya.raj@example.com</span>
-                </button>
-                <button type="button" onclick="fillAdminCreds()" class="w-full py-2.5 px-3.5 rounded-xl bg-indigo-50 hover:bg-indigo-100 text-indigo-700 font-semibold border border-indigo-100 transition cursor-pointer text-left flex items-center justify-between motion-btn-spring">
-                    <span class="flex items-center gap-2"><span>🛡️</span> <span>Admin Portal</span></span>
-                    <span class="text-[10px] font-mono text-indigo-500">admin@infinityinterns.com</span>
-                </button>
-            </div>
-        </div>
-
-        <div class="mt-6 text-center text-xs text-slate-500">
+        <div class="mt-8 pt-6 border-t border-slate-100 text-center text-xs text-slate-500">
             <span>New Student? </span>
             <button onclick="openApplyModal()" class="font-bold text-indigo-600 hover:underline cursor-pointer">
                 Register & Apply Here
@@ -97,18 +82,6 @@
             loginEmail.placeholder = "student@example.com";
             submitBtn.innerText = "Sign In to Student Portal";
         }
-    }
-
-    function fillStudentCreds() {
-        switchLoginRole('student');
-        document.getElementById('loginEmail').value = 'aditya.raj@example.com';
-        document.getElementById('loginPassword').value = 'Student@123';
-    }
-
-    function fillAdminCreds() {
-        switchLoginRole('admin');
-        document.getElementById('loginEmail').value = 'admin@infinityinterns.com';
-        document.getElementById('loginPassword').value = 'Admin@123';
     }
 </script>
 @endsection
