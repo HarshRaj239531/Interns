@@ -2,8 +2,10 @@
 
 namespace Database\Seeders;
 
+use App\Models\Degree;
 use App\Models\Inquiry;
 use App\Models\InternshipStream;
+use App\Models\School;
 use App\Models\StudentProfile;
 use App\Models\User;
 use Illuminate\Database\Seeder;
@@ -27,7 +29,119 @@ class DatabaseSeeder extends Seeder
             ]
         );
 
-        // 2. Seed Default Internship Streams
+        // 2. Seed Default Degrees
+        $degrees = [
+            [
+                'name' => 'Bachelor of Computer Applications',
+                'code' => 'BCA',
+                'duration' => '3 Years (6 Semesters)',
+                'description' => 'Software engineering, database architecture, cloud development, and applied IT systems.',
+                'sort_order' => 1,
+                'is_active' => true,
+            ],
+            [
+                'name' => 'Bachelor of Science',
+                'code' => 'BSc',
+                'duration' => '3 / 4 Years (NEP-2020)',
+                'description' => 'Scientific analysis, experimental research, environmental data, and mathematical computing.',
+                'sort_order' => 2,
+                'is_active' => true,
+            ],
+            [
+                'name' => 'Bachelor of Arts',
+                'code' => 'BA',
+                'duration' => '3 / 4 Years (NEP-2020)',
+                'description' => 'Humanities, social research, policy studies, communication, and digital media.',
+                'sort_order' => 3,
+                'is_active' => true,
+            ],
+            [
+                'name' => 'Bachelor of Business Administration',
+                'code' => 'BBA',
+                'duration' => '3 Years (6 Semesters)',
+                'description' => 'Corporate management, organizational leadership, financial analysis, and marketing strategy.',
+                'sort_order' => 4,
+                'is_active' => true,
+            ],
+            [
+                'name' => 'Bachelor of Commerce',
+                'code' => 'BCom',
+                'duration' => '3 / 4 Years (NEP-2020)',
+                'description' => 'Financial accounting, taxation, auditing, banking workflows, and economics.',
+                'sort_order' => 5,
+                'is_active' => true,
+            ],
+            [
+                'name' => 'Bachelor of Technology',
+                'code' => 'B.Tech',
+                'duration' => '4 Years (8 Semesters)',
+                'description' => 'Engineering principles, artificial intelligence, computer science, and core technology.',
+                'sort_order' => 6,
+                'is_active' => true,
+            ],
+        ];
+
+        foreach ($degrees as $d) {
+            Degree::firstOrCreate(['code' => $d['code']], $d);
+        }
+
+        // 3. Seed Default Schools & Colleges
+        $schools = [
+            [
+                'name' => 'Patna Science College, Patna University',
+                'code' => 'PSC-PU',
+                'city' => 'Patna',
+                'state' => 'Bihar',
+                'type' => 'COLLEGE',
+                'is_active' => true,
+            ],
+            [
+                'name' => 'Magadh Mahila College, Patna',
+                'code' => 'MMC-PU',
+                'city' => 'Patna',
+                'state' => 'Bihar',
+                'type' => 'COLLEGE',
+                'is_active' => true,
+            ],
+            [
+                'name' => 'College of Commerce, Arts & Science, Patna',
+                'code' => 'COCAS-PPU',
+                'city' => 'Patna',
+                'state' => 'Bihar',
+                'type' => 'COLLEGE',
+                'is_active' => true,
+            ],
+            [
+                'name' => 'A.N. College, Patna',
+                'code' => 'ANC-PPU',
+                'city' => 'Patna',
+                'state' => 'Bihar',
+                'type' => 'COLLEGE',
+                'is_active' => true,
+            ],
+            [
+                'name' => 'Patna College',
+                'code' => 'PC-PU',
+                'city' => 'Patna',
+                'state' => 'Bihar',
+                'type' => 'COLLEGE',
+                'is_active' => true,
+            ],
+            [
+                'name' => 'St. Xavier\'s College of Management & Technology',
+                'code' => 'SXCMT',
+                'city' => 'Patna',
+                'state' => 'Bihar',
+                'type' => 'COLLEGE',
+                'is_active' => true,
+            ],
+        ];
+
+        foreach ($schools as $s) {
+            School::firstOrCreate(['name' => $s['name']], $s);
+        }
+
+        // 4. Seed Default Internship Streams
         $streams = [
             [
                 'title' => 'Technology, Digital & Web Skills',

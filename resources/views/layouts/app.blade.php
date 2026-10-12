@@ -417,11 +417,20 @@
                     <div>
                         <label class="block text-xs font-semibold text-slate-700 mb-1">Undergraduate Degree *</label>
                         <select name="degree" required class="w-full px-3.5 py-2 rounded-xl bg-slate-50 border border-slate-200 text-xs focus:ring-2 focus:ring-indigo-500 focus:outline-none">
-                            <option value="BA" {{ old('degree') === 'BA' ? 'selected' : '' }}>Bachelor of Arts (BA)</option>
-                            <option value="BSc" {{ old('degree') === 'BSc' ? 'selected' : '' }}>Bachelor of Science (BSc)</option>
-                            <option value="BBA" {{ old('degree') === 'BBA' ? 'selected' : '' }}>Bachelor of Business Admin (BBA)</option>
-                            <option value="BCA" {{ old('degree') === 'BCA' ? 'selected' : '' }}>Bachelor of Computer App (BCA)</option>
-                            <option value="BCom" {{ old('degree') === 'BCom' ? 'selected' : '' }}>Bachelor of Commerce (BCom)</option>
+                            <option value="" disabled {{ old('degree') ? '' : 'selected' }}>Select Degree Program...</option>
+                            @if(isset($activeDegrees) && $activeDegrees->count() > 0)
+                                @foreach($activeDegrees as $deg)
+                                    <option value="{{ $deg->code }}" {{ old('degree') === $deg->code ? 'selected' : '' }}>
+                                        {{ $deg->name }} ({{ $deg->code }})
+                                    </option>
+                                @endforeach
+                            @else
+                                <option value="BA" {{ old('degree') === 'BA' ? 'selected' : '' }}>Bachelor of Arts (BA)</option>
+                                <option value="BSc" {{ old('degree') === 'BSc' ? 'selected' : '' }}>Bachelor of Science (BSc)</option>
+                                <option value="BBA" {{ old('degree') === 'BBA' ? 'selected' : '' }}>Bachelor of Business Admin (BBA)</option>
+                                <option value="BCA" {{ old('degree') === 'BCA' ? 'selected' : '' }}>Bachelor of Computer App (BCA)</option>
+                                <option value="BCom" {{ old('degree') === 'BCom' ? 'selected' : '' }}>Bachelor of Commerce (BCom)</option>
+                            @endif
                         </select>
                     </div>
                     <div>
@@ -439,8 +448,23 @@
                 </div>
 
                 <div>
-                    <label class="block text-xs font-semibold text-slate-700 mb-1">College / University Name *</label>
-                    <input type="text" name="college" value="{{ old('college') }}" required placeholder="e.g. Patna Science College, Patna University" class="w-full px-3.5 py-2 rounded-xl bg-slate-50 border border-slate-200 text-xs focus:ring-2 focus:ring-indigo-500 focus:outline-none">
+                    <label class="block text-xs font-semibold text-slate-700 mb-1">School / College / University Name *</label>
+                    <select name="college" id="regCollegeSelect" required class="w-full px-3.5 py-2 rounded-xl bg-slate-50 border border-slate-200 text-xs focus:ring-2 focus:ring-indigo-500 focus:outline-none" onchange="handleRegisterCollegeChange(this.value)">
+                        <option value="" disabled {{ old('college') ? '' : 'selected' }}>Select School / College...</option>
+                        @if(isset($activeSchools) && $activeSchools->count() > 0)
+                            @foreach($activeSchools as $school)
+                                <option value="{{ $school->name }}" {{ old('college') === $school->name ? 'selected' : '' }}>
+                                    {{ $school->name }}{{ $school->city ? ' (' . $school->city . ')' : '' }}
+                                </option>
+                            @endforeach
+                        @endif
+                        <option value="__OTHER__" {{ old('college') === '__OTHER__' || old('custom_college') ? 'selected' : '' }}>
+                            + Other School / College (Enter manually)
+                        </option>
+                    </select>
+                    <div id="regCustomCollegeDiv" class="{{ (isset($activeSchools) && $activeSchools->count() > 0 && old('college') !== '__OTHER__' && !old('custom_college')) ? 'hidden' : '' }} mt-2">
+                        <input type="text" name="custom_college" id="regCustomCollegeInput" value="{{ old('custom_college') }}" placeholder="Type your School / College / University full name" class="w-full px-3.5 py-2 rounded-xl bg-slate-50 border border-indigo-300 text-xs focus:ring-2 focus:ring-indigo-500 focus:outline-none">
+                    </div>
                 </div>
 
                 <div>
@@ -495,6 +519,22 @@
             window.toggleMobileNav = function() {
                 const drawer = document.getElementById('mobileDrawer');
                 if (drawer) drawer.classList.toggle('hidden');
+            };
+        }
+
+        if (typeof window.handleRegisterCollegeChange === 'undefined') {
+            window.handleRegisterCollegeChange = function(val) {
+                const div = document.getElementById('regCustomCollegeDiv');
+                const input = document.getElementById('regCustomCollegeInput');
+                if (!div || !input) return;
+                if (val === '__OTHER__') {
+                    div.classList.remove('hidden');
+                    input.required = true;
+                    input.focus();
+                } else {
+                    div.classList.add('hidden');
+                    input.required = false;
+                }
             };
         }
 

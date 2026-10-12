@@ -76,8 +76,26 @@ Route::middleware(['auth', 'admin'])->prefix('admin')->name('admin.')->group(fun
     Route::get('/certificate-generator', [AdminPortalController::class, 'certificateGenerator'])->name('certificate-generator');
     Route::post('/certificate-generator', [AdminPortalController::class, 'generateManualCertificate'])->name('certificate-generator.generate');
 
-    // Manage Internship Streams
+    // Unified Academic Setup Hub
+    Route::get('/academic-setup', [AdminPortalController::class, 'academicSetup'])->name('academic-setup');
+
+    // Manage Degrees (Dedicated Page)
+    Route::get('/degrees', [AdminPortalController::class, 'degrees'])->name('degrees');
+    Route::post('/degrees', [AdminPortalController::class, 'storeDegree'])->name('degrees.store');
+    Route::patch('/degrees/{id}', [AdminPortalController::class, 'updateDegree'])->name('degrees.update');
+    Route::post('/degrees/{id}/toggle', [AdminPortalController::class, 'toggleDegreeStatus'])->name('degrees.toggle');
+    Route::delete('/degrees/{id}', [AdminPortalController::class, 'deleteDegree'])->name('degrees.delete');
+
+    // Manage Schools / Colleges (Dedicated Page)
+    Route::get('/schools', [AdminPortalController::class, 'schools'])->name('schools');
+    Route::post('/schools', [AdminPortalController::class, 'storeSchool'])->name('schools.store');
+    Route::patch('/schools/{id}', [AdminPortalController::class, 'updateSchool'])->name('schools.update');
+    Route::post('/schools/{id}/toggle', [AdminPortalController::class, 'toggleSchoolStatus'])->name('schools.toggle');
+    Route::delete('/schools/{id}', [AdminPortalController::class, 'deleteSchool'])->name('schools.delete');
+
+    // Manage Internship Streams / Domains (Dedicated Page)
     Route::get('/streams', [AdminPortalController::class, 'streams'])->name('streams');
+    Route::get('/domains', [AdminPortalController::class, 'streams'])->name('domains');
     Route::post('/streams', [AdminPortalController::class, 'storeStream'])->name('streams.store');
     Route::patch('/streams/{id}', [AdminPortalController::class, 'updateStream'])->name('streams.update');
     Route::post('/streams/{id}/toggle', [AdminPortalController::class, 'toggleStreamStatus'])->name('streams.toggle');

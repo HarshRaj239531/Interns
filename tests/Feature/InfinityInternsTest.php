@@ -2,6 +2,8 @@
 
 namespace Tests\Feature;
 
+use App\Models\Degree;
+use App\Models\School;
 use App\Models\StudentProfile;
 use App\Models\User;
 use Illuminate\Foundation\Testing\RefreshDatabase;
@@ -426,5 +428,155 @@ class InfinityInternsTest extends TestCase
         $response = $this->get(route('admin.applications.export'));
         $response->assertStatus(200);
         $response->assertHeader('Content-Type', 'text/csv; charset=UTF-8');
+    }
+
+    public function test_admin_can_view_academic_setup_page(): void
+    {
+        $admin = User::create([
+            'name' => 'Academic Admin',
+            'email' => 'academic.admin@infinityinterns.com',
+            'password' => bcrypt('Admin@123'),
+            'role' => 'ADMIN',
+        ]);
+
+        $this->actingAs($admin);
+
+        $response = $this->get(route('admin.academic-setup'));
+        $response->assertStatus(200);
+        $response->assertSee('Academic Setup & Registration Data', false);
+    }
+
+    public function test_admin_can_create_update_toggle_and_delete_degree(): void
+    {
+        $admin = User::create([
+            'name' => 'Degree Admin',
+            'email' => 'degree.admin@infinityinterns.com',
+            'password' => bcrypt('Admin@123'),
+            'role' => 'ADMIN',
+        ]);
+
+        $this->actingAs($admin);
+
+        // 1. Create Degree
+        $response = $this->post(route('admin.degrees.store'), [
+            'name' => 'Master of Computer Applications',
+            'code' => 'MCA',
+            'duration' => '2 Years (4 Semesters)',
+            'description' => 'Advanced software engineering program',
+            'sort_order' => 10,
+            'is_active' => 'on',
+        ]);
+        $response->assertRedirect(route('admin.academic-setup', ['tab' => 'degrees']));
+        $this->assertDatabaseHas('degrees', [
+            'code' => 'MCA',
+            'name' => 'Master of Computer Applications',
+            'is_active' => true,
+        ]);
+
+        $degree = Degree::where('code', 'MCA')->first();
+
+        // 2. Update Degree
+        $response = $this->patch(route('admin.degrees.update', $degree->id), [
+            'name' => 'Master of Computer Applications (Postgrad)',
+            'code' => 'MCA',
+            'duration' => '2 Years',
+            'sort_order' => 11,
+            'is_active' => 'on',
+        ]);
+        $response->assertRedirect(route('admin.academic-setup', ['tab' => 'degrees']));
+        $this->assertDatabaseHas('degrees', [
+            'name' => 'Master of Computer Applications (Postgrad)',
+        ]);
+
+        // 3. Toggle Status
+        $response = $this->post(route('admin.degrees.toggle', $degree->id));
+        $response->assertRedirect(route('admin.academic-setup', ['tab' => 'degrees']));
+        $degree->refresh();
+        $this->assertFalse($degree->is_active);
+
+        // 4. Delete Degree
+        $response = $this->delete(route('admin.degrees.delete', $degree->id));
+        $response->assertRedirect(route('admin.academic-setup', ['tab' => 'degrees']));
+        $this->assertDatabaseMissing('degrees', ['code' => 'MCA']);
+    }
+
+    public function test_admin_can_create_update_toggle_and_delete_school(): void
+    {
+        $admin = User::create([
+            'name' => 'School Admin',
+            'email' => 'school.admin@infinityinterns.com',
+            'password' => bcrypt('Admin@123'),
+            'role' => 'ADMIN',
+        ]);
+
+        $this->actingAs($admin);
+
+        // 1. Create School
+        $response = $this->post(route('admin.schools.store'), [
+            'name' => 'Delhi University Central Campus',
+            'code' => 'DU-CC',
+            'city' => 'New Delhi',
+            'state' => 'Delhi',
+            'type' => 'UNIVERSITY',
+            'is_active' => 'on',
+        ]);
+        $response->assertRedirect(route('admin.academic-setup', ['tab' => 'schools']));
+        $this->assertDatabaseHas('schools', [
+            'name' => 'Delhi University Central Campus',
+            'code' => 'DU-CC',
+        ]);
+
+        $school = School::where('name', 'Delhi University Central Campus')->first();
+
+        // 2. Update School
+        $response = $this->patch(route('admin.schools.update', $school->id), [
+            'name' => 'University of Delhi (North Campus)',
+            'code' => 'DU-NC',
+            'city' => 'Delhi',
+            'state' => 'Delhi',
+            'type' => 'UNIVERSITY',
+            'is_active' => 'on',
+        ]);
+        $response->assertRedirect(route('admin.academic-setup', ['tab' => 'schools']));
+        $this->assertDatabaseHas('schools', [
+            'name' => 'University of Delhi (North Campus)',
+        ]);
+
+        $school->refresh();
+
+        // 3. Toggle Status
+        $response = $this->post(route('admin.schools.toggle', $school->id));
+        $response->assertRedirect(route('admin.academic-setup', ['tab' => 'schools']));
+        $school->refresh();
+        $this->assertFalse($school->is_active);
+
+        // 4. Delete School
+        $response = $this->delete(route('admin.schools.delete', $school->id));
+        $response->assertRedirect(route('admin.academic-setup', ['tab' => 'schools']));
+        $this->assertDatabaseMissing('schools', ['id' => $school->id]);
+    }
+
+    public function test_student_can_register_with_custom_other_school(): void
+    {
+        $response = $this->post(route('apply'), [
+            'name' => 'Vikram Aditya',
+            'email' => 'vikram.aditya@example.com',
+            'phone' => '9812345678',
+            'password' => 'Student@123',
+            'degree' => 'B.Tech',
+            'college' => '__OTHER__',
+            'custom_college' => 'Indian Institute of Technology Patna',
+            'semester' => '6th Semester',
+            'program_domain' => 'AI, Machine Learning & Data Science',
+        ]);
+
+        $response->assertSessionHas('success');
+        $this->assertDatabaseHas('student_profiles', [
+            'degree' => 'B.Tech',
+            'college' => 'Indian Institute of Technology Patna',
+        ]);
+        $this->assertDatabaseHas('schools', [
+            'name' => 'Indian Institute of Technology Patna',
+        ]);
     }
 }

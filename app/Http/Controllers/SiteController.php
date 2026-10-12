@@ -3,11 +3,13 @@
 namespace App\Http\Controllers;
 
 use App\Models\Inquiry;
+use App\Models\School;
 use App\Models\StudentProfile;
 use App\Models\User;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Auth;
 use Illuminate\Support\Facades\Hash;
+use Illuminate\Support\Facades\Schema;
 
 class SiteController extends Controller
 {
@@ -148,6 +150,10 @@ class SiteController extends Controller
 
     public function storeApplication(Request $request)
     {
+        if ($request->input('college') === '__OTHER__' && $request->filled('custom_college')) {
+            $request->merge(['college' => trim($request->input('custom_college'))]);
+        }
+
         $validated = $request->validate([
             'name' => ['required', 'string', 'max:255'],
             'email' => ['required', 'string', 'email', 'max:255', 'unique:users,email'],
@@ -158,6 +164,13 @@ class SiteController extends Controller
             'semester' => ['required', 'string', 'max:50'],
             'program_domain' => ['required', 'string', 'max:255'],
         ]);
+
+        if (Schema::hasTable('schools') && ! empty($validated['college'])) {
+            School::firstOrCreate(
+                ['name' => trim($validated['college'])],
+                ['type' => 'COLLEGE', 'state' => 'Bihar', 'is_active' => true]
+            );
+        }
 
         $user = User::create([
             'name' => trim($validated['name']),

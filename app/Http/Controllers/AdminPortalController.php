@@ -2,8 +2,10 @@
 
 namespace App\Http\Controllers;
 
+use App\Models\Degree;
 use App\Models\Inquiry;
 use App\Models\InternshipStream;
+use App\Models\School;
 use App\Models\StudentProfile;
 use App\Models\User;
 use Illuminate\Http\Request;
@@ -84,9 +86,13 @@ class AdminPortalController extends Controller
             'total_inquiries' => Inquiry::count(),
             'new_inquiries' => Inquiry::where('status', 'NEW')->count(),
             'total_streams' => InternshipStream::count(),
+            'total_degrees' => Degree::count(),
+            'total_schools' => School::count(),
         ];
 
         $streams = InternshipStream::orderBy('title')->get();
+        $degrees = Degree::where('is_active', true)->orderBy('sort_order')->orderBy('name')->get();
+        $schools = School::where('is_active', true)->orderBy('name')->get();
         $streamDistribution = InternshipStream::withCount('studentProfiles')->orderBy('title')->get();
         $recentApplications = StudentProfile::with('user')->latest()->take(6)->get();
         $recentCertificates = StudentProfile::with('user')->where('certificate_issued', true)->latest('certificate_date')->take(6)->get();
@@ -95,6 +101,8 @@ class AdminPortalController extends Controller
             'applications',
             'stats',
             'streams',
+            'degrees',
+            'schools',
             'tab',
             'streamDistribution',
             'recentApplications',
@@ -675,6 +683,234 @@ class AdminPortalController extends Controller
     }
 
     /**
+     * Dedicated Degrees Management Page
+     */
+    public function degrees(Request $request)
+    {
+        $degrees = Degree::withCount('studentProfiles')->orderBy('sort_order')->orderBy('name')->get();
+        $stats = [
+            'total' => $degrees->count(),
+            'active' => $degrees->where('is_active', true)->count(),
+            'inactive' => $degrees->where('is_active', false)->count(),
+            'students' => $degrees->sum('student_profiles_count'),
+        ];
+
+        return view('admin.degrees', compact('degrees', 'stats'));
+    }
+
+    /**
+     * Dedicated Schools & Colleges Management Page
+     */
+    public function schools(Request $request)
+    {
+        $schools = School::withCount('studentProfiles')->orderBy('name')->get();
+        $stats = [
+            'total' => $schools->count(),
+            'active' => $schools->where('is_active', true)->count(),
+            'inactive' => $schools->where('is_active', false)->count(),
+            'students' => $schools->sum('student_profiles_count'),
+        ];
+
+        return view('admin.schools', compact('schools', 'stats'));
+    }
+
+    /**
+     * Academic Setup Hub Dispatcher
+     */
+    public function academicSetup(Request $request)
+    {
+        $tab = $request->input('tab', 'degrees');
+
+        if ($tab === 'schools') {
+            return $this->schools($request);
+        }
+
+        if ($tab === 'domains' || $tab === 'streams') {
+            return $this->streams($request);
+        }
+
+        return $this->degrees($request);
+    }
+
+    /**
+     * Store New Degree
+     */
+    public function storeDegree(Request $request)
+    {
+        $validated = $request->validate([
+            'name' => ['required', 'string', 'max:255'],
+            'code' => ['required', 'string', 'max:50', 'unique:degrees,code'],
+            'duration' => ['required', 'string', 'max:100'],
+            'description' => ['nullable', 'string', 'max:1000'],
+            'sort_order' => ['nullable', 'integer'],
+            'is_active' => ['nullable'],
+        ]);
+
+        Degree::create([
+            'name' => trim($validated['name']),
+            'code' => strtoupper(trim($validated['code'])),
+            'duration' => trim($validated['duration']),
+            'description' => ! empty($validated['description']) ? trim($validated['description']) : null,
+            'sort_order' => (int) ($validated['sort_order'] ?? 0),
+            'is_active' => $request->has('is_active'),
+        ]);
+
+        return redirect()->route('admin.academic-setup', ['tab' => 'degrees'])
+            ->with('success', "New degree '{$validated['name']} ({$validated['code']})' created successfully!");
+    }
+
+    /**
+     * Update Degree
+     */
+    public function updateDegree($id, Request $request)
+    {
+        $degree = Degree::findOrFail($id);
+
+        $validated = $request->validate([
+            'name' => ['required', 'string', 'max:255'],
+            'code' => ['required', 'string', 'max:50', 'unique:degrees,code,'.$degree->id],
+            'duration' => ['required', 'string', 'max:100'],
+            'description' => ['nullable', 'string', 'max:1000'],
+            'sort_order' => ['nullable', 'integer'],
+            'is_active' => ['nullable'],
+        ]);
+
+        $degree->update([
+            'name' => trim($validated['name']),
+            'code' => strtoupper(trim($validated['code'])),
+            'duration' => trim($validated['duration']),
+            'description' => ! empty($validated['description']) ? trim($validated['description']) : null,
+            'sort_order' => (int) ($validated['sort_order'] ?? 0),
+            'is_active' => $request->has('is_active'),
+        ]);
+
+        return redirect()->route('admin.academic-setup', ['tab' => 'degrees'])
+            ->with('success', "Degree '{$degree->name}' updated successfully!");
+    }
+
+    /**
+     * Toggle Degree Active Status
+     */
+    public function toggleDegreeStatus($id)
+    {
+        $degree = Degree::findOrFail($id);
+        $degree->update(['is_active' => ! $degree->is_active]);
+
+        $statusText = $degree->is_active ? 'Activated' : 'Deactivated';
+
+        return redirect()->route('admin.academic-setup', ['tab' => 'degrees'])
+            ->with('success', "Degree '{$degree->name}' has been {$statusText}.");
+    }
+
+    /**
+     * Delete Degree
+     */
+    public function deleteDegree($id)
+    {
+        $degree = Degree::findOrFail($id);
+        $name = $degree->name;
+
+        if ($degree->studentProfiles()->count() > 0) {
+            return redirect()->route('admin.academic-setup', ['tab' => 'degrees'])
+                ->with('error', "Cannot delete degree '{$name}' because registered students are currently mapped to it. Consider deactivating it instead.");
+        }
+
+        $degree->delete();
+
+        return redirect()->route('admin.academic-setup', ['tab' => 'degrees'])
+            ->with('success', "Degree '{$name}' removed successfully.");
+    }
+
+    /**
+     * Store New School / College
+     */
+    public function storeSchool(Request $request)
+    {
+        $validated = $request->validate([
+            'name' => ['required', 'string', 'max:255', 'unique:schools,name'],
+            'code' => ['nullable', 'string', 'max:50'],
+            'city' => ['nullable', 'string', 'max:100'],
+            'state' => ['nullable', 'string', 'max:100'],
+            'type' => ['required', 'string', 'max:50'],
+            'is_active' => ['nullable'],
+        ]);
+
+        School::create([
+            'name' => trim($validated['name']),
+            'code' => ! empty($validated['code']) ? strtoupper(trim($validated['code'])) : null,
+            'city' => ! empty($validated['city']) ? trim($validated['city']) : null,
+            'state' => ! empty($validated['state']) ? trim($validated['state']) : 'Bihar',
+            'type' => strtoupper(trim($validated['type'])),
+            'is_active' => $request->has('is_active'),
+        ]);
+
+        return redirect()->route('admin.academic-setup', ['tab' => 'schools'])
+            ->with('success', "Institution / School '{$validated['name']}' added successfully!");
+    }
+
+    /**
+     * Update School / College
+     */
+    public function updateSchool($id, Request $request)
+    {
+        $school = School::findOrFail($id);
+
+        $validated = $request->validate([
+            'name' => ['required', 'string', 'max:255', 'unique:schools,name,'.$school->id],
+            'code' => ['nullable', 'string', 'max:50'],
+            'city' => ['nullable', 'string', 'max:100'],
+            'state' => ['nullable', 'string', 'max:100'],
+            'type' => ['required', 'string', 'max:50'],
+            'is_active' => ['nullable'],
+        ]);
+
+        $school->update([
+            'name' => trim($validated['name']),
+            'code' => ! empty($validated['code']) ? strtoupper(trim($validated['code'])) : null,
+            'city' => ! empty($validated['city']) ? trim($validated['city']) : null,
+            'state' => ! empty($validated['state']) ? trim($validated['state']) : 'Bihar',
+            'type' => strtoupper(trim($validated['type'])),
+            'is_active' => $request->has('is_active'),
+        ]);
+
+        return redirect()->route('admin.academic-setup', ['tab' => 'schools'])
+            ->with('success', "Institution / School '{$school->name}' updated successfully!");
+    }
+
+    /**
+     * Toggle School Active Status
+     */
+    public function toggleSchoolStatus($id)
+    {
+        $school = School::findOrFail($id);
+        $school->update(['is_active' => ! $school->is_active]);
+
+        $statusText = $school->is_active ? 'Activated' : 'Deactivated';
+
+        return redirect()->route('admin.academic-setup', ['tab' => 'schools'])
+            ->with('success', "Institution '{$school->name}' has been {$statusText}.");
+    }
+
+    /**
+     * Delete School / College
+     */
+    public function deleteSchool($id)
+    {
+        $school = School::findOrFail($id);
+        $name = $school->name;
+
+        if ($school->studentProfiles()->count() > 0) {
+            return redirect()->route('admin.academic-setup', ['tab' => 'schools'])
+                ->with('error', "Cannot delete institution '{$name}' because enrolled students are currently associated with it. Consider deactivating it instead.");
+        }
+
+        $school->delete();
+
+        return redirect()->route('admin.academic-setup', ['tab' => 'schools'])
+            ->with('success', "Institution '{$name}' removed successfully.");
+    }
+
+    /**
      * Internship Streams Management View
      */
     public function streams(Request $request)
@@ -685,7 +921,7 @@ class AdminPortalController extends Controller
     }
 
     /**
-     * Store New Internship Stream
+     * Store New Internship Stream / Domain
      */
     public function storeStream(Request $request)
     {
@@ -709,11 +945,11 @@ class AdminPortalController extends Controller
             'is_active' => $request->has('is_active'),
         ]);
 
-        return back()->with('success', "New internship stream '{$validated['title']}' added successfully!");
+        return back()->with('success', "New internship domain stream '{$validated['title']}' added successfully!");
     }
 
     /**
-     * Update Internship Stream
+     * Update Internship Stream / Domain
      */
     public function updateStream($id, Request $request)
     {
@@ -739,7 +975,7 @@ class AdminPortalController extends Controller
             'is_active' => $request->has('is_active'),
         ]);
 
-        return back()->with('success', "Internship stream '{$stream->title}' updated successfully!");
+        return back()->with('success', "Internship domain stream '{$stream->title}' updated successfully!");
     }
 
     /**
@@ -752,7 +988,7 @@ class AdminPortalController extends Controller
 
         $statusText = $stream->is_active ? 'Activated' : 'Deactivated';
 
-        return back()->with('success', "Stream '{$stream->title}' has been {$statusText}.");
+        return back()->with('success', "Domain stream '{$stream->title}' has been {$statusText}.");
     }
 
     /**

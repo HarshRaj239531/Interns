@@ -32,8 +32,8 @@
                 <a href="{{ route('admin.certificate-generator') }}" class="inline-flex items-center gap-2 text-xs font-bold text-white bg-emerald-600 hover:bg-emerald-500 px-4 py-2 rounded-xl transition shadow-md shadow-emerald-900/30 motion-btn-spring">
                     <span>⚡ Certificate Generator</span>
                 </a>
-                <a href="{{ route('admin.streams') }}" class="inline-flex items-center gap-2 text-xs font-semibold text-white bg-white/15 hover:bg-white/25 border border-white/20 px-3.5 py-2 rounded-xl transition motion-btn-spring">
-                    <span>Internship Streams ({{ $stats['total_streams'] }})</span>
+                <a href="{{ route('admin.academic-setup', ['tab' => 'degrees']) }}" class="inline-flex items-center gap-2 text-xs font-bold text-white bg-indigo-600 hover:bg-indigo-500 border border-indigo-400/40 px-3.5 py-2 rounded-xl transition shadow-md shadow-indigo-950/40 motion-btn-spring">
+                    <span>🎓 Academic Setup (Degrees • Colleges)</span>
                 </a>
                 <a href="{{ route('admin.track') }}" class="inline-flex items-center gap-2 text-xs font-semibold text-white bg-white/15 hover:bg-white/25 border border-white/20 px-3.5 py-2 rounded-xl transition motion-btn-spring">
                     <span>Track Lifecycle</span>
@@ -395,11 +395,17 @@
 
                 <select name="degree" class="px-3 py-2.5 rounded-xl adm-input text-xs">
                     <option value="all" {{ request('degree') == 'all' ? 'selected' : '' }}>All Degrees</option>
-                    <option value="BA" {{ request('degree') == 'BA' ? 'selected' : '' }}>BA</option>
-                    <option value="BSc" {{ request('degree') == 'BSc' ? 'selected' : '' }}>BSc</option>
-                    <option value="BBA" {{ request('degree') == 'BBA' ? 'selected' : '' }}>BBA</option>
-                    <option value="BCA" {{ request('degree') == 'BCA' ? 'selected' : '' }}>BCA</option>
-                    <option value="BCom" {{ request('degree') == 'BCom' ? 'selected' : '' }}>BCom</option>
+                    @if(isset($degrees))
+                        @foreach($degrees as $deg)
+                            <option value="{{ $deg->code }}" {{ request('degree') == $deg->code ? 'selected' : '' }}>{{ $deg->code }} ({{ $deg->name }})</option>
+                        @endforeach
+                    @else
+                        <option value="BA" {{ request('degree') == 'BA' ? 'selected' : '' }}>BA</option>
+                        <option value="BSc" {{ request('degree') == 'BSc' ? 'selected' : '' }}>BSc</option>
+                        <option value="BBA" {{ request('degree') == 'BBA' ? 'selected' : '' }}>BBA</option>
+                        <option value="BCA" {{ request('degree') == 'BCA' ? 'selected' : '' }}>BCA</option>
+                        <option value="BCom" {{ request('degree') == 'BCom' ? 'selected' : '' }}>BCom</option>
+                    @endif
                 </select>
 
                 <select name="domain" class="px-3 py-2.5 rounded-xl adm-input text-xs max-w-xs">
@@ -807,13 +813,22 @@
 
             <div class="grid grid-cols-1 sm:grid-cols-3 gap-3">
                 <div>
-                    <label class="block text-xs font-semibold adm-text-secondary mb-1">Degree Program *</label>
+                    <div class="flex items-center justify-between mb-1">
+                        <label class="block text-xs font-semibold adm-text-secondary">Degree Program *</label>
+                        <a href="{{ route('admin.academic-setup', ['tab' => 'degrees']) }}" target="_blank" class="text-[10px] text-indigo-600 dark:text-indigo-400 hover:underline font-bold">+ New Degree</a>
+                    </div>
                     <select name="degree" required class="w-full px-3 py-2 rounded-xl adm-input text-xs">
-                        <option value="BSc">Bachelor of Science (BSc)</option>
-                        <option value="BA">Bachelor of Arts (BA)</option>
-                        <option value="BBA">Bachelor of Business Admin (BBA)</option>
-                        <option value="BCA">Bachelor of Computer App (BCA)</option>
-                        <option value="BCom">Bachelor of Commerce (BCom)</option>
+                        @if(isset($degrees))
+                            @foreach($degrees as $deg)
+                                <option value="{{ $deg->code }}">{{ $deg->name }} ({{ $deg->code }})</option>
+                            @endforeach
+                        @else
+                            <option value="BSc">Bachelor of Science (BSc)</option>
+                            <option value="BA">Bachelor of Arts (BA)</option>
+                            <option value="BBA">Bachelor of Business Admin (BBA)</option>
+                            <option value="BCA">Bachelor of Computer App (BCA)</option>
+                            <option value="BCom">Bachelor of Commerce (BCom)</option>
+                        @endif
                     </select>
                 </div>
                 <div>
@@ -840,8 +855,18 @@
             </div>
 
             <div>
-                <label class="block text-xs font-semibold adm-text-secondary mb-1">College / Institute Name *</label>
-                <input type="text" name="college" required placeholder="e.g. Patna Science College, Patna University" class="w-full px-3 py-2 rounded-xl adm-input text-xs">
+                <div class="flex items-center justify-between mb-1">
+                    <label class="block text-xs font-semibold adm-text-secondary">School / College / Institute Name *</label>
+                    <a href="{{ route('admin.academic-setup', ['tab' => 'schools']) }}" target="_blank" class="text-[10px] text-indigo-600 dark:text-indigo-400 hover:underline font-bold">+ New College</a>
+                </div>
+                <input type="text" name="college" list="adminSchoolDatalist" required placeholder="Select or type e.g. Patna Science College, Patna University" class="w-full px-3 py-2 rounded-xl adm-input text-xs">
+                <datalist id="adminSchoolDatalist">
+                    @if(isset($schools))
+                        @foreach($schools as $sch)
+                            <option value="{{ $sch->name }}">{{ $sch->city ? ' (' . $sch->city . ')' : '' }}</option>
+                        @endforeach
+                    @endif
+                </datalist>
             </div>
 
             <div>
@@ -909,11 +934,17 @@
                 <div>
                     <label class="block text-xs font-semibold adm-text-secondary mb-1">Degree Program *</label>
                     <select name="degree" id="edit_degree" required class="w-full px-3 py-2 rounded-xl adm-input text-xs">
-                        <option value="BA">Bachelor of Arts (BA)</option>
-                        <option value="BSc">Bachelor of Science (BSc)</option>
-                        <option value="BBA">Bachelor of Business Admin (BBA)</option>
-                        <option value="BCA">Bachelor of Computer App (BCA)</option>
-                        <option value="BCom">Bachelor of Commerce (BCom)</option>
+                        @if(isset($degrees))
+                            @foreach($degrees as $deg)
+                                <option value="{{ $deg->code }}">{{ $deg->name }} ({{ $deg->code }})</option>
+                            @endforeach
+                        @else
+                            <option value="BA">Bachelor of Arts (BA)</option>
+                            <option value="BSc">Bachelor of Science (BSc)</option>
+                            <option value="BBA">Bachelor of Business Admin (BBA)</option>
+                            <option value="BCA">Bachelor of Computer App (BCA)</option>
+                            <option value="BCom">Bachelor of Commerce (BCom)</option>
+                        @endif
                     </select>
                 </div>
                 <div>
@@ -942,7 +973,7 @@
 
             <div>
                 <label class="block text-xs font-semibold adm-text-secondary mb-1">College / Institute Name *</label>
-                <input type="text" name="college" id="edit_college" required class="w-full px-3 py-2 rounded-xl adm-input text-xs">
+                <input type="text" name="college" id="edit_college" list="adminSchoolDatalist" required class="w-full px-3 py-2 rounded-xl adm-input text-xs">
             </div>
 
             <div>

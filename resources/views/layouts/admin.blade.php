@@ -123,19 +123,44 @@
                 </a>
 
                 <div class="pt-3 pb-1 px-3 text-[10px] font-bold uppercase tracking-wider text-slate-500 dark:text-slate-400">
-                    Operations
+                    Academic Configuration
                 </div>
 
-                <!-- Internship Streams -->
-                <a href="{{ route('admin.streams') }}" class="flex items-center justify-between px-3.5 py-2 rounded-xl transition {{ request()->routeIs('admin.streams*') ? 'bg-indigo-600 text-white shadow-lg shadow-indigo-600/30 font-bold' : 'text-slate-600 dark:text-slate-400 hover:text-slate-900 dark:hover:text-white hover:bg-slate-100 dark:hover:bg-slate-800/60' }}">
-                    <div class="flex items-center gap-3">
-                        <svg class="w-4 h-4 shrink-0" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M19 11H5m14 0a2 2 0 012 2v6a2 2 0 01-2 2H5a2 2 0 01-2-2v-6a2 2 0 012-2m14 0V9a2 2 0 00-2-2M5 11V9a2 2 0 012-2m0 0V5a2 2 0 012-2h6a2 2 0 012 2v2M7 7h10"/></svg>
-                        <span>Internship Streams</span>
+                <!-- Academic Setup (Degrees, Schools & Domains) -->
+                <div class="space-y-1">
+                    <a href="{{ route('admin.academic-setup') }}" class="flex items-center justify-between px-3.5 py-2.5 rounded-xl transition {{ (request()->routeIs('admin.academic-setup*') || request()->routeIs('admin.streams*')) ? 'bg-indigo-600 text-white shadow-lg shadow-indigo-600/30 font-bold' : 'text-slate-600 dark:text-slate-400 hover:text-slate-900 dark:hover:text-white hover:bg-slate-100 dark:hover:bg-slate-800/60' }}">
+                        <div class="flex items-center gap-3">
+                            <svg class="w-4 h-4 shrink-0" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M12 14l9-5-9-5-9 5 9 5zm0 0l6.16-3.422a12.083 12.083 0 01.665 6.479A11.952 11.952 0 0012 20.055a11.952 11.952 0 00-6.824-2.998 12.078 12.078 0 01.665-6.479L12 14zm-4 6v-7.5l4-2.222"/></svg>
+                            <div class="flex flex-col text-left">
+                                <span>Academic Setup</span>
+                                <span class="text-[9px] font-normal opacity-80">Catalog Master</span>
+                            </div>
+                        </div>
+                        <span class="text-[10px] px-2 py-0.5 rounded-full {{ (request()->routeIs('admin.academic-setup*') || request()->routeIs('admin.streams*')) ? 'bg-white/20 text-white' : 'bg-slate-100 dark:bg-slate-800 text-slate-700 dark:text-slate-300 border border-slate-200 dark:border-slate-700' }}">
+                            {{ $adminNavStats['total_academic_setup'] ?? 0 }}
+                        </span>
+                    </a>
+
+                    <!-- Direct Sub-links to Dedicated Separate Pages -->
+                    <div class="pl-4 pr-1 py-1 space-y-0.5 border-l-2 border-indigo-200 dark:border-indigo-900/60 ml-4">
+                        <a href="{{ route('admin.degrees') }}" class="flex items-center justify-between px-2.5 py-1.5 rounded-lg text-xs font-semibold transition {{ (request()->routeIs('admin.degrees*') || (request()->routeIs('admin.academic-setup*') && request('tab', 'degrees') === 'degrees')) ? 'text-indigo-600 dark:text-indigo-400 bg-indigo-50 dark:bg-indigo-950/60 font-bold' : 'text-slate-500 hover:text-slate-900 dark:text-slate-400 dark:hover:text-white' }}">
+                            <span class="flex items-center gap-1.5"><span>🎓</span><span>Degrees &amp; Programs</span></span>
+                            <span class="text-[9px] font-bold text-indigo-500">+ Add</span>
+                        </a>
+                        <a href="{{ route('admin.schools') }}" class="flex items-center justify-between px-2.5 py-1.5 rounded-lg text-xs font-semibold transition {{ (request()->routeIs('admin.schools*') || (request()->routeIs('admin.academic-setup*') && request('tab') === 'schools')) ? 'text-purple-600 dark:text-purple-400 bg-purple-50 dark:bg-purple-950/60 font-bold' : 'text-slate-500 hover:text-slate-900 dark:text-slate-400 dark:hover:text-white' }}">
+                            <span class="flex items-center gap-1.5"><span>🏫</span><span>Schools &amp; Colleges</span></span>
+                            <span class="text-[9px] font-bold text-purple-500">+ Add</span>
+                        </a>
+                        <a href="{{ route('admin.streams') }}" class="flex items-center justify-between px-2.5 py-1.5 rounded-lg text-xs font-semibold transition {{ (request()->routeIs('admin.streams*') || request()->routeIs('admin.domains*') || (request()->routeIs('admin.academic-setup*') && request('tab') === 'domains')) ? 'text-indigo-600 dark:text-indigo-400 bg-indigo-50 dark:bg-indigo-950/60 font-bold' : 'text-slate-500 hover:text-slate-900 dark:text-slate-400 dark:hover:text-white' }}">
+                            <span class="flex items-center gap-1.5"><span>🚀</span><span>Internship Domains</span></span>
+                            <span class="text-[9px] font-bold text-amber-500">+ Add</span>
+                        </a>
                     </div>
-                    <span class="text-[10px] px-2 py-0.5 rounded-full {{ request()->routeIs('admin.streams*') ? 'bg-white/20 text-white' : 'bg-slate-100 dark:bg-slate-800 text-slate-700 dark:text-slate-300 border border-slate-200 dark:border-slate-700' }}">
-                        {{ $adminNavStats['total_streams'] ?? 0 }}
-                    </span>
-                </a>
+                </div>
+
+                <div class="pt-3 pb-1 px-3 text-[10px] font-bold uppercase tracking-wider text-slate-500 dark:text-slate-400">
+                    Operations
+                </div>
 
                 <!-- Track Application -->
                 <a href="{{ route('admin.track') }}" class="flex items-center justify-between px-3.5 py-2 rounded-xl transition {{ request()->routeIs('admin.track*') ? 'bg-indigo-600 text-white shadow-lg shadow-indigo-600/30 font-bold' : 'text-slate-600 dark:text-slate-400 hover:text-slate-900 dark:hover:text-white hover:bg-slate-100 dark:hover:bg-slate-800/60' }}">
