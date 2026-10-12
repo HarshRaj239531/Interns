@@ -324,8 +324,6 @@
                             Enrolled Students
                         @elseif($tab === 'issued_cert')
                             Issued Certificates
-                        @elseif($tab === 'manage')
-                            Manage Applicants
                         @else
                             All Applications
                         @endif
@@ -334,7 +332,7 @@
                         {{ $tab === 'pending_cert' ? 'bg-amber-100 dark:bg-amber-950/60 text-amber-700 dark:text-amber-300' : '' }}
                         {{ $tab === 'enrolled' ? 'bg-blue-100 dark:bg-blue-950/60 text-blue-700 dark:text-blue-300' : '' }}
                         {{ $tab === 'issued_cert' ? 'bg-emerald-100 dark:bg-emerald-950/60 text-emerald-700 dark:text-emerald-300' : '' }}
-                        {{ in_array($tab, ['all', 'manage']) ? 'bg-indigo-100 dark:bg-indigo-950/60 text-indigo-700 dark:text-indigo-300' : '' }}
+                        {{ !in_array($tab, ['pending_cert', 'enrolled', 'issued_cert']) ? 'bg-indigo-100 dark:bg-indigo-950/60 text-indigo-700 dark:text-indigo-300' : '' }}
                     ">
                         @if($tab === 'pending_cert')
                             {{ $stats['pending_cert'] }} Ready for Issuance
@@ -342,10 +340,8 @@
                             {{ $stats['enrolled'] }} Active Interns
                         @elseif($tab === 'issued_cert')
                             {{ $stats['certificates_issued'] }} Issued
-                        @elseif($tab === 'manage')
-                            {{ $stats['total'] }} Records
                         @else
-                            {{ $stats['total'] }} Total Applications
+                            {{ $stats['total'] }} Applications @if($stats['pending'] > 0) ({{ $stats['pending'] }} Pending Review) @endif
                         @endif
                     </span>
                 </div>
@@ -356,10 +352,8 @@
                         Active student interns currently undergoing training across colleges and specialization streams.
                     @elseif($tab === 'issued_cert')
                         Official verifiable completion certificates issued with public QR verification links.
-                    @elseif($tab === 'manage')
-                        Administrative editing of applicant records, mentor assignments, and documentation status.
                     @else
-                        Comprehensive registry of all student applicant records, status audits, and dossiers.
+                        Review incoming student applications. Approve candidates to enroll them as active interns or reject them.
                     @endif
                 </p>
             </div>
@@ -434,8 +428,28 @@
     <div class="rounded-3xl adm-card overflow-hidden shadow-xl">
         <div class="p-5 border-b border-slate-200 dark:border-slate-800 flex items-center justify-between">
             <div>
-                <h3 class="font-serif font-bold text-base adm-text">Applicant Records Docket</h3>
-                <p class="text-[11px] adm-text-muted">Dynamic records with real-time status updates, attendance audit, and document release actions.</p>
+                <h3 class="font-serif font-bold text-base adm-text">
+                    @if($tab === 'enrolled')
+                        Enrolled Interns Registry
+                    @elseif($tab === 'pending_cert')
+                        Certificate Issuance Queue
+                    @elseif($tab === 'issued_cert')
+                        Issued Verifiable Credentials
+                    @else
+                        Student Applications Docket
+                    @endif
+                </h3>
+                <p class="text-[11px] adm-text-muted">
+                    @if($tab === 'enrolled')
+                        Active student interns undergoing training. Audit attendance, assign mentors, and release certifications.
+                    @elseif($tab === 'pending_cert')
+                        Completed interns qualified for institutional verification and official certificate generation.
+                    @elseif($tab === 'issued_cert')
+                        Permanent public ledger of issued certificates with secure QR verification codes.
+                    @else
+                        Review incoming student applications. Approve candidates to enroll them as active interns or reject them.
+                    @endif
+                </p>
             </div>
             <span class="text-xs font-semibold px-3 py-1 rounded-full bg-indigo-50 dark:bg-indigo-900/30 text-indigo-700 dark:text-indigo-400 border border-indigo-200 dark:border-indigo-700/50">
                 Showing {{ $applications->total() }} Records
@@ -444,13 +458,15 @@
 
         <div class="overflow-x-auto">
             <table class="w-full text-left text-xs">
+                @if(in_array($tab, ['enrolled', 'pending_cert', 'issued_cert']))
+                {{-- ENROLLED INTERNS & CERTIFICATIONS TABLE --}}
                 <thead class="adm-table-head uppercase text-[10px] tracking-wider border-b">
                     <tr>
-                        <th class="py-3.5 px-4 font-bold">Applicant & ID</th>
-                        <th class="py-3.5 px-4 font-bold">Degree & Institute</th>
-                        <th class="py-3.5 px-4 font-bold">Internship Stream</th>
+                        <th class="py-3.5 px-4 font-bold">Intern & ID</th>
+                        <th class="py-3.5 px-4 font-bold">Degree & Mentor</th>
+                        <th class="py-3.5 px-4 font-bold">Stream & Attendance</th>
                         <th class="py-3.5 px-4 font-bold">Status</th>
-                        <th class="py-3.5 px-4 font-bold">Documents Suite</th>
+                        <th class="py-3.5 px-4 font-bold">Issued Documents</th>
                         <th class="py-3.5 px-4 font-bold text-right">Actions</th>
                     </tr>
                 </thead>
@@ -473,14 +489,14 @@
                             </div>
                         </td>
 
-                        <!-- Degree & College -->
+                        <!-- Degree & Mentor -->
                         <td class="py-4 px-4">
                             <span class="font-semibold adm-text-secondary block">{{ $app->degree }} • {{ $app->semester }}</span>
                             <span class="adm-text-muted text-[11px] block max-w-xs truncate" title="{{ $app->college }}">{{ $app->college }}</span>
                             <span class="text-[10px] adm-text-muted">Mentor: <strong class="adm-text-secondary">{{ $app->mentor_name }}</strong></span>
                         </td>
 
-                        <!-- Domain -->
+                        <!-- Domain & Attendance -->
                         <td class="py-4 px-4">
                             <span class="text-indigo-700 dark:text-indigo-300 font-semibold block max-w-xs leading-snug">{{ $app->program_domain }}</span>
                             <div class="flex items-center gap-2 mt-1">
@@ -512,66 +528,39 @@
                             </form>
                         </td>
 
-                        <!-- Documents Suite -->
-                        <td class="py-4 px-4 space-y-1">
-                            <!-- 1. Offer Letter -->
-                            <div class="flex items-center gap-1.5 text-[11px]">
+                        <!-- Issued Documents -->
+                        <td class="py-4 px-4">
+                            <div class="flex flex-wrap items-center gap-1.5 max-w-xs">
                                 @if($app->offer_letter_issued)
-                                    <span class="text-blue-600 dark:text-blue-400 font-bold">✓</span>
-                                    <a href="{{ route('admin.application.view-offer-letter', $app->id) }}" target="_blank" class="text-blue-600 dark:text-blue-300 font-medium hover:underline">Offer Letter ↗</a>
-                                @else
-                                    <span class="text-slate-400 dark:text-slate-500 font-bold">○</span>
-                                    <span class="adm-text-muted">Offer Letter</span>
+                                    <a href="{{ route('admin.application.view-offer-letter', $app->id) }}" target="_blank" class="inline-flex items-center gap-1 px-2 py-0.5 rounded-md bg-blue-50 dark:bg-blue-950/50 hover:bg-blue-100 text-blue-700 dark:text-blue-300 border border-blue-200 dark:border-blue-800 text-[10px] font-semibold" title="View Offer Letter">
+                                        <span>Offer ↗</span>
+                                    </a>
                                 @endif
-                            </div>
 
-                            <!-- 2. Consent Letter -->
-                            <div class="flex items-center gap-1.5 text-[11px]">
                                 @if($app->consent_letter_issued)
-                                    <span class="text-purple-600 dark:text-purple-400 font-bold">✓</span>
-                                    <a href="{{ route('admin.application.view-consent-letter', $app->id) }}" target="_blank" class="text-purple-600 dark:text-purple-300 font-medium hover:underline">Consent Letter ↗</a>
-                                @else
-                                    <span class="text-slate-400 dark:text-slate-500 font-bold">○</span>
-                                    <span class="adm-text-muted">Consent Letter</span>
+                                    <a href="{{ route('admin.application.view-consent-letter', $app->id) }}" target="_blank" class="inline-flex items-center gap-1 px-2 py-0.5 rounded-md bg-purple-50 dark:bg-purple-950/50 hover:bg-purple-100 text-purple-700 dark:text-purple-300 border border-purple-200 dark:border-purple-800 text-[10px] font-semibold" title="View Consent Letter">
+                                        <span>Consent ↗</span>
+                                    </a>
                                 @endif
-                            </div>
 
-                            <!-- 3. Completion Certificate -->
-                            <div class="flex items-center gap-1.5 text-[11px]">
                                 @if($app->certificate_issued)
-                                    <span class="text-emerald-600 dark:text-emerald-400 font-bold">✓</span>
-                                    <a href="{{ route('admin.application.view-certificate', $app->id) }}" target="_blank" class="text-emerald-600 dark:text-emerald-300 font-medium hover:underline font-mono text-[10px]">
-                                        {{ $app->certificate_number }} ↗
+                                    <a href="{{ route('admin.application.view-certificate', $app->id) }}" target="_blank" class="inline-flex items-center gap-1 px-2 py-0.5 rounded-md bg-emerald-50 dark:bg-emerald-950/50 hover:bg-emerald-100 text-emerald-700 dark:text-emerald-300 border border-emerald-200 dark:border-emerald-800 text-[10px] font-semibold font-mono" title="View Certificate">
+                                        <span>Cert ↗</span>
                                     </a>
                                 @else
-                                    <span class="text-slate-400 dark:text-slate-500 font-bold">○</span>
-                                    <span class="adm-text-muted">Certificate</span>
+                                    <span class="text-[10px] text-slate-400 dark:text-slate-500 italic">Cert Pending</span>
                                 @endif
-                            </div>
 
-                            <!-- 4. LOR -->
-                            <div class="flex items-center gap-1.5 text-[11px]">
                                 @if($app->lor_issued)
-                                    <span class="text-amber-600 dark:text-amber-400 font-bold">✓</span>
-                                    <a href="{{ route('admin.application.view-lor', $app->id) }}" target="_blank" class="text-amber-600 dark:text-amber-300 font-medium hover:underline font-mono text-[10px]">
-                                        LOR ({{ $app->lor_number }}) ↗
+                                    <a href="{{ route('admin.application.view-lor', $app->id) }}" target="_blank" class="inline-flex items-center gap-1 px-2 py-0.5 rounded-md bg-amber-50 dark:bg-amber-950/50 hover:bg-amber-100 text-amber-700 dark:text-amber-300 border border-amber-200 dark:border-amber-800 text-[10px] font-semibold font-mono" title="View LOR">
+                                        <span>LOR ↗</span>
                                     </a>
-                                @else
-                                    <span class="text-slate-400 dark:text-slate-500 font-bold">○</span>
-                                    <span class="adm-text-muted">LOR</span>
                                 @endif
-                            </div>
 
-                            <!-- 5. Marksheet -->
-                            <div class="flex items-center gap-1.5 text-[11px]">
                                 @if($app->marksheet_issued)
-                                    <span class="text-indigo-600 dark:text-indigo-400 font-bold">✓</span>
-                                    <a href="{{ route('admin.application.view-marksheet', $app->id) }}" target="_blank" class="text-indigo-600 dark:text-indigo-300 font-medium hover:underline text-[10px]">
-                                        Scorecard ({{ $app->marksheet_grade }} - {{ $app->marksheet_marks }}%) ↗
+                                    <a href="{{ route('admin.application.view-marksheet', $app->id) }}" target="_blank" class="inline-flex items-center gap-1 px-2 py-0.5 rounded-md bg-indigo-50 dark:bg-indigo-950/50 hover:bg-indigo-100 text-indigo-700 dark:text-indigo-300 border border-indigo-200 dark:border-indigo-800 text-[10px] font-semibold" title="View Scorecard">
+                                        <span>Scorecard ↗</span>
                                     </a>
-                                @else
-                                    <span class="text-slate-400 dark:text-slate-500 font-bold">○</span>
-                                    <span class="adm-text-muted">Scorecard</span>
                                 @endif
                             </div>
                         </td>
@@ -586,62 +575,42 @@
 
                                 <!-- 2. Certificate Approval Access Button -->
                                 @if(!$app->certificate_issued)
-                                    <button type="button" onclick="openCertApprovalModal('{{ $app->id }}', '{{ $app->application_number }}', '{{ addslashes($app->user->name ?? 'Candidate') }}')" class="px-2.5 py-1 rounded-lg bg-emerald-100 dark:bg-emerald-900/40 hover:bg-emerald-200 dark:hover:bg-emerald-800 text-emerald-800 dark:text-emerald-300 border border-emerald-300 dark:border-emerald-700/50 text-[10px] font-bold transition cursor-pointer shadow-xs">
-                                        + Cert Approve
+                                    <button type="button" onclick="openCertApprovalModal('{{ $app->id }}', '{{ $app->application_number }}', '{{ addslashes($app->user->name ?? 'Candidate') }}')" class="px-2.5 py-1 rounded-lg bg-emerald-600 hover:bg-emerald-500 text-white text-[10px] font-bold transition cursor-pointer shadow-xs">
+                                        + Issue Cert
                                     </button>
                                 @else
                                     <form action="{{ route('admin.application.revoke-certificate', $app->id) }}" method="POST" onsubmit="return confirm('Revoke certificate for {{ $app->application_number }}?')" class="inline">
                                         @csrf
                                         <button type="submit" class="px-2.5 py-1 rounded-lg bg-rose-50 dark:bg-rose-950/40 hover:bg-rose-100 text-rose-700 dark:text-rose-300 border border-rose-200 dark:border-rose-800/40 text-[10px] font-semibold transition cursor-pointer" title="Revoke Certificate">
-                                            ↩ Revoke Cert
+                                            Revoke Cert
                                         </button>
                                     </form>
                                 @endif
 
                                 <!-- 3. Issue LOR Button -->
                                 @if(!$app->lor_issued)
-                                    <button type="button" onclick="openLorModal('{{ $app->id }}', '{{ $app->application_number }}', '{{ addslashes($app->user->name ?? 'Candidate') }}')" class="px-2.5 py-1 rounded-lg bg-amber-100 dark:bg-amber-900/40 hover:bg-amber-200 dark:hover:bg-amber-800 text-amber-800 dark:text-amber-300 border border-amber-300 dark:border-amber-700/50 text-[10px] font-bold transition cursor-pointer shadow-xs">
+                                    <button type="button" onclick="openLorModal('{{ $app->id }}', '{{ $app->application_number }}', '{{ addslashes($app->user->name ?? 'Candidate') }}')" class="px-2.5 py-1 rounded-lg bg-amber-50 dark:bg-amber-950/40 hover:bg-amber-100 text-amber-800 dark:text-amber-300 border border-amber-200 dark:border-amber-800/50 text-[10px] font-bold transition cursor-pointer shadow-xs">
                                         + LOR
                                     </button>
                                 @endif
 
-                                <!-- 4. Issue Consent Letter Button -->
-                                @if(!$app->consent_letter_issued)
-                                    <form action="{{ route('admin.application.consent-letter', $app->id) }}" method="POST" class="inline">
-                                        @csrf
-                                        <button type="submit" title="Issue Consent Letter" class="px-2.5 py-1 rounded-lg bg-purple-100 dark:bg-purple-900/40 hover:bg-purple-200 dark:hover:bg-purple-800 text-purple-800 dark:text-purple-300 border border-purple-300 dark:border-purple-700/50 text-[10px] font-semibold transition cursor-pointer">
-                                            + Consent
-                                        </button>
-                                    </form>
-                                @endif
-
-                                <!-- 5. Issue Offer Letter Button -->
-                                @if(!$app->offer_letter_issued)
-                                    <form action="{{ route('admin.application.offer-letter', $app->id) }}" method="POST" class="inline">
-                                        @csrf
-                                        <button type="submit" title="Issue Offer Letter" class="px-2.5 py-1 rounded-lg bg-blue-100 dark:bg-blue-900/40 hover:bg-blue-200 dark:hover:bg-blue-800 text-blue-800 dark:text-blue-300 border border-blue-300 dark:border-blue-700/50 text-[10px] font-semibold transition cursor-pointer">
-                                            + Offer
-                                        </button>
-                                    </form>
-                                @endif
-
-                                <!-- 6. Issue Marksheet Modal Trigger -->
+                                <!-- 4. Issue Marksheet Modal Trigger -->
                                 @if(!$app->marksheet_issued)
-                                    <button type="button" onclick="openMarksheetModal('{{ $app->id }}', '{{ $app->application_number }}')" title="Issue Marksheet" class="px-2.5 py-1 rounded-lg bg-indigo-100 dark:bg-indigo-900/40 hover:bg-indigo-200 dark:hover:bg-indigo-800 text-indigo-800 dark:text-indigo-300 border border-indigo-300 dark:border-indigo-700/50 text-[10px] font-semibold transition cursor-pointer">
-                                        + Marksheet
+                                    <button type="button" onclick="openMarksheetModal('{{ $app->id }}', '{{ $app->application_number }}')" title="Issue Marksheet" class="px-2.5 py-1 rounded-lg bg-indigo-50 dark:bg-indigo-950/40 hover:bg-indigo-100 text-indigo-800 dark:text-indigo-300 border border-indigo-200 dark:border-indigo-800/50 text-[10px] font-semibold transition cursor-pointer">
+                                        + Scorecard
                                     </button>
                                 @endif
 
-                                <!-- 7. Track Application Link -->
+                                <!-- 5. Track Application Link -->
                                 <a href="{{ route('admin.track', ['search' => $app->application_number]) }}" class="px-2 py-1 rounded-lg bg-slate-100 dark:bg-slate-800 hover:bg-indigo-50 dark:hover:bg-indigo-950/40 text-slate-700 dark:text-slate-300 hover:text-indigo-600 border border-slate-200 dark:border-slate-700 text-[10px] font-semibold transition" title="Track Lifecycle">
                                     Track
                                 </a>
 
-                                <!-- 8. Delete -->
-                                <form action="{{ route('admin.application.delete', $app->id) }}" method="POST" onsubmit="return confirm('Are you sure you want to permanently delete this student application and credentials?')" class="inline">
+                                <!-- 6. Delete -->
+                                <form action="{{ route('admin.application.delete', $app->id) }}" method="POST" onsubmit="return confirm('Are you sure you want to permanently delete this student record?')" class="inline">
                                     @csrf
                                     @method('DELETE')
-                                    <button type="submit" class="p-1 rounded-lg text-slate-500 dark:text-slate-400 hover:text-rose-600 hover:bg-rose-50 dark:hover:bg-rose-950/40 transition cursor-pointer" title="Delete Application">
+                                    <button type="submit" class="p-1 rounded-lg text-slate-500 dark:text-slate-400 hover:text-rose-600 hover:bg-rose-50 dark:hover:bg-rose-950/40 transition cursor-pointer" title="Delete">
                                         <svg class="w-4 h-4" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M19 7l-.867 12.142A2 2 0 0116.138 21H7.862a2 2 0 01-1.995-1.858L5 7m5 4v6m4-6v6m1-10V4a1 1 0 00-1-1h-4a1 1 0 00-1 1v3M4 7h16"/></svg>
                                     </button>
                                 </form>
@@ -651,11 +620,146 @@
                     @empty
                     <tr>
                         <td colspan="6" class="py-12 text-center adm-text-muted text-xs">
-                            No student applications match the selected criteria or filter tab.
+                            No enrolled student records match the selected criteria.
                         </td>
                     </tr>
                     @endforelse
                 </tbody>
+                @else
+                {{-- ALL APPLICATIONS: CLEAN REVIEW & APPROVE / REJECT TABLE --}}
+                <thead class="adm-table-head uppercase text-[10px] tracking-wider border-b">
+                    <tr>
+                        <th class="py-3.5 px-4 font-bold">Applicant & ID</th>
+                        <th class="py-3.5 px-4 font-bold">Degree & Institute</th>
+                        <th class="py-3.5 px-4 font-bold">Internship Stream</th>
+                        <th class="py-3.5 px-4 font-bold">Status</th>
+                        <th class="py-3.5 px-4 font-bold text-right">Review Decision & Actions</th>
+                    </tr>
+                </thead>
+                <tbody class="divide-y divide-slate-200 dark:divide-slate-800">
+                    @forelse($applications as $app)
+                    <tr class="adm-table-row transition {{ $app->status === 'PENDING' ? 'bg-amber-50/40 dark:bg-amber-950/15' : '' }}">
+                        <!-- Applicant Info -->
+                        <td class="py-4 px-4">
+                            <div class="flex items-center gap-3">
+                                <div class="w-9 h-9 rounded-xl bg-indigo-100 dark:bg-indigo-500/20 text-indigo-700 dark:text-indigo-300 font-bold text-xs flex items-center justify-center shrink-0 border border-indigo-200 dark:border-indigo-500/30 shadow-xs">
+                                    {{ substr($app->user->name ?? 'S', 0, 1) }}
+                                </div>
+                                <div>
+                                    <div class="flex items-center gap-1.5">
+                                        <span class="font-bold adm-text text-sm block leading-tight">{{ $app->user->name ?? 'Candidate' }}</span>
+                                        @if($app->status === 'PENDING')
+                                            <span class="px-1.5 py-0.2 rounded text-[9px] font-extrabold bg-amber-500/15 text-amber-700 dark:text-amber-400 border border-amber-500/30 uppercase tracking-wider">New</span>
+                                        @endif
+                                    </div>
+                                    <span class="font-mono text-indigo-600 dark:text-indigo-400 text-[11px] block font-semibold">{{ $app->application_number }}</span>
+                                    <span class="adm-text-muted text-[11px] block">{{ $app->user->email ?? 'N/A' }} • {{ $app->user->phone ?? 'N/A' }}</span>
+                                    <span class="text-[10px] text-slate-400 dark:text-slate-500 block">Applied {{ $app->created_at ? $app->created_at->format('d M Y, h:i A') : 'N/A' }}</span>
+                                </div>
+                            </div>
+                        </td>
+
+                        <!-- Degree & College -->
+                        <td class="py-4 px-4">
+                            <span class="font-semibold adm-text-secondary block">{{ $app->degree }} • {{ $app->semester }}</span>
+                            <span class="adm-text-muted text-[11px] block max-w-xs truncate" title="{{ $app->college }}">{{ $app->college }}</span>
+                        </td>
+
+                        <!-- Domain -->
+                        <td class="py-4 px-4">
+                            <span class="text-indigo-700 dark:text-indigo-300 font-semibold block max-w-xs leading-snug">{{ $app->program_domain }}</span>
+                            <span class="text-[10px] adm-text-muted block">UG Capstone Track</span>
+                        </td>
+
+                        <!-- Status Badge -->
+                        <td class="py-4 px-4">
+                            @if($app->status === 'PENDING')
+                                <span class="inline-flex items-center gap-1.5 px-2.5 py-1 rounded-full text-[11px] font-bold bg-amber-100 dark:bg-amber-950/70 text-amber-700 dark:text-amber-300 border border-amber-300 dark:border-amber-700/60">
+                                    <span class="w-1.5 h-1.5 rounded-full bg-amber-500 animate-pulse"></span>
+                                    Pending Review
+                                </span>
+                            @elseif(in_array($app->status, ['APPROVED', 'ACTIVE', 'COMPLETED']))
+                                <span class="inline-flex items-center gap-1.5 px-2.5 py-1 rounded-full text-[11px] font-bold bg-emerald-100 dark:bg-emerald-950/70 text-emerald-700 dark:text-emerald-300 border border-emerald-300 dark:border-emerald-700/60">
+                                    <span class="w-1.5 h-1.5 rounded-full bg-emerald-500"></span>
+                                    {{ $app->status === 'COMPLETED' ? 'Completed' : 'Enrolled Intern' }}
+                                </span>
+                            @elseif($app->status === 'REJECTED')
+                                <span class="inline-flex items-center gap-1.5 px-2.5 py-1 rounded-full text-[11px] font-bold bg-rose-100 dark:bg-rose-950/70 text-rose-700 dark:text-rose-300 border border-rose-300 dark:border-rose-700/60">
+                                    <span class="w-1.5 h-1.5 rounded-full bg-rose-500"></span>
+                                    Rejected
+                                </span>
+                            @endif
+                        </td>
+
+                        <!-- Review Decision / Actions -->
+                        <td class="py-4 px-4 text-right">
+                            <div class="flex items-center justify-end gap-2">
+                                @if($app->status === 'PENDING')
+                                    <!-- 1. APPROVE BUTTON -->
+                                    <form action="{{ route('admin.application.status', $app->id) }}" method="POST" class="inline">
+                                        @csrf
+                                        @method('PATCH')
+                                        <input type="hidden" name="status" value="APPROVED">
+                                        <button type="submit" class="inline-flex items-center gap-1.5 px-3.5 py-1.5 rounded-xl bg-emerald-600 hover:bg-emerald-500 text-white text-xs font-bold transition shadow-sm shadow-emerald-600/30 cursor-pointer motion-btn-spring" title="Approve application and enroll student as intern">
+                                            <svg class="w-4 h-4" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2.5" d="M5 13l4 4L19 7"/></svg>
+                                            <span>Approve</span>
+                                        </button>
+                                    </form>
+
+                                    <!-- 2. REJECT BUTTON -->
+                                    <form action="{{ route('admin.application.status', $app->id) }}" method="POST" class="inline" onsubmit="return confirm('Reject application {{ $app->application_number }} for {{ addslashes($app->user->name ?? 'Candidate') }}?')">
+                                        @csrf
+                                        @method('PATCH')
+                                        <input type="hidden" name="status" value="REJECTED">
+                                        <button type="submit" class="inline-flex items-center gap-1.5 px-3 py-1.5 rounded-xl bg-rose-50 dark:bg-rose-950/50 hover:bg-rose-100 dark:hover:bg-rose-900/50 text-rose-700 dark:text-rose-300 border border-rose-200 dark:border-rose-800 text-xs font-semibold transition cursor-pointer motion-btn-spring" title="Reject application">
+                                            <svg class="w-4 h-4" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2.5" d="M6 18L18 6M6 6l12 12"/></svg>
+                                            <span>Reject</span>
+                                        </button>
+                                    </form>
+                                @elseif(in_array($app->status, ['APPROVED', 'ACTIVE', 'COMPLETED']))
+                                    <!-- Enrolled Intern Link -->
+                                    <a href="{{ route('admin.dashboard', ['tab' => 'enrolled', 'search' => $app->application_number]) }}" class="inline-flex items-center gap-1 px-3 py-1.5 rounded-xl bg-indigo-50 dark:bg-indigo-950/50 hover:bg-indigo-100 dark:hover:bg-indigo-900/50 text-indigo-700 dark:text-indigo-300 border border-indigo-200 dark:border-indigo-800 text-xs font-bold transition shadow-xs motion-btn-spring" title="View Intern in Enrolled Students">
+                                        <span>Enrolled Intern</span>
+                                        <svg class="w-3.5 h-3.5" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M14 5l7 7m0 0l-7 7m7-7H3"/></svg>
+                                    </a>
+                                @elseif($app->status === 'REJECTED')
+                                    <!-- Re-Approve Option -->
+                                    <form action="{{ route('admin.application.status', $app->id) }}" method="POST" class="inline">
+                                        @csrf
+                                        @method('PATCH')
+                                        <input type="hidden" name="status" value="APPROVED">
+                                        <button type="submit" class="inline-flex items-center gap-1 px-3 py-1.5 rounded-xl bg-emerald-50 dark:bg-emerald-950/40 hover:bg-emerald-100 text-emerald-700 dark:text-emerald-300 border border-emerald-200 dark:border-emerald-800 text-xs font-semibold transition cursor-pointer" title="Re-Approve Application">
+                                            <svg class="w-3.5 h-3.5" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M4 4v5h.582m15.356 2A8.001 8.001 0 004.582 9m0 0H9m11 11v-5h-.581m0 0a8.003 8.003 0 01-15.357-2m15.357 2H15"/></svg>
+                                            <span>Re-Approve</span>
+                                        </button>
+                                    </form>
+                                @endif
+
+                                <!-- Subtle Edit Modal Trigger -->
+                                <button type="button" onclick="openEditApplicantModal({{ json_encode($app) }}, {{ json_encode($app->user) }})" class="p-1.5 rounded-lg text-slate-500 hover:text-slate-900 dark:hover:text-white hover:bg-slate-100 dark:hover:bg-slate-800 transition cursor-pointer" title="Edit Applicant Details">
+                                    <svg class="w-4 h-4" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M11 5H6a2 2 0 00-2 2v11a2 2 0 002 2h11a2 2 0 002-2v-5m-1.414-9.414a2 2 0 112.828 2.828L11.828 15H9v-2.828l8.586-8.586z"/></svg>
+                                </button>
+
+                                <!-- Subtle Delete Trigger -->
+                                <form action="{{ route('admin.application.delete', $app->id) }}" method="POST" onsubmit="return confirm('Permanently delete application {{ $app->application_number }}?')" class="inline">
+                                    @csrf
+                                    @method('DELETE')
+                                    <button type="submit" class="p-1.5 rounded-lg text-slate-400 hover:text-rose-600 hover:bg-rose-50 dark:hover:bg-rose-950/40 transition cursor-pointer" title="Delete Application">
+                                        <svg class="w-4 h-4" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M19 7l-.867 12.142A2 2 0 0116.138 21H7.862a2 2 0 01-1.995-1.858L5 7m5 4v6m4-6v6m1-10V4a1 1 0 00-1-1h-4a1 1 0 00-1 1v3M4 7h16"/></svg>
+                                    </button>
+                                </form>
+                            </div>
+                        </td>
+                    </tr>
+                    @empty
+                    <tr>
+                        <td colspan="5" class="py-12 text-center adm-text-muted text-xs">
+                            No student applications match the selected criteria.
+                        </td>
+                    </tr>
+                    @endforelse
+                </tbody>
+                @endif
             </table>
         </div>
 

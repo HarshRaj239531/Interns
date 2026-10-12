@@ -183,18 +183,16 @@ class SiteController extends Controller
             'college' => trim($validated['college']),
             'semester' => $validated['semester'],
             'program_domain' => $validated['program_domain'],
-            'status' => 'APPROVED',
-            'offer_letter_issued' => true,
-            'offer_letter_date' => now(),
-            'consent_letter_issued' => true,
-            'consent_letter_date' => now(),
-            'attendance_rate' => 90,
-            'mentor_name' => 'Faculty Advisory Board',
+            'status' => 'PENDING',
+            'offer_letter_issued' => false,
+            'consent_letter_issued' => false,
+            'attendance_rate' => 0,
+            'mentor_name' => 'Pending Assignment',
             'project_title' => 'Undergraduate Domain Capstone Report',
         ]);
 
         Auth::login($user);
 
-        return redirect()->route('student.dashboard')->with('success', "Welcome to Infinity Interns! Your application {$appNumber} is confirmed. Your Offer Letter & Consent Letter are instantly generated.");
+        return redirect()->route('student.dashboard')->with('success', "Welcome to Infinity Interns! Your application {$appNumber} has been submitted and is currently pending verification by the administration.");
     }
 }

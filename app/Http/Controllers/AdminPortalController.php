@@ -63,7 +63,13 @@ class AdminPortalController extends Controller
             });
         }
 
-        $applications = $query->latest()->paginate(15)->withQueryString();
+        if ($tab === 'all') {
+            $query->orderByRaw("CASE WHEN status = 'PENDING' THEN 0 ELSE 1 END")->latest();
+        } else {
+            $query->latest();
+        }
+
+        $applications = $query->paginate(15)->withQueryString();
 
         $stats = [
             'total' => StudentProfile::count(),
@@ -106,9 +112,36 @@ class AdminPortalController extends Controller
         ]);
 
         $profile = StudentProfile::findOrFail($id);
-        $profile->update(['status' => $validated['status']]);
+        $updateData = ['status' => $validated['status']];
 
-        return back()->with('success', "Application {$profile->application_number} status changed to {$validated['status']}");
+        if ($validated['status'] === 'APPROVED') {
+            if (! $profile->offer_letter_issued) {
+                $updateData['offer_letter_issued'] = true;
+                $updateData['offer_letter_date'] = now();
+            }
+            if (! $profile->consent_letter_issued) {
+                $updateData['consent_letter_issued'] = true;
+                $updateData['consent_letter_date'] = now();
+            }
+            if ($profile->attendance_rate == 0) {
+                $updateData['attendance_rate'] = 90;
+            }
+            if ($profile->mentor_name === 'Pending Assignment' || empty($profile->mentor_name)) {
+                $updateData['mentor_name'] = 'Faculty Advisory Board';
+            }
+        }
+
+        $profile->update($updateData);
+
+        $statusLabel = match ($validated['status']) {
+            'APPROVED' => 'Approved & Enrolled as Intern',
+            'REJECTED' => 'Rejected',
+            'ACTIVE' => 'Active Intern',
+            'COMPLETED' => 'Completed',
+            default => 'Pending Review',
+        };
+
+        return back()->with('success', "Application {$profile->application_number} is now marked as {$statusLabel}.");
     }
 
     /**

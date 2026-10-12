@@ -33,6 +33,7 @@ class AppServiceProvider extends ServiceProvider
             View::composer('layouts.admin', function ($view) {
                 try {
                     $totalApps = StudentProfile::count();
+                    $pendingApps = StudentProfile::where('status', 'PENDING')->count();
                     $enrolled = StudentProfile::whereIn('status', ['APPROVED', 'ACTIVE', 'COMPLETED'])->count();
                     $pendingCert = StudentProfile::whereIn('status', ['APPROVED', 'ACTIVE', 'COMPLETED'])->where('certificate_issued', false)->count();
                     $issuedCert = StudentProfile::where('certificate_issued', true)->count();
@@ -41,6 +42,7 @@ class AppServiceProvider extends ServiceProvider
 
                     $view->with('adminNavStats', [
                         'total' => $totalApps,
+                        'pending' => $pendingApps,
                         'enrolled' => $enrolled,
                         'pending_cert' => $pendingCert,
                         'certificates_issued' => $issuedCert,
