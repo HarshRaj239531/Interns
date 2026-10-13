@@ -27,19 +27,21 @@ class AppServiceProvider extends ServiceProvider
     public function boot(): void
     {
         try {
-            if (Schema::hasTable('degrees')) {
-                $activeDegrees = Degree::where('is_active', true)->orderBy('sort_order')->orderBy('name')->get();
-                View::share('activeDegrees', $activeDegrees);
-            }
+            if (! app()->runningInConsole()) {
+                if (Schema::hasTable('degrees')) {
+                    $activeDegrees = Degree::where('is_active', true)->orderBy('sort_order')->orderBy('name')->get();
+                    View::share('activeDegrees', $activeDegrees);
+                }
 
-            if (Schema::hasTable('schools')) {
-                $activeSchools = School::where('is_active', true)->orderBy('name')->get();
-                View::share('activeSchools', $activeSchools);
-            }
+                if (Schema::hasTable('schools')) {
+                    $activeSchools = School::where('is_active', true)->orderBy('name')->get();
+                    View::share('activeSchools', $activeSchools);
+                }
 
-            if (Schema::hasTable('internship_streams')) {
-                $activeStreams = InternshipStream::where('is_active', true)->orderBy('title')->get();
-                View::share('activeStreams', $activeStreams);
+                if (Schema::hasTable('internship_streams')) {
+                    $activeStreams = InternshipStream::where('is_active', true)->orderBy('title')->get();
+                    View::share('activeStreams', $activeStreams);
+                }
             }
 
             View::composer('layouts.admin', function ($view) {

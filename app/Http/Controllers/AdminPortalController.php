@@ -687,12 +687,22 @@ class AdminPortalController extends Controller
      */
     public function degrees(Request $request)
     {
-        $degrees = Degree::withCount('studentProfiles')->orderBy('sort_order')->orderBy('name')->get();
+        $query = Degree::withCount('studentProfiles');
+
+        if ($request->filled('search')) {
+            $search = trim($request->search);
+            $query->where(function ($q) use ($search) {
+                $q->where('name', 'like', "%{$search}%")
+                    ->orWhere('code', 'like', "%{$search}%");
+            });
+        }
+
+        $degrees = $query->orderBy('sort_order')->orderBy('name')->paginate(15)->withQueryString();
         $stats = [
-            'total' => $degrees->count(),
-            'active' => $degrees->where('is_active', true)->count(),
-            'inactive' => $degrees->where('is_active', false)->count(),
-            'students' => $degrees->sum('student_profiles_count'),
+            'total' => Degree::count(),
+            'active' => Degree::where('is_active', true)->count(),
+            'inactive' => Degree::where('is_active', false)->count(),
+            'students' => Degree::withCount('studentProfiles')->get()->sum('student_profiles_count'),
         ];
 
         return view('admin.degrees', compact('degrees', 'stats'));
@@ -703,12 +713,23 @@ class AdminPortalController extends Controller
      */
     public function schools(Request $request)
     {
-        $schools = School::withCount('studentProfiles')->orderBy('name')->get();
+        $query = School::withCount('studentProfiles');
+
+        if ($request->filled('search')) {
+            $search = trim($request->search);
+            $query->where(function ($q) use ($search) {
+                $q->where('name', 'like', "%{$search}%")
+                    ->orWhere('code', 'like', "%{$search}%")
+                    ->orWhere('city', 'like', "%{$search}%");
+            });
+        }
+
+        $schools = $query->orderBy('name')->paginate(15)->withQueryString();
         $stats = [
-            'total' => $schools->count(),
-            'active' => $schools->where('is_active', true)->count(),
-            'inactive' => $schools->where('is_active', false)->count(),
-            'students' => $schools->sum('student_profiles_count'),
+            'total' => School::count(),
+            'active' => School::where('is_active', true)->count(),
+            'inactive' => School::where('is_active', false)->count(),
+            'students' => School::withCount('studentProfiles')->get()->sum('student_profiles_count'),
         ];
 
         return view('admin.schools', compact('schools', 'stats'));
@@ -915,7 +936,18 @@ class AdminPortalController extends Controller
      */
     public function streams(Request $request)
     {
-        $streams = InternshipStream::withCount('studentProfiles')->orderBy('title')->get();
+        $query = InternshipStream::withCount('studentProfiles');
+
+        if ($request->filled('search')) {
+            $search = trim($request->search);
+            $query->where(function ($q) use ($search) {
+                $q->where('title', 'like', "%{$search}%")
+                    ->orWhere('code', 'like', "%{$search}%")
+                    ->orWhere('category', 'like', "%{$search}%");
+            });
+        }
+
+        $streams = $query->orderBy('title')->paginate(15)->withQueryString();
 
         return view('admin.streams', compact('streams'));
     }

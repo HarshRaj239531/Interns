@@ -141,7 +141,7 @@
                             <span class="text-[10px] text-emerald-600 dark:text-emerald-400 font-bold">COMPLETED</span>
                         </div>
                         <p class="text-xs adm-text-muted">Student registered online. System assigned unique application identifier <strong class="font-mono">{{ $profile->application_number }}</strong>.</p>
-                        <span class="text-[10px] adm-text-muted block">Recorded on: {{ $profile->created_at->format('d M Y, h:i A') }}</span>
+                        <span class="text-[10px] adm-text-muted block">Recorded on: {{ $profile->created_at ? $profile->created_at->format('d M Y') : 'N/A' }} {{-- Time commented out: , {{ $profile->created_at?->format('h:i A') }} --}}</span>
                     </div>
                 </div>
 

@@ -106,10 +106,6 @@
                     NEP-2020 requires a minimum of 75% verified contact hours and milestone check-ins for degree credit transfer.
                 </p>
             </div>
-                <p class="text-xs text-slate-500 font-light leading-relaxed">
-                    NEP-2020 requires a minimum of 75% verified contact hours and milestone check-ins for degree credit transfer.
-                </p>
-            </div>
 
             <div class="p-4 rounded-2xl bg-[#FAFBF9] border border-slate-200 space-y-2 text-xs">
                 <span class="font-bold text-slate-800 block">Mentor Check-ins:</span>

@@ -660,7 +660,7 @@
                                     </div>
                                     <span class="font-mono text-indigo-600 dark:text-indigo-400 text-[11px] block font-semibold">{{ $app->application_number }}</span>
                                     <span class="adm-text-muted text-[11px] block">{{ $app->user->email ?? 'N/A' }} • {{ $app->user->phone ?? 'N/A' }}</span>
-                                    <span class="text-[10px] text-slate-400 dark:text-slate-500 block">Applied {{ $app->created_at ? $app->created_at->format('d M Y, h:i A') : 'N/A' }}</span>
+                                    <span class="text-[10px] text-slate-400 dark:text-slate-500 block">Applied {{ $app->created_at ? $app->created_at->format('d M Y') : 'N/A' }} {{-- Time commented out: , {{ $app->created_at?->format('h:i A') }} --}}</span>
                                 </div>
                             </div>
                         </td>

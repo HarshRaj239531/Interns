@@ -65,7 +65,7 @@
                             <p class="adm-text-secondary text-xs font-light leading-relaxed">{{ $inq->message }}</p>
                         </td>
                         <td class="py-4 px-4 adm-text-muted text-[11px] whitespace-nowrap">
-                            {{ $inq->created_at->format('M d, Y') }}
+                            {{ $inq->created_at ? $inq->created_at->timezone(config('app.timezone', 'Asia/Kolkata'))->format('d M Y, h:i A') : 'N/A' }}
                         </td>
                         <td class="py-4 px-4 text-right">
                             <form action="{{ route('admin.inquiry.status', $inq->id) }}" method="POST" class="inline">
@@ -93,7 +93,7 @@
         </div>
 
         @if($inquiries->hasPages())
-        <div class="p-4 adm-table-head border-t">
+        <div class="p-4 adm-table-head border-t border-slate-200 dark:border-slate-800">
             {{ $inquiries->links() }}
         </div>
         @endif

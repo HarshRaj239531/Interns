@@ -191,7 +191,7 @@
         <!-- Search & Filter Bar -->
         <div class="p-5 border-b border-slate-200 dark:border-slate-800 flex flex-col sm:flex-row sm:items-center justify-between gap-4 bg-slate-50/50 dark:bg-slate-900/30">
             <div>
-                <h3 class="font-serif font-bold text-base adm-text">Configured Specialization Tracks ({{ $streams->count() }})</h3>
+                <h3 class="font-serif font-bold text-base adm-text">Configured Specialization Tracks ({{ method_exists($streams, 'total') ? $streams->total() : $streams->count() }})</h3>
                 <p class="text-[11px] adm-text-muted">Dynamic streams mapped to National Higher Education Qualifications Framework (NHEQF).</p>
             </div>
             <div class="relative w-full sm:w-64">
@@ -281,6 +281,12 @@
                 </tbody>
             </table>
         </div>
+
+        @if(method_exists($streams, 'hasPages') && $streams->hasPages())
+        <div class="p-4 border-t border-slate-200 dark:border-slate-800 adm-table-head">
+            {{ $streams->links() }}
+        </div>
+        @endif
     </div>
 </div>
 

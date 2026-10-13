@@ -32,6 +32,7 @@ $neededSettings = [
     'APP_DEBUG' => 'false',
     'APP_KEY' => 'base64:XyQ/Sjp9Q65menCAcwzC0zm6OjSjKBAhLqyGoofv8Ss=',
     'APP_URL' => 'https://infinityinterns.com',
+    'APP_TIMEZONE' => 'Asia/Kolkata',
     'DB_CONNECTION' => 'mysql',
     'DB_HOST' => 'localhost',
     'DB_PORT' => '3306',
