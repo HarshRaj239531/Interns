@@ -463,12 +463,13 @@ h1, h2, h3, .font-serif {
     will-change: transform;
 }
 
-/* Accessibility: Respect Reduced Motion */
-@media (prefers-reduced-motion: reduce) {
-    *, ::before, ::after {
-        animation-duration: 0.01ms !important;
-        animation-iteration-count: 1 !important;
-        transition-duration: 0.01ms !important;
-    }
+/* Custom horizontal scroll utilities */
+.no-scrollbar::-webkit-scrollbar {
+    display: none;
 }
+.no-scrollbar {
+    -ms-overflow-style: none;
+    scrollbar-width: none;
+}
+
 

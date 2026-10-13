@@ -309,57 +309,131 @@
     </div>
 </section>
 
-<!-- Journey Section -->
-<section id="journey" class="py-24 px-4 sm:px-6 lg:px-8 bg-[#F6F8F5] border-y border-slate-200/80">
+<!-- Journey Section (Modern Horizontal Scrolling Experience) -->
+<section id="journey" class="py-24 px-4 sm:px-6 lg:px-8 bg-[#F6F8F5] border-y border-slate-200/80 overflow-hidden relative">
     <div class="max-w-7xl mx-auto">
-        <div class="motion-reveal text-center max-w-2xl mx-auto mb-16">
-            <span class="text-indigo-600 font-bold text-xs tracking-[0.3em] uppercase mb-4 block">Professional Training Journey</span>
-            <h2 class="text-4xl md:text-5xl font-serif text-slate-900 leading-tight mb-4">
-                From Registration to <span class="text-indigo-700 italic">Completion.</span>
-            </h2>
-            <p class="text-slate-600 font-light text-base leading-relaxed">
-                A clear, student-friendly journey combining organized learning modules, practical tasks, live mentor interaction, and certified internship documentation.
-            </p>
-        </div>
-
-        <div class="motion-stagger grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-6">
-            @php
-            $steps = [
-                ['step' => '01', 'title' => 'Quick Registration', 'duration' => '2 minutes', 'desc' => 'Complete your student profile with basic and academic details and choose your preferred area.', 'items' => ['Profile creation', 'Basic details', 'Course selection', 'Digital enrollment']],
-                ['step' => '02', 'title' => 'Enrollment & Access', 'duration' => 'Simple', 'desc' => 'Get the next onboarding instructions and access information for your selected internship journey.', 'items' => ['Program confirmation', 'Learning access', 'Student guidance', 'Orientation deck']],
-                ['step' => '03', 'title' => 'Structured Learning', 'duration' => 'Guided', 'desc' => 'Follow specialized subjects and organized learning materials designed around practical skill development.', 'items' => ['Learning modules', 'Study material', 'Activity guidance', 'Concept checks']],
-                ['step' => '04', 'title' => 'Live Interaction', 'duration' => 'Interactive', 'desc' => 'Join scheduled sessions and connect with faculty or mentors for explanations, questions and guidance.', 'items' => ['Live masterclasses', 'Student support', 'Live Q&A clinics', 'Peer forum']],
-                ['step' => '05', 'title' => 'Assessment & Project', 'duration' => 'Flexible', 'desc' => 'Complete assignments, quizzes and practical project work with performance-focused evaluation.', 'items' => ['Online assessment', 'Capstone project', 'Originality review', 'Scoring']],
-                ['step' => '06', 'title' => 'Receive Documents', 'duration' => 'Completion', 'desc' => 'Complete the internship requirements and receive the applicable accredited documentation.', 'items' => ['UGC Certificate', 'Detailed Marksheet', 'Report Format', 'Attendance Log']],
-            ];
-            @endphp
-
-            @foreach($steps as $s)
-            <div class="motion-card-hover p-8 rounded-[2.2rem] bg-white border border-slate-200/80 hover:border-slate-300 shadow-xs hover:shadow-xl transition-all flex flex-col justify-between group">
-                <div>
-                    <div class="flex items-center justify-between mb-5">
-                        <span class="font-serif text-4xl font-extrabold text-indigo-600/70 group-hover:text-indigo-700 transition">{{ $s['step'] }}</span>
-                        <span class="text-[11px] font-semibold px-3 py-1 rounded-full bg-indigo-50 text-indigo-700 border border-indigo-100">{{ $s['duration'] }}</span>
-                    </div>
-                    <span class="text-[10px] font-bold tracking-wider text-slate-400 uppercase block mb-1">STEP {{ (int)$s['step'] }}</span>
-                    <h3 class="text-xl font-serif text-slate-900 mb-2.5">{{ $s['title'] }}</h3>
-                    <p class="text-xs text-slate-600 font-light leading-relaxed mb-6">{{ $s['desc'] }}</p>
-                </div>
-                <div class="pt-4 border-t border-slate-100">
-                    <ul class="grid grid-cols-2 gap-2 text-[11px] text-slate-700">
-                        @foreach($s['items'] as $item)
-                        <li class="flex items-center gap-1.5 font-medium truncate">
-                            <span class="w-3.5 h-3.5 rounded-full bg-emerald-100 text-emerald-700 flex items-center justify-center shrink-0 text-[10px]">✓</span>
-                            <span class="truncate">{{ $item }}</span>
-                        </li>
-                        @endforeach
-                    </ul>
-                </div>
+        <!-- Top Section Header with Controls -->
+        <div class="motion-reveal flex flex-col md:flex-row md:items-end justify-between gap-6 mb-10">
+            <div class="max-w-2xl">
+                <span class="text-indigo-600 font-bold text-xs tracking-[0.3em] uppercase mb-3 block">Professional Training Journey</span>
+                <h2 class="text-3xl sm:text-4xl md:text-5xl font-serif text-slate-900 leading-tight mb-3">
+                    From Registration to <span class="text-indigo-700 italic">Completion.</span>
+                </h2>
+                <p class="text-slate-600 font-light text-sm sm:text-base leading-relaxed">
+                    A clear, student-friendly journey combining organized learning modules, practical tasks, live mentor interaction, and certified internship documentation.
+                </p>
             </div>
-            @endforeach
+
+            <!-- Horizontal Slider Controls (Counter + Navigation Arrows) -->
+            <div class="flex items-center gap-3 shrink-0 self-start md:self-end">
+                <!-- Live Stage Counter Badge -->
+                <div class="px-4 py-2 rounded-2xl bg-white border border-slate-200 text-xs font-semibold text-slate-700 shadow-xs flex items-center gap-2">
+                    <span class="w-2 h-2 rounded-full bg-indigo-600 animate-pulse"></span>
+                    <span>Stage <strong id="journeyStageNumber" class="text-indigo-700 font-bold text-sm">01</strong> of 06</span>
+                </div>
+
+                <!-- Prev Button -->
+                <button type="button" id="journeyPrevBtn" class="w-11 h-11 rounded-2xl bg-white hover:bg-slate-50 border border-slate-200 text-slate-700 hover:text-indigo-600 flex items-center justify-center transition shadow-xs hover:shadow-md cursor-pointer motion-btn-spring" title="Previous Stage" aria-label="Previous Stage">
+                    <svg class="w-5 h-5" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2.5" d="M15 19l-7-7 7-7"/></svg>
+                </button>
+
+                <!-- Next Button -->
+                <button type="button" id="journeyNextBtn" class="w-11 h-11 rounded-2xl bg-indigo-600 hover:bg-indigo-700 text-white flex items-center justify-center transition shadow-md shadow-indigo-600/30 hover:shadow-lg cursor-pointer motion-btn-spring" title="Next Stage" aria-label="Next Stage">
+                    <svg class="w-5 h-5" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2.5" d="M9 5l7 7-7 7"/></svg>
+                </button>
+            </div>
         </div>
 
-        <div class="motion-reveal mt-14 p-8 rounded-[2rem] bg-white border border-slate-200 shadow-sm flex flex-col sm:flex-row items-center justify-between gap-6 text-center sm:text-left">
+        <!-- Quick-Jump Step Pills Navigation Bar -->
+        <div class="mb-8 overflow-x-auto no-scrollbar pb-2">
+            <div class="inline-flex items-center gap-2 p-1.5 rounded-2xl bg-white/80 border border-slate-200/90 shadow-xs">
+                @php
+                $stepPillTitles = [
+                    '01' => 'Quick Registration',
+                    '02' => 'Enrollment & Access',
+                    '03' => 'Structured Learning',
+                    '04' => 'Live Interaction',
+                    '05' => 'Assessment & Project',
+                    '06' => 'Receive Documents',
+                ];
+                @endphp
+                @foreach($stepPillTitles as $idx => $stitle)
+                <button type="button" onclick="scrollToJourneyStep({{ (int)$idx - 1 }})" class="journey-pill-btn px-3.5 py-1.5 rounded-xl text-xs font-semibold transition cursor-pointer flex items-center gap-1.5 shrink-0 {{ $idx === '01' ? 'bg-indigo-600 text-white shadow-xs font-bold' : 'text-slate-600 hover:text-slate-900 hover:bg-slate-100' }}" data-step-index="{{ (int)$idx - 1 }}">
+                    <span class="text-[10px] opacity-75 font-mono">{{ $idx }}</span>
+                    <span>{{ $stitle }}</span>
+                </button>
+                @endforeach
+            </div>
+        </div>
+
+        <!-- Horizontal Scrollable Container with Edge Gradient Fades -->
+        <div class="relative -mx-4 sm:-mx-6 lg:-mx-8">
+            <!-- Left Edge Soft Fade Mask -->
+            <div class="pointer-events-none absolute left-0 top-0 bottom-0 w-8 sm:w-16 bg-gradient-to-r from-[#F6F8F5] to-transparent z-10"></div>
+
+            <!-- Right Edge Soft Fade Mask -->
+            <div class="pointer-events-none absolute right-0 top-0 bottom-0 w-8 sm:w-16 bg-gradient-to-l from-[#F6F8F5] to-transparent z-10"></div>
+
+            <!-- Horizontal Track -->
+            <div id="journeyTrack" class="flex gap-6 overflow-x-auto no-scrollbar scroll-smooth snap-x snap-mandatory py-4 px-4 sm:px-6 lg:px-8 cursor-grab select-none">
+                @php
+                $steps = [
+                    ['step' => '01', 'title' => 'Quick Registration', 'duration' => '2 minutes', 'desc' => 'Complete your student profile with basic and academic details and choose your preferred area.', 'items' => ['Profile creation', 'Basic details', 'Course selection', 'Digital enrollment']],
+                    ['step' => '02', 'title' => 'Enrollment & Access', 'duration' => 'Simple', 'desc' => 'Get the next onboarding instructions and access information for your selected internship journey.', 'items' => ['Program confirmation', 'Learning access', 'Student guidance', 'Orientation deck']],
+                    ['step' => '03', 'title' => 'Structured Learning', 'duration' => 'Guided', 'desc' => 'Follow specialized subjects and organized learning materials designed around practical skill development.', 'items' => ['Learning modules', 'Study material', 'Activity guidance', 'Concept checks']],
+                    ['step' => '04', 'title' => 'Live Interaction', 'duration' => 'Interactive', 'desc' => 'Join scheduled sessions and connect with faculty or mentors for explanations, questions and guidance.', 'items' => ['Live masterclasses', 'Student support', 'Live Q&A clinics', 'Peer forum']],
+                    ['step' => '05', 'title' => 'Assessment & Project', 'duration' => 'Flexible', 'desc' => 'Complete assignments, quizzes and practical project work with performance-focused evaluation.', 'items' => ['Online assessment', 'Capstone project', 'Originality review', 'Scoring']],
+                    ['step' => '06', 'title' => 'Receive Documents', 'duration' => 'Completion', 'desc' => 'Complete the internship requirements and receive the applicable accredited documentation.', 'items' => ['UGC Certificate', 'Detailed Marksheet', 'Report Format', 'Attendance Log']],
+                ];
+                @endphp
+
+                @foreach($steps as $s)
+                <div class="journey-card w-[86vw] sm:w-[380px] md:w-[410px] shrink-0 snap-start motion-card-hover p-8 rounded-[2.2rem] bg-white border border-slate-200/90 hover:border-indigo-300 shadow-sm hover:shadow-2xl transition-all duration-300 flex flex-col justify-between group relative overflow-hidden">
+                    <!-- Top Gradient Accent Bar -->
+                    <div class="absolute top-0 left-0 right-0 h-1.5 bg-gradient-to-r from-indigo-500 via-purple-500 to-indigo-600 opacity-75 group-hover:opacity-100 transition"></div>
+
+                    <div>
+                        <div class="flex items-center justify-between mb-5 mt-1">
+                            <span class="font-serif text-4xl sm:text-5xl font-extrabold text-indigo-600/70 group-hover:text-indigo-600 transition">{{ $s['step'] }}</span>
+                            <span class="text-[11px] font-semibold px-3 py-1 rounded-full bg-indigo-50 text-indigo-700 border border-indigo-100/80 shadow-xs">{{ $s['duration'] }}</span>
+                        </div>
+                        <span class="text-[10px] font-bold tracking-wider text-slate-400 uppercase block mb-1">STAGE {{ (int)$s['step'] }} OF 06</span>
+                        <h3 class="text-xl font-serif text-slate-900 mb-2.5 group-hover:text-indigo-900 transition">{{ $s['title'] }}</h3>
+                        <p class="text-xs text-slate-600 font-light leading-relaxed mb-6">{{ $s['desc'] }}</p>
+                    </div>
+
+                    <div class="pt-4 border-t border-slate-100">
+                        <ul class="grid grid-cols-2 gap-2 text-[11px] text-slate-700">
+                            @foreach($s['items'] as $item)
+                            <li class="flex items-center gap-1.5 font-medium truncate">
+                                <span class="w-3.5 h-3.5 rounded-full bg-emerald-100 text-emerald-700 flex items-center justify-center shrink-0 text-[10px] font-bold">✓</span>
+                                <span class="truncate">{{ $item }}</span>
+                            </li>
+                            @endforeach
+                        </ul>
+                    </div>
+                </div>
+                @endforeach
+            </div>
+        </div>
+
+        <!-- Dynamic Horizontal Progress Bar & Gesture Hint -->
+        <div class="mt-8 flex flex-col sm:flex-row items-center justify-between gap-4">
+            <!-- Progress Line Indicator -->
+            <div class="w-full sm:w-72 bg-slate-200/80 rounded-full h-1.5 overflow-hidden">
+                <div id="journeyProgressBar" class="bg-indigo-600 h-1.5 rounded-full transition-all duration-200" style="width: 16.66%;"></div>
+            </div>
+
+            <!-- Interactive Scroll Hint -->
+            <div class="flex items-center gap-2 text-xs font-medium text-slate-500">
+                <span class="inline-block w-1.5 h-1.5 rounded-full bg-indigo-500 animate-ping"></span>
+                <span>Scroll or drag horizontally to view all 6 stages</span>
+                <span class="text-indigo-600 font-bold">→</span>
+            </div>
+        </div>
+
+        <!-- Registration CTA Card -->
+        <div class="motion-reveal mt-12 p-8 rounded-[2rem] bg-white border border-slate-200 shadow-sm flex flex-col sm:flex-row items-center justify-between gap-6 text-center sm:text-left">
             <div>
                 <h4 class="text-xl font-serif text-slate-900">Ready to start your undergraduate internship?</h4>
                 <p class="text-xs text-slate-600 mt-1 font-light">Registration takes less than 2 minutes through our online portal.</p>
@@ -371,6 +445,132 @@
         </div>
     </div>
 </section>
+
+<!-- Journey Interactive Script -->
+<script>
+    document.addEventListener('DOMContentLoaded', function () {
+        const track = document.getElementById('journeyTrack');
+        const prevBtn = document.getElementById('journeyPrevBtn');
+        const nextBtn = document.getElementById('journeyNextBtn');
+        const progressBar = document.getElementById('journeyProgressBar');
+        const stageNumber = document.getElementById('journeyStageNumber');
+        const pillButtons = document.querySelectorAll('.journey-pill-btn');
+
+        if (!track) return;
+
+        // 1. Mouse wheel horizontal scroll handler
+        track.addEventListener('wheel', function (e) {
+            const maxScrollLeft = track.scrollWidth - track.clientWidth;
+            const atStart = track.scrollLeft <= 5 && e.deltaY < 0;
+            const atEnd = track.scrollLeft >= maxScrollLeft - 5 && e.deltaY > 0;
+
+            // If user has room to scroll inside the track, hijack the wheel to scroll horizontally
+            if (!atStart && !atEnd) {
+                e.preventDefault();
+                track.scrollBy({
+                    left: e.deltaY * 1.6,
+                    behavior: 'auto'
+                });
+            }
+        }, { passive: false });
+
+        // 2. Click & Drag to Scroll Handler
+        let isDown = false;
+        let startX;
+        let scrollLeft;
+
+        track.addEventListener('mousedown', function (e) {
+            isDown = true;
+            track.classList.add('cursor-grabbing');
+            track.classList.remove('cursor-grab');
+            startX = e.pageX - track.offsetLeft;
+            scrollLeft = track.scrollLeft;
+        });
+
+        track.addEventListener('mouseleave', function () {
+            isDown = false;
+            track.classList.remove('cursor-grabbing');
+            track.classList.add('cursor-grab');
+        });
+
+        track.addEventListener('mouseup', function () {
+            isDown = false;
+            track.classList.remove('cursor-grabbing');
+            track.classList.add('cursor-grab');
+        });
+
+        track.addEventListener('mousemove', function (e) {
+            if (!isDown) return;
+            e.preventDefault();
+            const x = e.pageX - track.offsetLeft;
+            const walk = (x - startX) * 1.5;
+            track.scrollLeft = scrollLeft - walk;
+        });
+
+        // 3. Arrow Navigation Buttons
+        function getCardStepWidth() {
+            const firstCard = track.querySelector('.journey-card');
+            return firstCard ? firstCard.offsetWidth + 24 : 400; // card width + gap
+        }
+
+        if (prevBtn) {
+            prevBtn.addEventListener('click', function () {
+                track.scrollBy({ left: -getCardStepWidth(), behavior: 'smooth' });
+            });
+        }
+
+        if (nextBtn) {
+            nextBtn.addEventListener('click', function () {
+                track.scrollBy({ left: getCardStepWidth(), behavior: 'smooth' });
+            });
+        }
+
+        // 4. Update Indicators on Scroll
+        function updateJourneyUI() {
+            const scrollWidth = track.scrollWidth - track.clientWidth;
+            const currentScroll = track.scrollLeft;
+            const progress = scrollWidth > 0 ? (currentScroll / scrollWidth) : 0;
+
+            // Update Progress Line (min 16% to 100%)
+            if (progressBar) {
+                const percent = Math.min(100, Math.max(16.66, 16.66 + (progress * 83.34)));
+                progressBar.style.width = percent + '%';
+            }
+
+            // Calculate active index (0 to 5)
+            const cardWidth = getCardStepWidth();
+            const activeIdx = Math.min(5, Math.max(0, Math.round(currentScroll / cardWidth)));
+
+            if (stageNumber) {
+                stageNumber.textContent = String(activeIdx + 1).padStart(2, '0');
+            }
+
+            // Update Stage Pills Active Style
+            pillButtons.forEach(function (pill, idx) {
+                if (idx === activeIdx) {
+                    pill.classList.add('bg-indigo-600', 'text-white', 'shadow-xs', 'font-bold');
+                    pill.classList.remove('text-slate-600', 'hover:text-slate-900', 'hover:bg-slate-100');
+                } else {
+                    pill.classList.remove('bg-indigo-600', 'text-white', 'shadow-xs', 'font-bold');
+                    pill.classList.add('text-slate-600', 'hover:text-slate-900', 'hover:bg-slate-100');
+                }
+            });
+        }
+
+        track.addEventListener('scroll', updateJourneyUI, { passive: true });
+        window.addEventListener('resize', updateJourneyUI, { passive: true });
+        updateJourneyUI();
+
+        // 5. Global helper to scroll to specific step
+        window.scrollToJourneyStep = function (stepIdx) {
+            const cardWidth = getCardStepWidth();
+            track.scrollTo({
+                left: stepIdx * cardWidth,
+                behavior: 'smooth'
+            });
+        };
+    });
+</script>
 
 <!-- Documents Section -->
 <section id="documents" class="py-24 px-4 sm:px-6 lg:px-8 bg-white">
