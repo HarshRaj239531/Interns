@@ -720,4 +720,86 @@ class InfinityInternsTest extends TestCase
         $response->assertRedirect(route('student.dashboard'));
         $this->assertAuthenticated();
     }
+
+    public function test_admin_can_view_and_update_offer_letter_settings(): void
+    {
+        $admin = User::create([
+            'name' => 'Super Admin',
+            'email' => 'admin.settings@infinityinterns.com',
+            'password' => bcrypt('Admin@123'),
+            'role' => 'ADMIN',
+        ]);
+
+        $this->actingAs($admin);
+
+        // 1. Visit settings page
+        $res = $this->get(route('admin.offer-letter.settings'));
+        $res->assertStatus(200);
+        $res->assertSee('Offer Letter Settings');
+        $res->assertSee('Aryav Singh Vishal');
+
+        // 2. Update settings
+        $updateRes = $this->post(route('admin.offer-letter.settings.update'), [
+            'company_name' => 'INFINITY INTERNS CORP',
+            'company_subtitle' => 'Affiliated with Infinitya1 Innovations',
+            'cin_number' => 'U85500BR2026PTC999999',
+            'address' => 'Floor 4, Tech Tower, Bailey Road, Patna – 800001',
+            'email' => 'contact@infinityinterns.com',
+            'website' => 'www.infinityinterns.org',
+            'letter_title' => 'INTERNSHIP APPOINTMENT & OFFER LETTER',
+            'ref_prefix' => 'II/OFFER/',
+            'default_role' => 'Software Engineering Intern',
+            'default_department' => 'Engineering & R&D',
+            'default_location' => 'HYBRID-OFFICE',
+            'default_duration' => '10 Weeks (Summer Intensive)',
+            'default_stipend' => 'Rs 8000',
+            'default_reporting_manager' => 'Dr. Rajeshwar Sharma',
+            'default_mode' => 'Hybrid',
+            'acceptance_days' => 7,
+            'signatory_name' => 'Vikramaditya Roy',
+            'signatory_designation' => 'Executive Director of Academic Operations',
+        ]);
+        $updateRes->assertSessionHas('success');
+
+        // 3. Verify changes reflected in database
+        $this->assertDatabaseHas('offer_letter_settings', [
+            'company_name' => 'INFINITY INTERNS CORP',
+            'cin_number' => 'U85500BR2026PTC999999',
+            'signatory_name' => 'Vikramaditya Roy',
+        ]);
+
+        // 4. Verify candidate offer letter renders customized values
+        $studentUser = User::create([
+            'name' => 'Gunja Kumari',
+            'email' => 'gunja.test@example.com',
+            'password' => bcrypt('Secret@123'),
+            'role' => 'STUDENT',
+        ]);
+        $profile = StudentProfile::create([
+            'user_id' => $studentUser->id,
+            'application_number' => 'INF-2026-9047',
+            'degree' => 'B.Tech CSE',
+            'college' => 'NIT Patna',
+            'semester' => '6th Semester',
+            'program_domain' => 'AI & Cloud Computing',
+            'status' => 'APPROVED',
+            'offer_letter_issued' => true,
+            'offer_letter_date' => now(),
+        ]);
+
+        $letterRes = $this->get(route('admin.application.view-offer-letter', $profile->id));
+        $letterRes->assertStatus(200);
+        $letterRes->assertSee('INFINITY INTERNS CORP');
+        $letterRes->assertSee('U85500BR2026PTC999999');
+        $letterRes->assertSee('Vikramaditya Roy');
+        $letterRes->assertSee('Floor 4, Tech Tower, Bailey Road, Patna – 800001');
+
+        // 5. Test reset to defaults
+        $resetRes = $this->post(route('admin.offer-letter.settings.reset'));
+        $resetRes->assertSessionHas('success');
+        $this->assertDatabaseHas('offer_letter_settings', [
+            'company_name' => 'INFINITY INTERNS',
+            'cin_number' => 'U85500BR2025PTC075319',
+        ]);
+    }
 }

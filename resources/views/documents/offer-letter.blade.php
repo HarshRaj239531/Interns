@@ -1,126 +1,235 @@
+@php
+    $settings = $settings ?? \App\Models\OfferLetterSetting::current();
+    
+    // Resolve offer letter date
+    $offerDateObj = $profile->offer_letter_date ?? now();
+    $offerDate = $offerDateObj->format('d F Y');
+    $offerYear = $offerDateObj->format('Y');
+
+    // Resolve acceptance deadline
+    $acceptanceDays = $settings->acceptance_days ?? 5;
+    $acceptanceDate = (clone $offerDateObj)->addDays($acceptanceDays)->format('d F Y');
+
+    // Reference number
+    $seq = substr($profile->application_number ?? '047', -3);
+    if (! $seq || strlen($seq) < 3) {
+        $seq = str_pad($profile->id ?? '47', 3, '0', STR_PAD_LEFT);
+    }
+    $refNo = rtrim($settings->ref_prefix, '/') . '/' . $offerYear . '/' . $seq;
+
+    // Table values resolution
+    $role = $settings->default_role;
+    if (!empty($profile->program_domain)) {
+        $role = str_contains(strtolower($profile->program_domain), 'intern')
+            ? $profile->program_domain
+            : $profile->program_domain . ' Intern';
+    }
+    
+    $department = !empty($profile->program_domain) ? $profile->program_domain : $settings->default_department;
+    $reportingManager = (!empty($profile->mentor_name) && $profile->mentor_name !== 'Faculty Advisory Board')
+        ? $profile->mentor_name
+        : $settings->default_reporting_manager;
+@endphp
 <!DOCTYPE html>
 <html lang="en">
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Offer Letter – {{ $user->name }} ({{ $profile->application_number }})</title>
+    <title>{{ $settings->letter_title }} - OFFER & ACCEPTANCE LETTER – {{ $user->name }} ({{ $profile->application_number }})</title>
     <link rel="icon" type="image/svg+xml" href="/favicon.svg">
     @vite(['resources/css/app.css', 'resources/js/app.js'])
     <style>
+        @page {
+            size: A4 portrait;
+            margin: 12mm 15mm;
+        }
         @media print {
             .no-print { display: none !important; }
-            body { background: white !important; padding: 0 !important; }
-            .print-container { box-shadow: none !important; border: none !important; }
+            body { background: white !important; padding: 0 !important; color: #000 !important; }
+            .print-container {
+                box-shadow: none !important;
+                border: none !important;
+                padding: 0 !important;
+                margin: 0 !important;
+                max-width: 100% !important;
+            }
         }
     </style>
 </head>
-<body class="bg-slate-100 min-h-screen py-8 px-4 font-sans text-slate-800 antialiased">
+<body class="bg-slate-100 min-h-screen py-8 px-4 font-sans text-slate-800 antialiased selection:bg-blue-100">
 
-    <!-- Top Action Bar -->
-    <div class="max-w-4xl mx-auto mb-6 flex items-center justify-between no-print">
-        <a href="{{ auth()->user()->isAdmin() ? route('admin.dashboard') : route('student.dashboard') }}" class="inline-flex items-center gap-2 text-xs font-semibold text-slate-600 hover:text-slate-900 bg-white px-4 py-2 rounded-full shadow-xs border border-slate-200">
+    <!-- Top Action Bar (Hidden on Print) -->
+    <div class="max-w-4xl mx-auto mb-6 flex flex-wrap items-center justify-between gap-3 no-print">
+        <a href="{{ auth()->check() && auth()->user()->isAdmin() ? route('admin.dashboard') : route('student.dashboard') }}" class="inline-flex items-center gap-2 text-xs font-semibold text-slate-600 hover:text-slate-900 bg-white px-4 py-2 rounded-full shadow-xs border border-slate-200 transition">
             ← Back to Dashboard
         </a>
-        <button onclick="window.print()" class="inline-flex items-center gap-2 text-xs font-bold text-white bg-indigo-600 hover:bg-indigo-700 px-6 py-2.5 rounded-full shadow-lg shadow-indigo-600/30 transition cursor-pointer">
-            <svg class="w-4 h-4" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M17 17h2a2 2 0 002-2v-4a2 2 0 00-2-2H5a2 2 0 00-2 2v4a2 2 0 002 2h2m2 4h6a2 2 0 002-2v-4H9v4a2 2 0 002 2zm8-12V5a2 2 0 00-2-2H9a2 2 0 00-2 2v4h10z"/></svg>
-            <span>Print Official Letter</span>
-        </button>
+
+        <div class="flex items-center gap-3">
+            @if(auth()->check() && auth()->user()->isAdmin())
+                <a href="{{ route('admin.offer-letter.settings') }}" class="inline-flex items-center gap-1.5 text-xs font-semibold text-indigo-700 bg-indigo-50 hover:bg-indigo-100 border border-indigo-200 px-3.5 py-2 rounded-full transition">
+                    <span>⚙️ Letter Settings</span>
+                </a>
+            @endif
+
+            <button onclick="window.print()" class="inline-flex items-center gap-2 text-xs font-bold text-white bg-indigo-600 hover:bg-indigo-700 px-6 py-2 rounded-full shadow-md shadow-indigo-600/30 transition cursor-pointer">
+                <svg class="w-4 h-4" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M17 17h2a2 2 0 002-2v-4a2 2 0 00-2-2H5a2 2 0 00-2 2v4a2 2 0 002 2h2m2 4h6a2 2 0 002-2v-4H9v4a2 2 0 002 2zm8-12V5a2 2 0 00-2-2H9a2 2 0 00-2 2v4h10z"/></svg>
+                <span>Print / Download PDF</span>
+            </button>
+        </div>
     </div>
 
-    <!-- Letter Container -->
-    <div class="print-container max-w-4xl mx-auto bg-white p-10 sm:p-14 rounded-3xl shadow-xl border border-slate-200 space-y-8">
-        <!-- Letterhead Header -->
-        <div class="flex items-start justify-between pb-6 border-b-2 border-indigo-900">
-            <div class="flex items-center gap-3">
-                <img src="/infinity-interns-logo.png" alt="Logo" class="h-12 w-auto">
-                <div>
-                    <h1 class="font-serif font-bold text-2xl text-slate-900 tracking-wider uppercase">INFINITY INTERNS</h1>
-                    <span class="text-[10px] text-indigo-700 font-bold uppercase tracking-widest block">UGC-Accredited Internship Programs</span>
-                    <span class="text-[9px] text-slate-500 block">A Unit of Infinitya1 Career Counselling Pvt Ltd.</span>
-                </div>
+    <!-- Letter Container Sheet -->
+    <div class="print-container max-w-[820px] mx-auto bg-white p-10 sm:p-14 md:p-16 rounded-2xl shadow-xl border border-slate-200 text-slate-800">
+        
+        <!-- Header Letterhead -->
+        <div class="flex items-start justify-between gap-4">
+            <!-- Left Header: Logo -->
+            <div class="flex items-center">
+                <img src="{{ $settings->logo_path ? asset($settings->logo_path) : '/infinity-interns-logo.png' }}" alt="{{ $settings->company_name }}" class="h-16 sm:h-20 w-auto object-contain">
             </div>
-            <div class="text-right text-[11px] text-slate-500 space-y-0.5">
-                <p class="font-semibold text-slate-800">Operational Directorate</p>
-                <p>Bhub Patna, Bihar, India – 800001</p>
-                <p>Email: info@infinityinterns.com</p>
-                <p>Website: www.infinityinterns.com</p>
+
+            <!-- Right Header: Company Info -->
+            <div class="text-right text-[11px] leading-tight text-slate-600 space-y-0.5">
+                <div class="font-extrabold text-slate-900 text-xs tracking-wider uppercase">{{ $settings->company_name }}</div>
+                @if($settings->cin_number)
+                    <div class="text-[10px] text-slate-500 font-medium">CIN No.: {{ $settings->cin_number }}</div>
+                @endif
+                <div class="text-[10px] text-slate-600">{{ $settings->address }}</div>
+                <div class="text-[10px] text-slate-600">{{ $settings->email }} | {{ $settings->website }}</div>
             </div>
         </div>
 
-        <!-- Meta Line -->
-        <div class="flex items-center justify-between text-xs text-slate-600">
+        <!-- Solid Ocean Blue Dividing Line -->
+        <div class="w-full h-[2.5px] bg-[#1e3a8a] my-5"></div>
+
+        <!-- Document Heading -->
+        <div class="text-center my-5">
+            <h1 class="text-xl sm:text-2xl font-bold tracking-wide text-[#1e3a8a] uppercase">{{ $settings->letter_title }}</h1>
+            <span class="sr-only">OFFER & ACCEPTANCE LETTER</span>
+        </div>
+
+        <!-- Ref Number and Date Row -->
+        <div class="flex items-center justify-between text-xs sm:text-sm text-slate-800 my-4 font-normal">
             <div>
-                <span class="font-bold text-slate-800">Ref No:</span>
-                <span class="font-mono">INF/OL/2026/{{ substr($profile->application_number, -4) }}</span>
+                <strong class="font-bold text-slate-900">Ref No:</strong> <span>{{ $refNo }}</span>
             </div>
             <div>
-                <span class="font-bold text-slate-800">Date of Dispatch:</span>
-                <span>{{ $profile->offer_letter_date ? $profile->offer_letter_date->format('F d, Y') : date('F d, Y') }}</span>
+                <strong class="font-bold text-slate-900">Date:</strong> <span>{{ $offerDate }}</span>
             </div>
         </div>
 
-        <!-- Addressee -->
-        <div class="text-xs space-y-1 text-slate-700">
-            <p class="font-bold text-slate-900 text-sm">To,</p>
-            <p class="font-bold text-slate-900">{{ $user->name }}</p>
-            <p>Degree: {{ $profile->degree }} ({{ $profile->semester }})</p>
-            <p>College / Institution: {{ $profile->college }}</p>
-            <p>Application ID: <span class="font-mono font-bold text-indigo-700">{{ $profile->application_number }}</span></p>
+        <!-- Recipient Addressee -->
+        <div class="text-xs sm:text-sm text-slate-900 space-y-3 mt-5 mb-4">
+            <p class="font-bold">To,</p>
+            <p class="font-bold">Dear {{ $user->name }},</p>
         </div>
 
-        <!-- Subject -->
-        <div class="p-3 bg-[#FAFBF9] rounded-xl border border-slate-200 text-xs font-bold text-indigo-900">
-            SUBJECT: OFFICIAL OFFER & ACCEPTANCE LETTER FOR UNDERGRADUATE UGC INTERNSHIP PROGRAM – BATCH 2026
+        <!-- Opening Paragraph -->
+        <p class="text-xs sm:text-[13px] text-slate-700 leading-relaxed text-justify mb-4">
+            {{ $settings->intro_text ?: ("We are pleased to offer you an internship with " . $settings->company_name . " (" . $settings->company_subtitle . "). We believe that your skills and interests align well with our mission, and we are confident that this internship will be a valuable opportunity for your professional growth and development.") }}
+        </p>
+
+        <!-- Details Heading -->
+        <p class="text-xs sm:text-[13px] font-bold text-slate-900 mb-2">
+            Your internship details are as follows:
+        </p>
+
+        <!-- 7-Row Bordered Details Table -->
+        <div class="mb-5 overflow-hidden">
+            <table class="w-full border-collapse border border-slate-300 text-xs sm:text-sm">
+                <tbody>
+                    <tr>
+                        <td class="border border-slate-300 px-3.5 py-2 font-bold text-slate-900 w-[35%] bg-slate-50/40">Internship Role</td>
+                        <td class="border border-slate-300 px-3.5 py-2 text-slate-800">{{ $role }}</td>
+                    </tr>
+                    <tr>
+                        <td class="border border-slate-300 px-3.5 py-2 font-bold text-slate-900 bg-slate-50/40">Department</td>
+                        <td class="border border-slate-300 px-3.5 py-2 text-slate-800">{{ $department }}</td>
+                    </tr>
+                    <tr>
+                        <td class="border border-slate-300 px-3.5 py-2 font-bold text-slate-900 bg-slate-50/40">Location</td>
+                        <td class="border border-slate-300 px-3.5 py-2 text-slate-800 uppercase">{{ $settings->default_location }}</td>
+                    </tr>
+                    <tr>
+                        <td class="border border-slate-300 px-3.5 py-2 font-bold text-slate-900 bg-slate-50/40">Duration</td>
+                        <td class="border border-slate-300 px-3.5 py-2 text-slate-800">{{ $settings->default_duration }}</td>
+                    </tr>
+                    <tr>
+                        <td class="border border-slate-300 px-3.5 py-2 font-bold text-slate-900 bg-slate-50/40">Stipend</td>
+                        <td class="border border-slate-300 px-3.5 py-2 text-slate-800">{{ $settings->default_stipend }}</td>
+                    </tr>
+                    <tr>
+                        <td class="border border-slate-300 px-3.5 py-2 font-bold text-slate-900 bg-slate-50/40">Reporting Manager</td>
+                        <td class="border border-slate-300 px-3.5 py-2 text-slate-800">{{ $reportingManager }}</td>
+                    </tr>
+                    <tr>
+                        <td class="border border-slate-300 px-3.5 py-2 font-bold text-slate-900 bg-slate-50/40">Mode of Internship</td>
+                        <td class="border border-slate-300 px-3.5 py-2 text-slate-800">{{ $settings->default_mode }}</td>
+                    </tr>
+                </tbody>
+            </table>
         </div>
 
-        <!-- Body -->
-        <div class="space-y-4 text-xs leading-relaxed text-slate-700 font-light">
-            <p>Dear <strong>{{ $user->name }}</strong>,</p>
+        <!-- Post-Table Policies -->
+        <p class="text-xs sm:text-[13px] text-slate-700 leading-relaxed text-justify mb-3">
+            {{ $settings->terms_text ?: "You will be expected to maintain professionalism, meet the assigned objectives, and abide by the policies and confidentiality terms of the organization." }}
+        </p>
 
-            <p>
-                Following the evaluation of your undergraduate academic profile, we are delighted to formally offer you an internship appointment under the <strong>{{ $profile->program_domain }}</strong> track with <strong>Infinity Interns</strong> (A Unit of Infinitya1 Career Counselling Pvt Ltd.).
-            </p>
+        <!-- Acceptance Deadline -->
+        <p class="text-xs sm:text-[13px] text-slate-700 leading-relaxed text-justify mb-3">
+            Please confirm your acceptance of this offer by signing and returning a copy of this letter by <strong class="font-bold text-slate-900">{{ $acceptanceDate }}</strong>.
+        </p>
 
-            <p>
-                This internship program is structured in full compliance with the National Education Policy (NEP) 2020 and University Grants Commission (UGC) National Higher Education Qualifications Framework (NHEQF), designed to fulfill 2 to 4 academic credits required for your <strong>{{ $profile->degree }}</strong> degree at <strong>{{ $profile->college }}</strong>.
-            </p>
+        <!-- Closing Line -->
+        <p class="text-xs sm:text-[13px] text-slate-700 leading-relaxed text-justify mb-6">
+            {{ $settings->closing_text ?: ("We look forward to having you as part of our team and wish you a fruitful learning journey with " . $settings->company_name . ".") }}
+        </p>
 
-            <div class="p-4 rounded-2xl bg-[#FAFBF9] border border-slate-200 space-y-2 text-xs">
-                <span class="font-bold text-slate-900 uppercase tracking-wider block">Key Terms of Internship:</span>
-                <div class="grid grid-cols-2 gap-2 text-slate-800">
-                    <div>• <strong>Assigned Track:</strong> {{ $profile->program_domain }}</div>
-                    <div>• <strong>Duration:</strong> 6 to 8 Weeks (60 to 120 Contact Hours)</div>
-                    <div>• <strong>Mode of Delivery:</strong> Hybrid (Self-paced + Live Mentor Clinics)</div>
-                    <div>• <strong>Faculty Advisor:</strong> {{ $profile->mentor_name }}</div>
-                </div>
-            </div>
-
-            <p>
-                During your internship, you will be expected to complete all scheduled learning modules, participate in live mentor workshops, maintain a minimum attendance rate of 75%, and submit a domain capstone project. Upon successful completion and evaluation, you will be awarded an authenticated <strong>Internship Completion Certificate</strong> and <strong>Detailed Academic Marksheet</strong>.
-            </p>
-
-            <p>
-                We congratulate you on your selection and wish you a rewarding, intellectually stimulating internship journey.
-            </p>
+        <!-- Sign-Off Header -->
+        <div class="space-y-0.5 text-xs sm:text-sm text-slate-900 mb-4">
+            <p class="font-bold">Best Regards,</p>
+            <p class="font-bold">For {{ $settings->company_name }}</p>
+            @if($settings->company_subtitle)
+                <p class="text-[11px] text-slate-500 font-normal">({{ $settings->company_subtitle }})</p>
+            @endif
         </div>
 
-        <!-- Signatures & Official Stamp -->
-        <div class="pt-8 border-t border-slate-200 flex items-end justify-between">
+        <!-- Signatures & Seal Impression Row -->
+        <div class="pt-2 flex items-end justify-between gap-4">
+            <!-- Left Side: Signatory Signature & Details -->
             <div class="space-y-1">
-                <div class="h-12 flex items-center font-serif text-indigo-900 font-bold italic text-lg">
-                    Dr. Alok Verma
+                <div class="h-16 flex items-end">
+                    @if($settings->signature_path && file_exists(public_path($settings->signature_path)))
+                        <img src="{{ asset($settings->signature_path) }}" alt="Signature" class="max-h-16 max-w-[180px] object-contain">
+                    @else
+                        <!-- Elegant script signature placeholder -->
+                        <span class="font-serif italic text-lg text-slate-800 font-bold opacity-80 select-none">
+                            {{ $settings->signatory_name }}
+                        </span>
+                    @endif
                 </div>
-                <p class="font-bold text-xs text-slate-900">Dr. Alok Verma</p>
-                <p class="text-[11px] text-slate-500">Director of Academic Affairs & Training</p>
-                <p class="text-[10px] text-slate-400">Infinitya1 Career Counselling Pvt Ltd.</p>
+                <p class="font-bold text-xs sm:text-sm text-slate-900">{{ $settings->signatory_name }}</p>
+                <p class="text-[11px] text-slate-500 font-medium">{{ $settings->signatory_designation }}</p>
             </div>
 
-            <div class="w-24 h-24 rounded-full border-2 border-dashed border-indigo-300 flex flex-col items-center justify-center text-center p-2 text-indigo-700 bg-indigo-50/40">
-                <span class="text-[9px] font-bold uppercase tracking-wider">Official Seal</span>
-                <span class="text-xs">✦ 2026 ✦</span>
-                <span class="text-[8px] font-bold">Infinity Interns</span>
+            <!-- Right Side: Official Stamp / Seal -->
+            <div class="flex flex-col items-end">
+                <div class="h-24 w-28 flex items-center justify-center mb-1">
+                    @if($settings->seal_path && file_exists(public_path($settings->seal_path)))
+                        <img src="{{ asset($settings->seal_path) }}" alt="Official Seal" class="h-24 w-24 object-contain">
+                    @else
+                        <!-- Subtle official stamp watermark if no image uploaded yet -->
+                        <div class="w-16 h-16 rounded-full border-2 border-dashed border-slate-300 flex flex-col items-center justify-center text-center p-1 text-slate-400 select-none">
+                            <span class="text-[7px] font-bold uppercase tracking-wider">OFFICIAL</span>
+                            <span class="text-[8px]">✦ SEAL ✦</span>
+                        </div>
+                    @endif
+                </div>
+                <span class="text-[11px] text-slate-500 font-medium">Official Seal / Signature</span>
             </div>
         </div>
+
     </div>
+
 </body>
 </html>

@@ -2,6 +2,7 @@
 
 namespace App\Http\Controllers;
 
+use App\Models\OfferLetterSetting;
 use App\Models\StudentProfile;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Auth;
@@ -68,7 +69,9 @@ class StudentPortalController extends Controller
             return back()->with('error', 'Offer letter has not been released yet for this application.');
         }
 
-        return view('documents.offer-letter', compact('user', 'profile'));
+        $settings = OfferLetterSetting::current();
+
+        return view('documents.offer-letter', compact('user', 'profile', 'settings'));
     }
 
     public function viewConsentLetter()

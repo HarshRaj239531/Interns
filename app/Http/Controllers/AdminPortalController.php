@@ -5,6 +5,7 @@ namespace App\Http\Controllers;
 use App\Models\Degree;
 use App\Models\Inquiry;
 use App\Models\InternshipStream;
+use App\Models\OfferLetterSetting;
 use App\Models\School;
 use App\Models\StudentProfile;
 use App\Models\User;
@@ -564,8 +565,9 @@ class AdminPortalController extends Controller
     {
         $profile = StudentProfile::with('user')->findOrFail($id);
         $user = $profile->user;
+        $settings = OfferLetterSetting::current();
 
-        return view('documents.offer-letter', compact('user', 'profile'));
+        return view('documents.offer-letter', compact('user', 'profile', 'settings'));
     }
 
     /**
@@ -1106,5 +1108,153 @@ class AdminPortalController extends Controller
         $recentStudents = StudentProfile::with('user')->latest()->take(10)->get();
 
         return view('admin.track', compact('profile', 'recentStudents', 'search'));
+    }
+
+    /**
+     * Offer Letter Settings Dashboard
+     */
+    public function offerLetterSettings()
+    {
+        $settings = OfferLetterSetting::current();
+        $sampleProfile = StudentProfile::with('user')->where('offer_letter_issued', true)->latest()->first()
+            ?? StudentProfile::with('user')->latest()->first();
+
+        return view('admin.offer-letter-settings', compact('settings', 'sampleProfile'));
+    }
+
+    /**
+     * Update Offer Letter Settings & Upload Media (Signature, Stamp/Seal, Logo)
+     */
+    public function updateOfferLetterSettings(Request $request)
+    {
+        $settings = OfferLetterSetting::current();
+
+        $validated = $request->validate([
+            'company_name' => 'required|string|max:255',
+            'company_subtitle' => 'nullable|string|max:255',
+            'cin_number' => 'nullable|string|max:100',
+            'address' => 'required|string|max:500',
+            'email' => 'required|email|max:255',
+            'website' => 'required|string|max:255',
+            'letter_title' => 'required|string|max:255',
+            'ref_prefix' => 'required|string|max:50',
+            'default_role' => 'nullable|string|max:255',
+            'default_department' => 'nullable|string|max:255',
+            'default_location' => 'required|string|max:255',
+            'default_duration' => 'required|string|max:255',
+            'default_stipend' => 'required|string|max:255',
+            'default_reporting_manager' => 'required|string|max:255',
+            'default_mode' => 'required|string|max:100',
+            'acceptance_days' => 'required|integer|min:1|max:90',
+            'intro_text' => 'nullable|string',
+            'terms_text' => 'nullable|string',
+            'closing_text' => 'nullable|string',
+            'signatory_name' => 'required|string|max:255',
+            'signatory_designation' => 'required|string|max:255',
+            'signature' => 'nullable|image|mimes:jpeg,png,jpg,svg,webp|max:3072',
+            'seal' => 'nullable|image|mimes:jpeg,png,jpg,svg,webp|max:3072',
+            'logo' => 'nullable|image|mimes:jpeg,png,jpg,svg,webp|max:3072',
+        ]);
+
+        $destinationPath = public_path('uploads/offer-letter');
+        if (! file_exists($destinationPath)) {
+            mkdir($destinationPath, 0755, true);
+        }
+
+        if ($request->hasFile('signature')) {
+            $file = $request->file('signature');
+            $fileName = 'signature_'.time().'.'.$file->getClientOriginalExtension();
+            $file->move($destinationPath, $fileName);
+            $validated['signature_path'] = 'uploads/offer-letter/'.$fileName;
+        }
+
+        if ($request->hasFile('seal')) {
+            $file = $request->file('seal');
+            $fileName = 'seal_'.time().'.'.$file->getClientOriginalExtension();
+            $file->move($destinationPath, $fileName);
+            $validated['seal_path'] = 'uploads/offer-letter/'.$fileName;
+        }
+
+        if ($request->hasFile('logo')) {
+            $file = $request->file('logo');
+            $fileName = 'logo_'.time().'.'.$file->getClientOriginalExtension();
+            $file->move($destinationPath, $fileName);
+            $validated['logo_path'] = 'uploads/offer-letter/'.$fileName;
+        }
+
+        $settings->update($validated);
+
+        return back()->with('success', 'Offer Letter settings and headers updated successfully!');
+    }
+
+    /**
+     * Remove an uploaded image (signature, seal, or logo)
+     */
+    public function removeOfferLetterImage(Request $request)
+    {
+        $type = $request->input('type');
+        $settings = OfferLetterSetting::current();
+
+        if ($type === 'signature') {
+            if ($settings->signature_path && file_exists(public_path($settings->signature_path))) {
+                @unlink(public_path($settings->signature_path));
+            }
+            $settings->update(['signature_path' => null]);
+
+            return back()->with('success', 'Official signature image removed.');
+        }
+
+        if ($type === 'seal') {
+            if ($settings->seal_path && file_exists(public_path($settings->seal_path))) {
+                @unlink(public_path($settings->seal_path));
+            }
+            $settings->update(['seal_path' => null]);
+
+            return back()->with('success', 'Official seal stamp image removed.');
+        }
+
+        if ($type === 'logo') {
+            if ($settings->logo_path && file_exists(public_path($settings->logo_path))) {
+                @unlink(public_path($settings->logo_path));
+            }
+            $settings->update(['logo_path' => null]);
+
+            return back()->with('success', 'Custom logo removed (restored default logo).');
+        }
+
+        return back()->with('error', 'Invalid media removal request.');
+    }
+
+    /**
+     * Reset settings back to sample template defaults
+     */
+    public function resetOfferLetterSettings()
+    {
+        $settings = OfferLetterSetting::current();
+        $settings->update([
+            'company_name' => 'INFINITY INTERNS',
+            'company_subtitle' => 'A unit of Infinitya1 Career Counselling private limited',
+            'cin_number' => 'U85500BR2025PTC075319',
+            'address' => 'B-hub Maurya Lok Complex, Patna, Bihar – 800001',
+            'email' => 'info@infinityinterns.com',
+            'website' => 'www.infinityinterns.com',
+            'letter_title' => 'INTERNSHIP OFFER LETTER',
+            'ref_prefix' => 'II/OL/',
+            'default_role' => 'Financial Management Intern',
+            'default_department' => 'Marketing & Finance',
+            'default_location' => 'ON-OFFICE',
+            'default_duration' => '06 June 2026 to 21 July 2026',
+            'default_stipend' => 'Rs 5000',
+            'default_reporting_manager' => 'Aryav Singh Vishal',
+            'default_mode' => 'Office',
+            'acceptance_days' => 5,
+            'intro_text' => null,
+            'terms_text' => null,
+            'closing_text' => null,
+            'signatory_name' => 'Aryav Singh Vishal',
+            'signatory_designation' => 'Authorized Signatory',
+        ]);
+
+        return back()->with('success', 'Offer letter settings reset to sample template defaults!');
     }
 }

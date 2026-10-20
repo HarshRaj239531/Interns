@@ -180,6 +180,19 @@
                         {{ $adminNavStats['total_inquiries'] ?? 0 }}
                     </span>
                 </a>
+
+                <div class="pt-3 pb-1 px-3 text-[10px] font-bold uppercase tracking-wider text-slate-500 dark:text-slate-400">
+                    Document Settings
+                </div>
+
+                <!-- Offer Letter Settings -->
+                <a href="{{ route('admin.offer-letter.settings') }}" class="flex items-center justify-between px-3.5 py-2 rounded-xl transition {{ request()->routeIs('admin.offer-letter*') ? 'bg-indigo-600 text-white shadow-lg shadow-indigo-600/30 font-bold' : 'text-slate-600 dark:text-slate-400 hover:text-slate-900 dark:hover:text-white hover:bg-slate-100 dark:hover:bg-slate-800/60' }}">
+                    <div class="flex items-center gap-3">
+                        <svg class="w-4 h-4 shrink-0" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M9 12h6m-6 4h6m2 5H7a2 2 0 01-2-2V5a2 2 0 012-2h5.586a1 1 0 01.707.293l5.414 5.414a1 1 0 01.293.707V19a2 2 0 01-2 2z"/></svg>
+                        <span>Offer Letter Settings</span>
+                    </div>
+                    <span class="text-[9px] px-1.5 py-0.5 rounded {{ request()->routeIs('admin.offer-letter*') ? 'bg-white/20 text-white' : 'bg-indigo-500/10 text-indigo-700 dark:text-indigo-400 font-bold' }} uppercase">Customize</span>
+                </a>
             </nav>
         </div>
 
