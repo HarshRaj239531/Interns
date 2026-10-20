@@ -279,6 +279,46 @@ h1, h2, h3, .font-serif {
     background: #312E81;
 }
 
+/* =========================================================
+   INDEPENDENT SIDEBAR & MAIN VIEW SCROLL CONTAINMENT
+   ========================================================= */
+.adm-sidebar-scroll {
+    overflow-y: auto !important;
+    overscroll-behavior: contain !important;
+    overscroll-behavior-y: contain !important;
+    -webkit-overflow-scrolling: touch;
+    scrollbar-width: thin;
+    scrollbar-color: rgba(148, 163, 184, 0.3) transparent;
+}
+
+[data-admin-theme="dark"] .adm-sidebar-scroll {
+    scrollbar-color: rgba(148, 163, 184, 0.25) transparent;
+}
+
+.adm-sidebar-scroll::-webkit-scrollbar {
+    width: 4px;
+}
+
+.adm-sidebar-scroll::-webkit-scrollbar-track {
+    background: transparent !important;
+}
+
+.adm-sidebar-scroll::-webkit-scrollbar-thumb {
+    background: rgba(148, 163, 184, 0.25);
+    border-radius: 9999px;
+    border: none !important;
+}
+
+.adm-sidebar-scroll:hover::-webkit-scrollbar-thumb {
+    background: rgba(99, 102, 241, 0.6);
+}
+
+.adm-main-scroll {
+    overscroll-behavior: contain !important;
+    overscroll-behavior-y: contain !important;
+    -webkit-overflow-scrolling: touch;
+}
+
 /* Navbar Hover Underline Effect */
 .nav-link-underline {
     position: relative;

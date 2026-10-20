@@ -23,15 +23,15 @@
 
     @vite(['resources/css/app.css', 'resources/js/app.js'])
 </head>
-<body class="h-full min-h-screen adm-canvas font-sans antialiased flex flex-col md:flex-row overflow-x-hidden">
+<body class="h-full min-h-screen md:h-screen md:overflow-hidden adm-canvas font-sans antialiased flex flex-col md:flex-row">
     <!-- Top Scroll Progress Indicator (Framer Motion) -->
     <div id="scrollProgress" class="fixed top-0 left-0 right-0 h-[3px] bg-gradient-to-r from-indigo-500 via-purple-500 to-emerald-400 z-[999] origin-left scale-x-0 pointer-events-none"></div>
 
-    <!-- Sidebar -->
-    <aside class="w-full md:w-64 adm-sidebar border-r p-5 flex flex-col justify-between shrink-0 md:h-screen md:sticky md:top-0 z-40">
-        <div>
-            <!-- Brand -->
-            <a href="{{ route('admin.dashboard') }}" class="flex items-center gap-3 mb-8 px-2 group">
+    <!-- Sidebar (Independent Fixed-Height Split Container) -->
+    <aside class="w-full md:w-64 adm-sidebar border-r flex flex-col shrink-0 md:h-screen md:max-h-screen z-40 select-none">
+        <!-- Brand (Pinned Header) -->
+        <div class="p-5 pb-4 shrink-0 border-b border-slate-200/70 dark:border-slate-800/70">
+            <a href="{{ route('admin.dashboard') }}" class="flex items-center gap-3 px-1 group">
                 <div class="w-10 h-10 rounded-xl bg-slate-100 dark:bg-slate-800 border border-slate-200 dark:border-slate-700/80 flex items-center justify-center p-1.5 shadow-sm group-hover:border-indigo-500/50 transition">
                     <img src="/infinity-interns-logo.png" alt="Logo" class="h-full w-auto object-contain">
                 </div>
@@ -42,8 +42,10 @@
                     </span>
                 </div>
             </a>
+        </div>
 
-            <!-- Navigation Links -->
+        <!-- Scrollable Navigation (Independent Isolated Scroll Container) -->
+        <div class="flex-1 overflow-y-auto px-3.5 py-4 space-y-1 overscroll-contain adm-sidebar-scroll">
             <nav class="space-y-1 text-xs font-semibold">
                 <!-- Dashboard Overview -->
                 <a href="{{ route('admin.dashboard', ['tab' => 'overview']) }}" class="flex items-center justify-between px-3.5 py-2.5 rounded-xl transition {{ (request()->routeIs('admin.dashboard') && (request('tab', 'overview') === 'overview' || !request('tab'))) ? 'bg-indigo-600 text-white shadow-lg shadow-indigo-600/30 font-bold' : 'text-slate-600 dark:text-slate-400 hover:text-slate-900 dark:hover:text-white hover:bg-slate-100 dark:hover:bg-slate-800/60' }}">
@@ -205,9 +207,9 @@
             </nav>
         </div>
 
-        <!-- User / Logout -->
-        <div class="pt-6 border-t border-slate-200 dark:border-slate-800/80 mt-6 space-y-3">
-            <div class="flex items-center gap-3 px-2">
+        <!-- User / Logout (Pinned Footer) -->
+        <div class="p-4 border-t border-slate-200 dark:border-slate-800/80 shrink-0 space-y-3 bg-slate-50/50 dark:bg-slate-900/40">
+            <div class="flex items-center gap-3 px-1">
                 <div class="w-9 h-9 rounded-xl bg-gradient-to-br from-indigo-500 to-purple-600 text-white font-bold text-xs flex items-center justify-center shadow-md shadow-indigo-600/20 shrink-0">
                     {{ substr(auth()->user()->name, 0, 1) }}
                 </div>
@@ -226,8 +228,8 @@
         </div>
     </aside>
 
-    <!-- Main Content Area -->
-    <div class="flex-1 flex flex-col min-w-0 min-h-screen adm-canvas overflow-y-auto">
+    <!-- Main Content Area (Independent Isolated Scroll Container) -->
+    <div id="adminMainScroll" class="flex-1 flex flex-col min-w-0 md:h-screen md:max-h-screen overflow-y-auto overscroll-contain adm-canvas adm-main-scroll">
         <!-- Top App Bar -->
         <header class="h-16 adm-header border-b px-6 md:px-8 flex items-center justify-between shrink-0 sticky top-0 z-30">
             <div class="flex items-center gap-2.5">
@@ -363,6 +365,32 @@
                 prompt("Copy credentials manually:", text);
             });
         }
+
+        // Strict Isolated Sidebar Scroll Controller
+        (function() {
+            const aside = document.querySelector('aside.adm-sidebar');
+            const navScroll = document.querySelector('.adm-sidebar-scroll');
+            if (!aside) return;
+
+            aside.addEventListener('wheel', function(e) {
+                if (window.innerWidth < 768) return; // Do not restrict on mobile
+
+                // If mouse is on header, footer, or any non-scrollable area of sidebar
+                if (!navScroll || !navScroll.contains(e.target)) {
+                    e.preventDefault();
+                    return;
+                }
+
+                // Inside nav scroll: allow internal scroll, but block wheel bubbling at top/bottom edges
+                const delta = e.deltaY;
+                const atTop = navScroll.scrollTop <= 0;
+                const atBottom = Math.ceil(navScroll.scrollTop + navScroll.clientHeight) >= (navScroll.scrollHeight - 1);
+
+                if ((delta < 0 && atTop) || (delta > 0 && atBottom)) {
+                    e.preventDefault();
+                }
+            }, { passive: false });
+        })();
     </script>
 
     @yield('scripts')

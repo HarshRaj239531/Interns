@@ -29,6 +29,21 @@ function initScrollProgress() {
 
         gsap.set(progressEl, { scaleX: 0, transformOrigin: 'left center' });
 
+        const adminScroller = document.getElementById('adminMainScroll');
+        if (adminScroller && window.innerWidth >= 768) {
+            adminScroller.addEventListener('scroll', () => {
+                const max = adminScroller.scrollHeight - adminScroller.clientHeight;
+                const ratio = max > 0 ? adminScroller.scrollTop / max : 0;
+                gsap.to(progressEl, {
+                    scaleX: Math.min(1, Math.max(0, ratio)),
+                    duration: 0.1,
+                    ease: 'none',
+                    overwrite: 'auto'
+                });
+            }, { passive: true });
+            return;
+        }
+
         gsap.to(progressEl, {
             scaleX: 1,
             ease: 'none',
