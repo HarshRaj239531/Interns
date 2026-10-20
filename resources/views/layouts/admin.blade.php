@@ -89,6 +89,7 @@
                     </span>
                 </a>
 
+                {{-- CERTIFICATIONS SECTION COMMENTED OUT
                 <div class="pt-3 pb-1 px-3 text-[10px] font-bold uppercase tracking-wider text-slate-500 dark:text-slate-400">
                     Certifications
                 </div>
@@ -123,6 +124,7 @@
                     </div>
                     <span class="text-[9px] px-1.5 py-0.5 rounded bg-emerald-500/20 text-emerald-700 dark:text-emerald-400 font-bold uppercase">Manual</span>
                 </a>
+                --}}
 
                 <div class="pt-3 pb-1 px-3 text-[10px] font-bold uppercase tracking-wider text-slate-500 dark:text-slate-400">
                     Academic Configuration
