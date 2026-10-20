@@ -970,4 +970,42 @@ class InfinityInternsTest extends TestCase
             'company_name' => 'INFINITY INTERNS',
         ]);
     }
+
+    public function test_admin_layout_has_animated_spinning_settings_button_and_theme_studio_drawer(): void
+    {
+        $adminUser = User::create([
+            'name' => 'Admin Studio Tester',
+            'email' => 'admin.studio@example.com',
+            'phone' => '+91 9999900000',
+            'password' => bcrypt('Admin@123'),
+            'role' => 'ADMIN',
+        ]);
+
+        $this->actingAs($adminUser);
+
+        $response = $this->get(route('admin.dashboard'));
+        $response->assertStatus(200);
+
+        // Verify continuously animated spinning gear icon & Customize trigger button in header
+        $response->assertSee('adminThemeStudioBtn', false);
+        $response->assertSee('animate-spin-continuous', false);
+        $response->assertSee('Customize');
+
+        // Verify Appearance & Theme Studio drawer markup
+        $response->assertSee('adminCustomizerDrawer', false);
+        $response->assertSee('adminCustomizerBackdrop', false);
+        $response->assertSee('Appearance & Theme Studio', false);
+        $response->assertSee('1-Click Master Presets');
+
+        // Verify base themes, color picker, fonts, scale and curvature options
+        $response->assertSee('Cyberpunk 2077');
+        $response->assertSee('Nordic Forest');
+        $response->assertSee('Warm Sepia');
+        $response->assertSee('OLED Obsidian');
+        $response->assertSee('studioColorPicker', false);
+        $response->assertSee('Plus Jakarta Sans');
+        $response->assertSee('Space Grotesk');
+        $response->assertSee('Playfair Display');
+        $response->assertSee('Tech Dot-Matrix Background');
+    }
 }

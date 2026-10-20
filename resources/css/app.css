@@ -1,7 +1,7 @@
-@import url('https://fonts.googleapis.com/css2?family=Playfair+Display:ital,wght@0,400..900;1,400..900&family=Plus+Jakarta+Sans:ital,wght@0,300..800;1,300..800&display=swap');
+@import url('https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700;800&family=Outfit:wght@300;400;500;600;700;800&family=Playfair+Display:ital,wght@0,400..900;1,400..900&family=Plus+Jakarta+Sans:ital,wght@0,300..800;1,300..800&family=Poppins:wght@300;400;500;600;700&family=Space+Grotesk:wght@400;500;600;700&display=swap');
 @import 'tailwindcss';
 
-@custom-variant dark (&:is([data-admin-theme="dark"], [data-admin-theme="dark"] *, .dark, .dark *));
+@custom-variant dark (&:is([data-admin-theme="dark"], [data-admin-theme="oled"], [data-admin-theme="cyberpunk"], [data-admin-theme="nordic"], [data-admin-theme="sepia"], [data-admin-theme="dark"] *, .dark, .dark *));
 
 @source '../../vendor/laravel/framework/src/Illuminate/Pagination/resources/views/*.blade.php';
 @source '../../storage/framework/views/*.php';
@@ -122,6 +122,163 @@ body:not([data-admin-theme]) {
     --adm-shadow-sm: 0 1px 2px 0 rgba(0, 0, 0, 0.3);
     --adm-shadow-md: 0 4px 6px -1px rgba(0, 0, 0, 0.4), 0 2px 4px -2px rgba(0, 0, 0, 0.3);
     --adm-shadow-lg: 0 10px 15px -3px rgba(0, 0, 0, 0.5), 0 4px 6px -4px rgba(0, 0, 0, 0.4);
+}
+
+/* Admin OLED / True Black Obsidian Theme */
+[data-admin-theme="oled"] {
+    color-scheme: dark;
+    --adm-bg: #000000;
+    --adm-sidebar: #050505;
+    --adm-sidebar-border: #171717;
+    --adm-header: rgba(0, 0, 0, 0.94);
+    --adm-header-border: #171717;
+    --adm-card: #080808;
+    --adm-card-border: #1c1c1c;
+    --adm-card-hover: #121212;
+    --adm-text: #FFFFFF;
+    --adm-text-secondary: #E5E7EB;
+    --adm-text-muted: #9CA3AF;
+    --adm-banner-bg: linear-gradient(135deg, #09090b 0%, #18181b 100%);
+    --adm-banner-border: #27272a;
+    --adm-banner-text: #FFFFFF;
+    --adm-banner-muted: #A1A1AA;
+    --adm-table-head: #050505;
+    --adm-table-border: #171717;
+    --adm-table-hover: rgba(255, 255, 255, 0.05);
+    --adm-input-bg: #000000;
+    --adm-input-border: #262626;
+    --adm-input-focus: var(--adm-accent, #6366F1);
+    --adm-scrollbar-track: #000000;
+    --adm-scrollbar-thumb: #262626;
+    --adm-shadow-sm: 0 1px 2px 0 rgba(0, 0, 0, 0.8);
+    --adm-shadow-md: 0 4px 6px -1px rgba(0, 0, 0, 0.9);
+    --adm-shadow-lg: 0 10px 15px -3px rgba(0, 0, 0, 0.95);
+}
+
+/* Admin Cyberpunk / Synthwave Neon Theme */
+[data-admin-theme="cyberpunk"] {
+    color-scheme: dark;
+    --adm-bg: #07060f;
+    --adm-sidebar: #0d0a1c;
+    --adm-sidebar-border: #271a47;
+    --adm-header: rgba(13, 10, 28, 0.92);
+    --adm-header-border: #271a47;
+    --adm-card: #120e26;
+    --adm-card-border: #2b1c54;
+    --adm-card-hover: #1c153b;
+    --adm-text: #F8FAFC;
+    --adm-text-secondary: #E2E8F0;
+    --adm-text-muted: #A5B4FC;
+    --adm-banner-bg: linear-gradient(135deg, #3b0764 0%, #701a75 50%, #4c0519 100%);
+    --adm-banner-border: rgba(236, 72, 153, 0.4);
+    --adm-banner-text: #FFFFFF;
+    --adm-banner-muted: #FBCFE8;
+    --adm-table-head: #0d0a1c;
+    --adm-table-border: #271a47;
+    --adm-table-hover: rgba(192, 132, 252, 0.12);
+    --adm-input-bg: #080612;
+    --adm-input-border: #3b2075;
+    --adm-input-focus: #EC4899;
+    --adm-scrollbar-track: #07060f;
+    --adm-scrollbar-thumb: #3b2075;
+}
+
+/* Admin Nordic Forest (Deep Emerald) */
+[data-admin-theme="nordic"] {
+    color-scheme: dark;
+    --adm-bg: #030c0a;
+    --adm-sidebar: #061512;
+    --adm-sidebar-border: #112d26;
+    --adm-header: rgba(6, 21, 18, 0.92);
+    --adm-header-border: #112d26;
+    --adm-card: #091f1b;
+    --adm-card-border: #143b32;
+    --adm-card-hover: #0f2c26;
+    --adm-text: #F0FDF4;
+    --adm-text-secondary: #BBF7D0;
+    --adm-text-muted: #6EE7B7;
+    --adm-banner-bg: linear-gradient(135deg, #064E3B 0%, #065F46 50%, #047857 100%);
+    --adm-banner-border: rgba(52, 211, 153, 0.35);
+    --adm-banner-text: #FFFFFF;
+    --adm-banner-muted: #A7F3D0;
+    --adm-table-head: #061512;
+    --adm-table-border: #112d26;
+    --adm-table-hover: rgba(16, 185, 129, 0.12);
+    --adm-input-bg: #040f0c;
+    --adm-input-border: #143b32;
+    --adm-input-focus: #10B981;
+    --adm-scrollbar-track: #030c0a;
+    --adm-scrollbar-thumb: #143b32;
+}
+
+/* Admin Sepia / Espresso Warmth */
+[data-admin-theme="sepia"] {
+    color-scheme: dark;
+    --adm-bg: #12100d;
+    --adm-sidebar: #171410;
+    --adm-sidebar-border: #2c241c;
+    --adm-header: rgba(23, 20, 16, 0.92);
+    --adm-header-border: #2c241c;
+    --adm-card: #1d1914;
+    --adm-card-border: #382e23;
+    --adm-card-hover: #26211a;
+    --adm-text: #FEF3C7;
+    --adm-text-secondary: #FDE68A;
+    --adm-text-muted: #D97706;
+    --adm-banner-bg: linear-gradient(135deg, #78350F 0%, #92400E 50%, #451A03 100%);
+    --adm-banner-border: rgba(245, 158, 11, 0.35);
+    --adm-banner-text: #FFFFFF;
+    --adm-banner-muted: #FDE68A;
+    --adm-table-head: #171410;
+    --adm-table-border: #2c241c;
+    --adm-table-hover: rgba(245, 158, 11, 0.1);
+    --adm-input-bg: #13100d;
+    --adm-input-border: #382e23;
+    --adm-input-focus: #F59E0B;
+    --adm-scrollbar-track: #12100d;
+    --adm-scrollbar-thumb: #382e23;
+}
+
+/* Dynamic Typography Classes */
+html.font-jakarta, html.font-jakarta body { font-family: 'Plus Jakarta Sans', -apple-system, sans-serif !important; }
+html.font-inter, html.font-inter body { font-family: 'Inter', -apple-system, sans-serif !important; }
+html.font-outfit, html.font-outfit body { font-family: 'Outfit', -apple-system, sans-serif !important; }
+html.font-space, html.font-space body { font-family: 'Space Grotesk', -apple-system, sans-serif !important; }
+html.font-poppins, html.font-poppins body { font-family: 'Poppins', -apple-system, sans-serif !important; }
+html.font-serif-lux, html.font-serif-lux body { font-family: 'Playfair Display', Georgia, serif !important; }
+html.font-system, html.font-system body { font-family: system-ui, -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, sans-serif !important; }
+
+/* Scale / UI Density */
+html.scale-compact { font-size: 13.5px !important; }
+html.scale-standard { font-size: 14.5px !important; }
+html.scale-relaxed { font-size: 16px !important; }
+
+/* Corner Radius Classes */
+html.radius-sharp .adm-card, html.radius-sharp .rounded-2xl, html.radius-sharp .rounded-xl, html.radius-sharp .rounded-3xl, html.radius-sharp button:not(.rounded-full) { border-radius: 0px !important; }
+html.radius-subtle .adm-card, html.radius-subtle .rounded-2xl, html.radius-subtle .rounded-xl, html.radius-subtle .rounded-3xl, html.radius-subtle button:not(.rounded-full) { border-radius: 6px !important; }
+html.radius-curved .adm-card, html.radius-curved .rounded-2xl, html.radius-curved .rounded-xl, html.radius-curved .rounded-3xl, html.radius-curved button:not(.rounded-full) { border-radius: 14px !important; }
+html.radius-pill .adm-card, html.radius-pill .rounded-2xl, html.radius-pill .rounded-xl, html.radius-pill .rounded-3xl, html.radius-pill button:not(.rounded-full) { border-radius: 22px !important; }
+
+/* Optional Matrix Dot Grid Pattern */
+html.pattern-grid .adm-canvas {
+    background-image: radial-gradient(rgba(148, 163, 184, 0.12) 1px, transparent 1px) !important;
+    background-size: 20px 20px !important;
+}
+
+/* Continuous 360 Spin Animation */
+@keyframes spinContinuous {
+    0% { transform: rotate(0deg); }
+    100% { transform: rotate(360deg); }
+}
+
+.animate-spin-continuous {
+    animation: spinContinuous 6s linear infinite !important;
+    display: inline-block;
+    transform-origin: center center;
+}
+
+.animate-spin-continuous:hover {
+    animation: spinContinuous 1.8s linear infinite !important;
 }
 
 /* =========================================================

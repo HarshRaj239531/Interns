@@ -6,18 +6,70 @@
     <title>@yield('title', 'Admin Portal') – Infinity Interns</title>
     <link rel="icon" type="image/svg+xml" href="/favicon.svg">
     
-    <!-- Instant Zero-FOUC Theme Initializer -->
+    <!-- Instant Zero-FOUC Theme & Appearance Studio Initializer -->
     <script>
         (function() {
             try {
-                const savedTheme = localStorage.getItem('admin-theme') || 'dark';
-                document.documentElement.setAttribute('data-admin-theme', savedTheme);
-                if (savedTheme === 'dark') {
-                    document.documentElement.classList.add('dark');
+                let studio = {};
+                try {
+                    studio = JSON.parse(localStorage.getItem('admin-theme-studio') || '{}');
+                } catch (e) { studio = {}; }
+
+                const theme = studio.theme || localStorage.getItem('admin-theme') || 'dark';
+                const font = studio.font || 'jakarta';
+                const scale = studio.scale || 'standard';
+                const radius = studio.radius || 'curved';
+                const pattern = !!studio.pattern;
+                const accent = studio.accent || '#4f46e5';
+
+                const docEl = document.documentElement;
+                docEl.setAttribute('data-admin-theme', theme);
+                
+                if (theme === 'light') {
+                    docEl.classList.remove('dark');
                 } else {
-                    document.documentElement.classList.remove('dark');
+                    docEl.classList.add('dark');
                 }
-            } catch (e) {}
+
+                // Apply Font, Scale, Radius, Pattern classes
+                docEl.classList.remove('font-jakarta', 'font-inter', 'font-outfit', 'font-space', 'font-poppins', 'font-serif-lux', 'font-system');
+                docEl.classList.add('font-' + font);
+
+                docEl.classList.remove('scale-compact', 'scale-standard', 'scale-relaxed');
+                docEl.classList.add('scale-' + scale);
+
+                docEl.classList.remove('radius-sharp', 'radius-subtle', 'radius-curved', 'radius-pill');
+                docEl.classList.add('radius-' + radius);
+
+                if (pattern) {
+                    docEl.classList.add('pattern-grid');
+                } else {
+                    docEl.classList.remove('pattern-grid');
+                }
+
+                if (accent) {
+                    let accentStyle = document.getElementById('admin-custom-accent-style');
+                    if (!accentStyle) {
+                        accentStyle = document.createElement('style');
+                        accentStyle.id = 'admin-custom-accent-style';
+                        document.head.appendChild(accentStyle);
+                    }
+                    accentStyle.textContent = `
+                        :root {
+                            --adm-accent: ${accent} !important;
+                            --adm-accent-hover: ${accent} !important;
+                            --adm-accent-light: ${accent}1a !important;
+                        }
+                        .bg-indigo-600, .bg-indigo-700 { background-color: ${accent} !important; }
+                        .text-indigo-600, .dark\\:text-indigo-400 { color: ${accent} !important; }
+                        .border-indigo-500, .border-indigo-600 { border-color: ${accent} !important; }
+                        .hover\\:border-indigo-500\\/50:hover { border-color: ${accent}80 !important; }
+                        .focus\\:ring-indigo-500:focus, .focus\\:ring-indigo-600:focus { --tw-ring-color: ${accent} !important; }
+                    `;
+                }
+            } catch (e) {
+                console.error('Zero-FOUC init error:', e);
+            }
         })();
     </script>
 
@@ -251,10 +303,24 @@
             <div class="flex items-center gap-3">
                 <span class="text-xs adm-text-muted hidden sm:inline">{{ date('l, d M Y') }}</span>
 
-                <!-- Interactive Dark / Light Mode Switcher Toggle Button -->
-                <button type="button" onclick="toggleAdminTheme()" id="themeToggleBtn" title="Toggle Dark / Light Theme" class="flex items-center gap-2 px-3 py-1.5 rounded-full border border-slate-200 dark:border-slate-700 bg-slate-100 dark:bg-slate-800 text-slate-700 dark:text-slate-200 text-xs font-semibold hover:border-indigo-500 transition cursor-pointer shadow-xs">
+                <!-- Quick Dark / Light Switcher -->
+                <button type="button" onclick="quickToggleAdminTheme()" id="themeToggleBtn" title="Quick Theme Switch" class="flex items-center gap-2 px-3 py-1.5 rounded-full border border-slate-200 dark:border-slate-700/80 bg-slate-100 dark:bg-slate-800/90 text-slate-700 dark:text-slate-200 text-xs font-semibold hover:border-indigo-500/50 transition cursor-pointer shadow-xs">
                     <span id="themeIcon">🌙</span>
-                    <span id="themeLabel" class="hidden sm:inline">Dark</span>
+                    <span id="themeLabel" class="hidden sm:inline">Theme</span>
+                </button>
+
+                <!-- Continuously Animated Spinning Cog / Appearance Studio Trigger Button -->
+                <button type="button" onclick="openAdminCustomizer()" id="adminThemeStudioBtn" title="Open Admin Theme & Appearance Studio" class="relative group flex items-center gap-2 px-3.5 py-1.5 rounded-full border border-indigo-500/30 bg-gradient-to-r from-indigo-500/10 via-purple-500/10 to-pink-500/10 hover:from-indigo-500/20 hover:to-purple-500/20 text-indigo-700 dark:text-indigo-300 text-xs font-bold transition cursor-pointer shadow-xs overflow-hidden">
+                    <span class="absolute inset-0 bg-indigo-500/5 group-hover:bg-indigo-500/10 transition"></span>
+                    <!-- Continuous Smooth 360-degree Rotating Cog Icon (Always spins) -->
+                    <svg class="w-4 h-4 text-indigo-600 dark:text-indigo-400 animate-spin-continuous transition-transform" fill="none" stroke="currentColor" viewBox="0 0 24 24" xmlns="http://www.w3.org/2000/svg">
+                        <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M10.325 4.317c.426-1.756 2.924-1.756 3.35 0a1.724 1.724 0 002.573 1.066c1.543-.94 3.31.826 2.37 2.37a1.724 1.724 0 001.065 2.572c1.756.426 1.756 2.924 0 3.35a1.724 1.724 0 00-1.066 2.573c.94 1.543-.826 3.31-2.37 2.37a1.724 1.724 0 00-2.572 1.065c-.426 1.756-2.924 1.756-3.35 0a1.724 1.724 0 00-2.573-1.066c-1.543.94-3.31-.826-2.37-2.37a1.724 1.724 0 00-1.065-2.572c-1.756-.426-1.756-2.924 0-3.35a1.724 1.724 0 001.066-2.573c-.94-1.543.826-3.31 2.37-2.37.996.608 2.296.07 2.572-1.065z"></path>
+                        <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M15 12a3 3 0 11-6 0 3 3 0 016 0z"></path>
+                    </svg>
+                    <span class="relative z-10 flex items-center gap-1.5">
+                        <span class="font-semibold">Customize</span>
+                        <span class="w-1.5 h-1.5 rounded-full bg-emerald-400 animate-pulse"></span>
+                    </span>
                 </button>
 
                 <!-- Role Badge -->
@@ -337,33 +403,612 @@
     </div>
 
     <!-- Theme Controller JavaScript -->
+    <!-- =========================================================
+         ADMIN THEME & APPEARANCE STUDIO SLIDE-OVER DRAWER
+         ========================================================= -->
+    <!-- Backdrop Overlay -->
+    <div id="adminCustomizerBackdrop" onclick="closeAdminCustomizer()" class="fixed inset-0 bg-black/60 backdrop-blur-xs z-[100] transition-opacity duration-300 opacity-0 pointer-events-none"></div>
+
+    <!-- Drawer Panel -->
+    <div id="adminCustomizerDrawer" class="fixed top-0 right-0 bottom-0 w-full sm:w-[480px] bg-slate-900 text-slate-100 border-l border-slate-800 z-[101] flex flex-col shadow-2xl transition-transform duration-300 ease-out translate-x-full select-none">
+        <!-- Drawer Header -->
+        <div class="p-5 border-b border-slate-800 flex items-center justify-between shrink-0 bg-slate-950/60 backdrop-blur-md">
+            <div class="flex items-center gap-3">
+                <div class="w-9 h-9 rounded-xl bg-indigo-500/20 border border-indigo-500/30 flex items-center justify-center text-indigo-400">
+                    <!-- Spinning Cog Icon in Drawer Title -->
+                    <svg class="w-5 h-5 animate-spin-continuous" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                        <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M10.325 4.317c.426-1.756 2.924-1.756 3.35 0a1.724 1.724 0 002.573 1.066c1.543-.94 3.31.826 2.37 2.37a1.724 1.724 0 001.065 2.572c1.756.426 1.756 2.924 0 3.35a1.724 1.724 0 00-1.066 2.573c.94 1.543-.826 3.31-2.37 2.37a1.724 1.724 0 00-2.572 1.065c-.426 1.756-2.924 1.756-3.35 0a1.724 1.724 0 00-2.573-1.066c-1.543.94-3.31-.826-2.37-2.37a1.724 1.724 0 00-1.065-2.572c-1.756-.426-1.756-2.924 0-3.35a1.724 1.724 0 001.066-2.573c-.94-1.543.826-3.31 2.37-2.37.996.608 2.296.07 2.572-1.065z"></path>
+                        <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M15 12a3 3 0 11-6 0 3 3 0 016 0z"></path>
+                    </svg>
+                </div>
+                <div>
+                    <h3 class="font-bold text-sm text-white flex items-center gap-2">
+                        Appearance & Theme Studio
+                        <span class="text-[9px] px-2 py-0.5 rounded-full bg-emerald-500/20 text-emerald-400 font-mono font-semibold">LIVE</span>
+                    </h3>
+                    <p class="text-[11px] text-slate-400">Personalize colors, typography, scale & atmosphere</p>
+                </div>
+            </div>
+
+            <div class="flex items-center gap-2">
+                <button type="button" onclick="resetStudioDefaults()" title="Reset to Factory Defaults" class="px-2.5 py-1.5 text-[11px] font-semibold text-slate-400 hover:text-white rounded-lg hover:bg-slate-800 transition cursor-pointer">
+                    Reset
+                </button>
+                <button type="button" onclick="closeAdminCustomizer()" class="w-8 h-8 rounded-lg flex items-center justify-center text-slate-400 hover:text-white hover:bg-slate-800 transition text-lg cursor-pointer">
+                    &times;
+                </button>
+            </div>
+        </div>
+
+        <!-- Drawer Content (Scrollable) -->
+        <div class="flex-1 overflow-y-auto p-5 space-y-6 adm-sidebar-scroll">
+            <!-- 1-Click Master Presets -->
+            <div class="space-y-2.5">
+                <label class="text-xs font-bold text-slate-300 uppercase tracking-wider flex items-center justify-between">
+                    <span>⚡ 1-Click Master Presets</span>
+                    <span class="text-[10px] text-slate-500 normal-case">Fast instant switch</span>
+                </label>
+                <div class="grid grid-cols-2 gap-2 text-xs">
+                    <button type="button" onclick="applyMasterPreset('midnight')" class="p-2.5 rounded-xl border border-slate-800 bg-slate-800/60 hover:border-indigo-500 text-left transition cursor-pointer group flex items-center gap-2.5">
+                        <span class="w-3.5 h-3.5 rounded-full bg-indigo-500 shrink-0"></span>
+                        <div>
+                            <span class="font-semibold text-slate-200 block group-hover:text-white">Deep Midnight</span>
+                            <span class="text-[10px] text-slate-400 block">Default Slate</span>
+                        </div>
+                    </button>
+                    <button type="button" onclick="applyMasterPreset('cyberpunk')" class="p-2.5 rounded-xl border border-slate-800 bg-slate-800/60 hover:border-cyan-400 text-left transition cursor-pointer group flex items-center gap-2.5">
+                        <span class="w-3.5 h-3.5 rounded-full bg-cyan-400 shrink-0 shadow-[0_0_8px_rgba(6,182,212,0.8)]"></span>
+                        <div>
+                            <span class="font-semibold text-cyan-300 block group-hover:text-white">Cyberpunk 2077</span>
+                            <span class="text-[10px] text-slate-400 block">Neon Glow</span>
+                        </div>
+                    </button>
+                    <button type="button" onclick="applyMasterPreset('oled')" class="p-2.5 rounded-xl border border-slate-800 bg-slate-800/60 hover:border-slate-500 text-left transition cursor-pointer group flex items-center gap-2.5">
+                        <span class="w-3.5 h-3.5 rounded-full bg-neutral-900 border border-neutral-700 shrink-0"></span>
+                        <div>
+                            <span class="font-semibold text-slate-200 block group-hover:text-white">OLED Obsidian</span>
+                            <span class="text-[10px] text-slate-400 block">Pitch Black</span>
+                        </div>
+                    </button>
+                    <button type="button" onclick="applyMasterPreset('nordic')" class="p-2.5 rounded-xl border border-slate-800 bg-slate-800/60 hover:border-emerald-500 text-left transition cursor-pointer group flex items-center gap-2.5">
+                        <span class="w-3.5 h-3.5 rounded-full bg-emerald-500 shrink-0"></span>
+                        <div>
+                            <span class="font-semibold text-emerald-300 block group-hover:text-white">Nordic Forest</span>
+                            <span class="text-[10px] text-slate-400 block">Deep Emerald</span>
+                        </div>
+                    </button>
+                    <button type="button" onclick="applyMasterPreset('sepia')" class="p-2.5 rounded-xl border border-slate-800 bg-slate-800/60 hover:border-amber-500 text-left transition cursor-pointer group flex items-center gap-2.5">
+                        <span class="w-3.5 h-3.5 rounded-full bg-amber-500 shrink-0"></span>
+                        <div>
+                            <span class="font-semibold text-amber-300 block group-hover:text-white">Warm Sepia</span>
+                            <span class="text-[10px] text-slate-400 block">Espresso Tone</span>
+                        </div>
+                    </button>
+                    <button type="button" onclick="applyMasterPreset('light')" class="p-2.5 rounded-xl border border-slate-800 bg-slate-800/60 hover:border-indigo-400 text-left transition cursor-pointer group flex items-center gap-2.5">
+                        <span class="w-3.5 h-3.5 rounded-full bg-white border border-slate-300 shrink-0"></span>
+                        <div>
+                            <span class="font-semibold text-slate-200 block group-hover:text-white">Paper White</span>
+                            <span class="text-[10px] text-slate-400 block">Crisp Light</span>
+                        </div>
+                    </button>
+                </div>
+            </div>
+
+            <!-- Base Theme Environment Selection -->
+            <div class="space-y-2.5">
+                <label class="text-xs font-bold text-slate-300 uppercase tracking-wider block">
+                    🎨 Workspace Theme Base
+                </label>
+                <div class="grid grid-cols-3 gap-2" id="themeBaseSelector">
+                    <button type="button" onclick="setAdminTheme('dark')" data-theme-val="dark" class="theme-chip p-2.5 rounded-xl border border-slate-800 bg-slate-800/50 hover:bg-slate-800 text-center transition cursor-pointer flex flex-col items-center gap-1.5">
+                        <span class="text-base">🌙</span>
+                        <span class="text-xs font-semibold text-slate-200">Dark Slate</span>
+                    </button>
+                    <button type="button" onclick="setAdminTheme('oled')" data-theme-val="oled" class="theme-chip p-2.5 rounded-xl border border-slate-800 bg-slate-800/50 hover:bg-slate-800 text-center transition cursor-pointer flex flex-col items-center gap-1.5">
+                        <span class="text-base">⚫</span>
+                        <span class="text-xs font-semibold text-slate-200">OLED Black</span>
+                    </button>
+                    <button type="button" onclick="setAdminTheme('light')" data-theme-val="light" class="theme-chip p-2.5 rounded-xl border border-slate-800 bg-slate-800/50 hover:bg-slate-800 text-center transition cursor-pointer flex flex-col items-center gap-1.5">
+                        <span class="text-base">☀️</span>
+                        <span class="text-xs font-semibold text-slate-200">Pure Light</span>
+                    </button>
+                    <button type="button" onclick="setAdminTheme('cyberpunk')" data-theme-val="cyberpunk" class="theme-chip p-2.5 rounded-xl border border-slate-800 bg-slate-800/50 hover:bg-slate-800 text-center transition cursor-pointer flex flex-col items-center gap-1.5">
+                        <span class="text-base">🔮</span>
+                        <span class="text-xs font-semibold text-slate-200">Cyberpunk</span>
+                    </button>
+                    <button type="button" onclick="setAdminTheme('nordic')" data-theme-val="nordic" class="theme-chip p-2.5 rounded-xl border border-slate-800 bg-slate-800/50 hover:bg-slate-800 text-center transition cursor-pointer flex flex-col items-center gap-1.5">
+                        <span class="text-base">🌲</span>
+                        <span class="text-xs font-semibold text-slate-200">Nordic Pine</span>
+                    </button>
+                    <button type="button" onclick="setAdminTheme('sepia')" data-theme-val="sepia" class="theme-chip p-2.5 rounded-xl border border-slate-800 bg-slate-800/50 hover:bg-slate-800 text-center transition cursor-pointer flex flex-col items-center gap-1.5">
+                        <span class="text-base">☕</span>
+                        <span class="text-xs font-semibold text-slate-200">Warm Sepia</span>
+                    </button>
+                </div>
+            </div>
+
+            <!-- Primary Accent Color Studio & Custom Color Picker -->
+            <div class="space-y-2.5">
+                <div class="flex items-center justify-between">
+                    <label class="text-xs font-bold text-slate-300 uppercase tracking-wider">
+                        🌈 Primary Accent Color
+                    </label>
+                    <span id="activeAccentLabel" class="text-xs font-mono font-bold text-indigo-400">#4f46e5</span>
+                </div>
+                
+                <!-- Preset Color Circles -->
+                <div class="flex flex-wrap items-center gap-2.5 pt-1">
+                    <button type="button" onclick="setAdminAccent('#4f46e5')" data-color="#4f46e5" title="Indigo Classic" class="accent-circle w-8 h-8 rounded-full bg-[#4f46e5] border-2 border-transparent hover:scale-110 transition cursor-pointer shadow-sm"></button>
+                    <button type="button" onclick="setAdminAccent('#8b5cf6')" data-color="#8b5cf6" title="Electric Violet" class="accent-circle w-8 h-8 rounded-full bg-[#8b5cf6] border-2 border-transparent hover:scale-110 transition cursor-pointer shadow-sm"></button>
+                    <button type="button" onclick="setAdminAccent('#10b981')" data-color="#10b981" title="Emerald Green" class="accent-circle w-8 h-8 rounded-full bg-[#10b981] border-2 border-transparent hover:scale-110 transition cursor-pointer shadow-sm"></button>
+                    <button type="button" onclick="setAdminAccent('#f43f5e')" data-color="#f43f5e" title="Crimson Rose" class="accent-circle w-8 h-8 rounded-full bg-[#f43f5e] border-2 border-transparent hover:scale-110 transition cursor-pointer shadow-sm"></button>
+                    <button type="button" onclick="setAdminAccent('#06b6d4')" data-color="#06b6d4" title="Cyan Aqua" class="accent-circle w-8 h-8 rounded-full bg-[#06b6d4] border-2 border-transparent hover:scale-110 transition cursor-pointer shadow-sm"></button>
+                    <button type="button" onclick="setAdminAccent('#f59e0b')" data-color="#f59e0b" title="Amber Gold" class="accent-circle w-8 h-8 rounded-full bg-[#f59e0b] border-2 border-transparent hover:scale-110 transition cursor-pointer shadow-sm"></button>
+                    <button type="button" onclick="setAdminAccent('#f97316')" data-color="#f97316" title="Tangerine Orange" class="accent-circle w-8 h-8 rounded-full bg-[#f97316] border-2 border-transparent hover:scale-110 transition cursor-pointer shadow-sm"></button>
+                    <button type="button" onclick="setAdminAccent('#0284c7')" data-color="#0284c7" title="Sky Blue" class="accent-circle w-8 h-8 rounded-full bg-[#0284c7] border-2 border-transparent hover:scale-110 transition cursor-pointer shadow-sm"></button>
+                    <button type="button" onclick="setAdminAccent('#ec4899')" data-color="#ec4899" title="Neon Pink" class="accent-circle w-8 h-8 rounded-full bg-[#ec4899] border-2 border-transparent hover:scale-110 transition cursor-pointer shadow-sm"></button>
+                </div>
+
+                <!-- Custom Hex & HTML5 Color Picker -->
+                <div class="mt-3 p-3 rounded-xl border border-slate-800 bg-slate-800/40 flex items-center justify-between gap-3">
+                    <div class="flex items-center gap-2.5">
+                        <input type="color" id="studioColorPicker" oninput="setAdminAccent(this.value)" value="#4f46e5" class="w-8 h-8 rounded-lg cursor-pointer border border-slate-700 bg-transparent p-0.5">
+                        <div>
+                            <span class="text-xs font-semibold text-slate-200 block">Custom Color Picker</span>
+                            <span class="text-[10px] text-slate-400 block">Pick any arbitrary color</span>
+                        </div>
+                    </div>
+                    <input type="text" id="studioHexInput" onchange="if(/^#[0-9A-Fa-f]{6}$/.test(this.value)){ setAdminAccent(this.value); }" value="#4f46e5" class="w-24 px-2.5 py-1 rounded-lg border border-slate-700 bg-slate-900 text-xs font-mono font-bold text-center text-slate-200 focus:border-indigo-500 focus:outline-hidden">
+                </div>
+            </div>
+
+            <!-- Typography & Font Family -->
+            <div class="space-y-2.5">
+                <label class="text-xs font-bold text-slate-300 uppercase tracking-wider block">
+                    ✍️ Typography & Font Family
+                </label>
+                <div class="space-y-1.5" id="fontSelector">
+                    <button type="button" onclick="setAdminFont('jakarta')" data-font-val="jakarta" class="font-chip w-full p-2.5 rounded-xl border border-slate-800 bg-slate-800/40 hover:bg-slate-800 text-left transition cursor-pointer flex items-center justify-between">
+                        <div>
+                            <span class="text-xs font-bold text-slate-200 block" style="font-family: 'Plus Jakarta Sans', sans-serif;">Plus Jakarta Sans</span>
+                            <span class="text-[10px] text-slate-400">Modern, geometric and clean (Default)</span>
+                        </div>
+                        <span class="text-xs text-indigo-400 font-mono check-indicator">✓</span>
+                    </button>
+                    <button type="button" onclick="setAdminFont('inter')" data-font-val="inter" class="font-chip w-full p-2.5 rounded-xl border border-slate-800 bg-slate-800/40 hover:bg-slate-800 text-left transition cursor-pointer flex items-center justify-between">
+                        <div>
+                            <span class="text-xs font-bold text-slate-200 block" style="font-family: 'Inter', sans-serif;">Inter</span>
+                            <span class="text-[10px] text-slate-400">Silicon valley precision interface standard</span>
+                        </div>
+                        <span class="text-xs text-indigo-400 font-mono check-indicator hidden">✓</span>
+                    </button>
+                    <button type="button" onclick="setAdminFont('outfit')" data-font-val="outfit" class="font-chip w-full p-2.5 rounded-xl border border-slate-800 bg-slate-800/40 hover:bg-slate-800 text-left transition cursor-pointer flex items-center justify-between">
+                        <div>
+                            <span class="text-xs font-bold text-slate-200 block" style="font-family: 'Outfit', sans-serif;">Outfit</span>
+                            <span class="text-[10px] text-slate-400">Dynamic display font with stylish curves</span>
+                        </div>
+                        <span class="text-xs text-indigo-400 font-mono check-indicator hidden">✓</span>
+                    </button>
+                    <button type="button" onclick="setAdminFont('space')" data-font-val="space" class="font-chip w-full p-2.5 rounded-xl border border-slate-800 bg-slate-800/40 hover:bg-slate-800 text-left transition cursor-pointer flex items-center justify-between">
+                        <div>
+                            <span class="text-xs font-bold text-slate-200 block" style="font-family: 'Space Grotesk', sans-serif;">Space Grotesk</span>
+                            <span class="text-[10px] text-slate-400">Cyber & tech brutalist monospace feel</span>
+                        </div>
+                        <span class="text-xs text-indigo-400 font-mono check-indicator hidden">✓</span>
+                    </button>
+                    <button type="button" onclick="setAdminFont('poppins')" data-font-val="poppins" class="font-chip w-full p-2.5 rounded-xl border border-slate-800 bg-slate-800/40 hover:bg-slate-800 text-left transition cursor-pointer flex items-center justify-between">
+                        <div>
+                            <span class="text-xs font-bold text-slate-200 block" style="font-family: 'Poppins', sans-serif;">Poppins</span>
+                            <span class="text-[10px] text-slate-400">Soft geometric rounded letterforms</span>
+                        </div>
+                        <span class="text-xs text-indigo-400 font-mono check-indicator hidden">✓</span>
+                    </button>
+                    <button type="button" onclick="setAdminFont('serif-lux')" data-font-val="serif-lux" class="font-chip w-full p-2.5 rounded-xl border border-slate-800 bg-slate-800/40 hover:bg-slate-800 text-left transition cursor-pointer flex items-center justify-between">
+                        <div>
+                            <span class="text-xs font-bold text-slate-200 block" style="font-family: 'Playfair Display', serif;">Playfair Display</span>
+                            <span class="text-[10px] text-slate-400">Luxury editorial serif typography</span>
+                        </div>
+                        <span class="text-xs text-indigo-400 font-mono check-indicator hidden">✓</span>
+                    </button>
+                    <button type="button" onclick="setAdminFont('system')" data-font-val="system" class="font-chip w-full p-2.5 rounded-xl border border-slate-800 bg-slate-800/40 hover:bg-slate-800 text-left transition cursor-pointer flex items-center justify-between">
+                        <div>
+                            <span class="text-xs font-bold text-slate-200 block" style="font-family: system-ui, sans-serif;">System Native</span>
+                            <span class="text-[10px] text-slate-400">Fastest zero-network OS system UI</span>
+                        </div>
+                        <span class="text-xs text-indigo-400 font-mono check-indicator hidden">✓</span>
+                    </button>
+                </div>
+            </div>
+
+            <!-- UI Scale & Density -->
+            <div class="space-y-2.5">
+                <label class="text-xs font-bold text-slate-300 uppercase tracking-wider block">
+                    📏 UI Scale & Information Density
+                </label>
+                <div class="grid grid-cols-3 gap-2" id="scaleSelector">
+                    <button type="button" onclick="setAdminScale('compact')" data-scale-val="compact" class="scale-chip p-2.5 rounded-xl border border-slate-800 bg-slate-800/40 hover:bg-slate-800 text-center transition cursor-pointer">
+                        <span class="text-xs font-bold text-slate-200 block">Compact</span>
+                        <span class="text-[10px] text-slate-400 block">Dense (88%)</span>
+                    </button>
+                    <button type="button" onclick="setAdminScale('standard')" data-scale-val="standard" class="scale-chip p-2.5 rounded-xl border border-slate-800 bg-slate-800/40 hover:bg-slate-800 text-center transition cursor-pointer">
+                        <span class="text-xs font-bold text-slate-200 block">Standard</span>
+                        <span class="text-[10px] text-slate-400 block">Normal (100%)</span>
+                    </button>
+                    <button type="button" onclick="setAdminScale('relaxed')" data-scale-val="relaxed" class="scale-chip p-2.5 rounded-xl border border-slate-800 bg-slate-800/40 hover:bg-slate-800 text-center transition cursor-pointer">
+                        <span class="text-xs font-bold text-slate-200 block">Relaxed</span>
+                        <span class="text-[10px] text-slate-400 block">Large (112%)</span>
+                    </button>
+                </div>
+            </div>
+
+            <!-- Corner Smoothness / Radius -->
+            <div class="space-y-2.5">
+                <label class="text-xs font-bold text-slate-300 uppercase tracking-wider block">
+                    📐 Corner Curvature / Radius
+                </label>
+                <div class="grid grid-cols-4 gap-2" id="radiusSelector">
+                    <button type="button" onclick="setAdminRadius('sharp')" data-radius-val="sharp" class="radius-chip p-2 rounded-xl border border-slate-800 bg-slate-800/40 hover:bg-slate-800 text-center transition cursor-pointer">
+                        <div class="w-6 h-6 border-t-2 border-l-2 border-indigo-400 mx-auto mb-1"></div>
+                        <span class="text-[11px] font-semibold text-slate-200 block">Sharp</span>
+                    </button>
+                    <button type="button" onclick="setAdminRadius('subtle')" data-radius-val="subtle" class="radius-chip p-2 rounded-xl border border-slate-800 bg-slate-800/40 hover:bg-slate-800 text-center transition cursor-pointer">
+                        <div class="w-6 h-6 border-t-2 border-l-2 border-indigo-400 rounded-tl-sm mx-auto mb-1"></div>
+                        <span class="text-[11px] font-semibold text-slate-200 block">Subtle</span>
+                    </button>
+                    <button type="button" onclick="setAdminRadius('curved')" data-radius-val="curved" class="radius-chip p-2 rounded-xl border border-slate-800 bg-slate-800/40 hover:bg-slate-800 text-center transition cursor-pointer">
+                        <div class="w-6 h-6 border-t-2 border-l-2 border-indigo-400 rounded-tl-xl mx-auto mb-1"></div>
+                        <span class="text-[11px] font-semibold text-slate-200 block">Curved</span>
+                    </button>
+                    <button type="button" onclick="setAdminRadius('pill')" data-radius-val="pill" class="radius-chip p-2 rounded-xl border border-slate-800 bg-slate-800/40 hover:bg-slate-800 text-center transition cursor-pointer">
+                        <div class="w-6 h-6 border-t-2 border-l-2 border-indigo-400 rounded-tl-full mx-auto mb-1"></div>
+                        <span class="text-[11px] font-semibold text-slate-200 block">Pill</span>
+                    </button>
+                </div>
+            </div>
+
+            <!-- Atmosphere Toggles -->
+            <div class="space-y-2.5">
+                <label class="text-xs font-bold text-slate-300 uppercase tracking-wider block">
+                    ✨ Visual Atmosphere
+                </label>
+                <div class="p-3 rounded-xl border border-slate-800 bg-slate-800/40 flex items-center justify-between">
+                    <div>
+                        <span class="text-xs font-semibold text-slate-200 block">Tech Dot-Matrix Background</span>
+                        <span class="text-[10px] text-slate-400 block">Subtle geometric grid backdrop</span>
+                    </div>
+                    <label class="relative inline-flex items-center cursor-pointer">
+                        <input type="checkbox" id="patternToggle" onchange="toggleAdminPattern(this.checked)" class="sr-only peer">
+                        <div class="w-11 h-6 bg-slate-700 peer-focus:outline-hidden rounded-full peer peer-checked:after:translate-x-full peer-checked:after:border-white after:content-[''] after:absolute after:top-[2px] after:left-[2px] after:bg-white after:border-slate-300 after:border after:rounded-full after:h-5 after:w-5 after:transition-all peer-checked:bg-indigo-600"></div>
+                    </label>
+                </div>
+            </div>
+        </div>
+
+        <!-- Drawer Footer -->
+        <div class="p-4 border-t border-slate-800 bg-slate-950/80 backdrop-blur-md flex items-center justify-between shrink-0">
+            <span class="text-[11px] text-slate-400 flex items-center gap-1.5">
+                <span class="w-2 h-2 rounded-full bg-emerald-500 animate-pulse"></span>
+                <span>Auto-saved to your profile</span>
+            </span>
+            <button type="button" onclick="closeAdminCustomizer()" class="px-5 py-2 rounded-xl bg-indigo-600 hover:bg-indigo-500 text-white font-bold text-xs shadow-md transition cursor-pointer">
+                Done
+            </button>
+        </div>
+    </div>
+
+    <!-- Scripts Section -->
     <script>
+        // State Store
+        let adminStudio = {
+            theme: 'dark',
+            accent: '#4f46e5',
+            font: 'jakarta',
+            scale: 'standard',
+            radius: 'curved',
+            pattern: false
+        };
+
+        // Initialize state from localStorage
+        (function loadStudioState() {
+            try {
+                const saved = JSON.parse(localStorage.getItem('admin-theme-studio') || '{}');
+                adminStudio = Object.assign(adminStudio, saved);
+                // Also respect legacy admin-theme if available and no studio theme set
+                if (!saved.theme && localStorage.getItem('admin-theme')) {
+                    adminStudio.theme = localStorage.getItem('admin-theme');
+                }
+            } catch (e) {
+                console.error(e);
+            }
+        })();
+
+        function saveStudioState() {
+            try {
+                localStorage.setItem('admin-theme-studio', JSON.stringify(adminStudio));
+                localStorage.setItem('admin-theme', adminStudio.theme);
+            } catch (e) {}
+        }
+
         function updateThemeUI(theme) {
             const icon = document.getElementById('themeIcon');
             const label = document.getElementById('themeLabel');
-            if (!icon || !label) return;
+            if (icon && label) {
+                if (theme === 'light') {
+                    icon.textContent = '☀️';
+                    label.textContent = 'Light';
+                } else if (theme === 'oled') {
+                    icon.textContent = '⚫';
+                    label.textContent = 'OLED';
+                } else if (theme === 'cyberpunk') {
+                    icon.textContent = '🔮';
+                    label.textContent = 'Cyber';
+                } else if (theme === 'nordic') {
+                    icon.textContent = '🌲';
+                    label.textContent = 'Nordic';
+                } else if (theme === 'sepia') {
+                    icon.textContent = '☕';
+                    label.textContent = 'Sepia';
+                } else {
+                    icon.textContent = '🌙';
+                    label.textContent = 'Dark';
+                }
+            }
 
+            // Update Theme Chips in Drawer
+            document.querySelectorAll('#themeBaseSelector button').forEach(btn => {
+                const val = btn.getAttribute('data-theme-val');
+                if (val === theme) {
+                    btn.classList.add('border-indigo-500', 'bg-indigo-600/20');
+                    btn.classList.remove('border-slate-800', 'bg-slate-800/50');
+                } else {
+                    btn.classList.remove('border-indigo-500', 'bg-indigo-600/20');
+                    btn.classList.add('border-slate-800', 'bg-slate-800/50');
+                }
+            });
+        }
+
+        function setAdminTheme(theme) {
+            adminStudio.theme = theme;
+            const docEl = document.documentElement;
+            docEl.setAttribute('data-admin-theme', theme);
             if (theme === 'light') {
-                icon.textContent = '☀️';
-                label.textContent = 'Light';
+                docEl.classList.remove('dark');
             } else {
-                icon.textContent = '🌙';
-                label.textContent = 'Dark';
+                docEl.classList.add('dark');
+            }
+            saveStudioState();
+            updateThemeUI(theme);
+        }
+
+        function quickToggleAdminTheme() {
+            const current = adminStudio.theme;
+            const next = current === 'dark' ? 'light' : 'dark';
+            setAdminTheme(next);
+        }
+
+        function setAdminAccent(hex) {
+            if (!hex) return;
+            adminStudio.accent = hex;
+            
+            let accentStyle = document.getElementById('admin-custom-accent-style');
+            if (!accentStyle) {
+                accentStyle = document.createElement('style');
+                accentStyle.id = 'admin-custom-accent-style';
+                document.head.appendChild(accentStyle);
+            }
+
+            accentStyle.textContent = `
+                :root {
+                    --adm-accent: ${hex} !important;
+                    --adm-accent-hover: ${hex} !important;
+                    --adm-accent-light: ${hex}1a !important;
+                }
+                .bg-indigo-600, .bg-indigo-700 { background-color: ${hex} !important; }
+                .text-indigo-600, .dark\\:text-indigo-400 { color: ${hex} !important; }
+                .border-indigo-500, .border-indigo-600 { border-color: ${hex} !important; }
+                .hover\\:border-indigo-500\\/50:hover { border-color: ${hex}80 !important; }
+                .focus\\:ring-indigo-500:focus, .focus\\:ring-indigo-600:focus { --tw-ring-color: ${hex} !important; }
+            `;
+
+            const label = document.getElementById('activeAccentLabel');
+            if (label) label.textContent = hex;
+
+            const picker = document.getElementById('studioColorPicker');
+            if (picker && picker.value !== hex) picker.value = hex;
+
+            const hexInput = document.getElementById('studioHexInput');
+            if (hexInput && hexInput.value !== hex) hexInput.value = hex;
+
+            // Highlight matching preset swatch
+            document.querySelectorAll('.accent-circle').forEach(btn => {
+                if (btn.getAttribute('data-color') === hex) {
+                    btn.classList.add('ring-2', 'ring-white', 'ring-offset-2', 'ring-offset-slate-900');
+                } else {
+                    btn.classList.remove('ring-2', 'ring-white', 'ring-offset-2', 'ring-offset-slate-900');
+                }
+            });
+
+            saveStudioState();
+        }
+
+        function setAdminFont(font) {
+            adminStudio.font = font;
+            const docEl = document.documentElement;
+            docEl.classList.remove('font-jakarta', 'font-inter', 'font-outfit', 'font-space', 'font-poppins', 'font-serif-lux', 'font-system');
+            docEl.classList.add('font-' + font);
+
+            document.querySelectorAll('#fontSelector button').forEach(btn => {
+                const val = btn.getAttribute('data-font-val');
+                const check = btn.querySelector('.check-indicator');
+                if (val === font) {
+                    btn.classList.add('border-indigo-500', 'bg-indigo-600/10');
+                    if (check) check.classList.remove('hidden');
+                } else {
+                    btn.classList.remove('border-indigo-500', 'bg-indigo-600/10');
+                    if (check) check.classList.add('hidden');
+                }
+            });
+
+            saveStudioState();
+        }
+
+        function setAdminScale(scale) {
+            adminStudio.scale = scale;
+            const docEl = document.documentElement;
+            docEl.classList.remove('scale-compact', 'scale-standard', 'scale-relaxed');
+            docEl.classList.add('scale-' + scale);
+
+            document.querySelectorAll('#scaleSelector button').forEach(btn => {
+                const val = btn.getAttribute('data-scale-val');
+                if (val === scale) {
+                    btn.classList.add('border-indigo-500', 'bg-indigo-600/20');
+                    btn.classList.remove('border-slate-800', 'bg-slate-800/40');
+                } else {
+                    btn.classList.remove('border-indigo-500', 'bg-indigo-600/20');
+                    btn.classList.add('border-slate-800', 'bg-slate-800/40');
+                }
+            });
+
+            saveStudioState();
+        }
+
+        function setAdminRadius(radius) {
+            adminStudio.radius = radius;
+            const docEl = document.documentElement;
+            docEl.classList.remove('radius-sharp', 'radius-subtle', 'radius-curved', 'radius-pill');
+            docEl.classList.add('radius-' + radius);
+
+            document.querySelectorAll('#radiusSelector button').forEach(btn => {
+                const val = btn.getAttribute('data-radius-val');
+                if (val === radius) {
+                    btn.classList.add('border-indigo-500', 'bg-indigo-600/20');
+                    btn.classList.remove('border-slate-800', 'bg-slate-800/40');
+                } else {
+                    btn.classList.remove('border-indigo-500', 'bg-indigo-600/20');
+                    btn.classList.add('border-slate-800', 'bg-slate-800/40');
+                }
+            });
+
+            saveStudioState();
+        }
+
+        function toggleAdminPattern(enabled) {
+            adminStudio.pattern = !!enabled;
+            const docEl = document.documentElement;
+            if (adminStudio.pattern) {
+                docEl.classList.add('pattern-grid');
+            } else {
+                docEl.classList.remove('pattern-grid');
+            }
+            const toggle = document.getElementById('patternToggle');
+            if (toggle) toggle.checked = adminStudio.pattern;
+            saveStudioState();
+        }
+
+        function applyMasterPreset(preset) {
+            if (preset === 'midnight') {
+                setAdminTheme('dark');
+                setAdminAccent('#4f46e5');
+                setAdminFont('jakarta');
+                setAdminScale('standard');
+                setAdminRadius('curved');
+                toggleAdminPattern(false);
+            } else if (preset === 'cyberpunk') {
+                setAdminTheme('cyberpunk');
+                setAdminAccent('#06b6d4');
+                setAdminFont('space');
+                setAdminScale('compact');
+                setAdminRadius('sharp');
+                toggleAdminPattern(true);
+            } else if (preset === 'oled') {
+                setAdminTheme('oled');
+                setAdminAccent('#3b82f6');
+                setAdminFont('inter');
+                setAdminScale('standard');
+                setAdminRadius('subtle');
+                toggleAdminPattern(false);
+            } else if (preset === 'nordic') {
+                setAdminTheme('nordic');
+                setAdminAccent('#10b981');
+                setAdminFont('outfit');
+                setAdminScale('standard');
+                setAdminRadius('curved');
+                toggleAdminPattern(false);
+            } else if (preset === 'sepia') {
+                setAdminTheme('sepia');
+                setAdminAccent('#f59e0b');
+                setAdminFont('serif-lux');
+                setAdminScale('relaxed');
+                setAdminRadius('subtle');
+                toggleAdminPattern(false);
+            } else if (preset === 'light') {
+                setAdminTheme('light');
+                setAdminAccent('#4f46e5');
+                setAdminFont('jakarta');
+                setAdminScale('standard');
+                setAdminRadius('curved');
+                toggleAdminPattern(false);
             }
         }
 
-        function toggleAdminTheme() {
-            const current = document.documentElement.getAttribute('data-admin-theme') === 'light' ? 'light' : 'dark';
-            const next = current === 'dark' ? 'light' : 'dark';
-            document.documentElement.setAttribute('data-admin-theme', next);
-            if (next === 'dark') {
-                document.documentElement.classList.add('dark');
-            } else {
-                document.documentElement.classList.remove('dark');
-            }
-            localStorage.setItem('admin-theme', next);
-            updateThemeUI(next);
+        function resetStudioDefaults() {
+            applyMasterPreset('midnight');
+            localStorage.removeItem('admin-theme-studio');
+            localStorage.removeItem('admin-theme');
         }
+
+        function openAdminCustomizer() {
+            const drawer = document.getElementById('adminCustomizerDrawer');
+            const backdrop = document.getElementById('adminCustomizerBackdrop');
+            if (!drawer || !backdrop) return;
+
+            // Sync UI state before showing
+            updateThemeUI(adminStudio.theme);
+            setAdminAccent(adminStudio.accent);
+            setAdminFont(adminStudio.font);
+            setAdminScale(adminStudio.scale);
+            setAdminRadius(adminStudio.radius);
+            toggleAdminPattern(adminStudio.pattern);
+
+            backdrop.classList.remove('pointer-events-none');
+            backdrop.classList.remove('opacity-0');
+            backdrop.classList.add('opacity-100');
+
+            drawer.classList.remove('translate-x-full');
+            drawer.classList.add('translate-x-0');
+            document.body.classList.add('overflow-hidden');
+        }
+
+        function closeAdminCustomizer() {
+            const drawer = document.getElementById('adminCustomizerDrawer');
+            const backdrop = document.getElementById('adminCustomizerBackdrop');
+            if (!drawer || !backdrop) return;
+
+            drawer.classList.remove('translate-x-0');
+            drawer.classList.add('translate-x-full');
+
+            backdrop.classList.remove('opacity-100');
+            backdrop.classList.add('opacity-0');
+            backdrop.classList.add('pointer-events-none');
+            document.body.classList.remove('overflow-hidden');
+        }
+
+        // Initialize UI labels on page load
+        document.addEventListener('DOMContentLoaded', function() {
+            updateThemeUI(adminStudio.theme);
+            setAdminAccent(adminStudio.accent);
+            setAdminFont(adminStudio.font);
+            setAdminScale(adminStudio.scale);
+            setAdminRadius(adminStudio.radius);
+            toggleAdminPattern(adminStudio.pattern);
+        });
+
+        // Close drawer on Escape key
+        document.addEventListener('keydown', function(e) {
+            if (e.key === 'Escape') {
+                closeAdminCustomizer();
+            }
+        });
 
         // Copy Student Credentials to Clipboard
         function copyStudentCredentials(email, password, name, appNumber) {
