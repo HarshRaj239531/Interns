@@ -35,10 +35,19 @@ class AuthController extends Controller
             $user = Auth::user();
 
             if ($user->isAdmin()) {
-                return redirect()->intended(route('admin.dashboard'))->with('success', 'Welcome back, Administrator');
+                $intended = $request->session()->pull('url.intended', route('admin.dashboard'));
+                $target = str_contains($intended, '/admin') ? $intended : route('admin.dashboard');
+
+                return redirect($target)->with('success', 'Welcome back, Administrator');
             }
 
-            return redirect()->intended(route('student.dashboard'))->with('success', 'Welcome to your Student Portal');
+            // Student login: clear any stored admin url.intended to prevent 403 unauthorized error
+            $intended = $request->session()->pull('url.intended', route('student.dashboard'));
+            $target = (str_contains($intended, '/student') && ! str_contains($intended, '/admin'))
+                ? $intended
+                : route('student.dashboard');
+
+            return redirect($target)->with('success', 'Welcome to your Student Portal');
         }
 
         return back()->withErrors([

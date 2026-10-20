@@ -689,4 +689,35 @@ class InfinityInternsTest extends TestCase
         $loginResponse->assertRedirect(route('student.dashboard'));
         $this->assertAuthenticated();
     }
+
+    public function test_student_login_with_admin_url_intended_redirects_to_student_dashboard(): void
+    {
+        $student = User::create([
+            'name' => 'Intended Test Student',
+            'email' => 'intended.student@example.com',
+            'password' => bcrypt('Student@123'),
+            'role' => 'STUDENT',
+        ]);
+
+        StudentProfile::create([
+            'user_id' => $student->id,
+            'application_number' => 'INF-2026-6677',
+            'degree' => 'BCA',
+            'college' => 'Patna Science College',
+            'semester' => '3rd Semester',
+            'program_domain' => 'Web Development',
+            'status' => 'ACTIVE',
+        ]);
+
+        // Simulate user visiting an admin URL before logging in
+        $response = $this->withSession(['url.intended' => route('admin.dashboard')])
+            ->post(route('login'), [
+                'email' => 'intended.student@example.com',
+                'password' => 'Student@123',
+            ]);
+
+        // Student must be redirected to student dashboard, NOT admin dashboard!
+        $response->assertRedirect(route('student.dashboard'));
+        $this->assertAuthenticated();
+    }
 }

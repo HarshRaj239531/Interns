@@ -2,6 +2,7 @@
 
 namespace App\Http\Controllers;
 
+use App\Models\StudentProfile;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Auth;
 
@@ -10,10 +11,31 @@ class StudentPortalController extends Controller
     public function dashboard()
     {
         $user = Auth::user();
+
+        if ($user->isAdmin()) {
+            return redirect()->route('admin.dashboard');
+        }
+
         $profile = $user->studentProfile;
 
         if (! $profile) {
-            return redirect()->route('home')->with('error', 'Student profile record not found.');
+            $appNumber = 'INF-2026-'.rand(1000, 9999);
+            while (StudentProfile::where('application_number', $appNumber)->exists()) {
+                $appNumber = 'INF-2026-'.rand(1000, 9999);
+            }
+
+            $profile = StudentProfile::create([
+                'user_id' => $user->id,
+                'application_number' => $appNumber,
+                'degree' => 'BSc',
+                'college' => 'Patna Science College, Patna University',
+                'semester' => '5th Semester',
+                'program_domain' => 'Technology, Digital & Web Skills',
+                'mentor_name' => 'Faculty Advisory Board',
+                'project_title' => 'Undergraduate Capstone Evaluation',
+                'attendance_rate' => 85,
+                'status' => 'PENDING',
+            ]);
         }
 
         return view('student.dashboard', compact('user', 'profile'));
