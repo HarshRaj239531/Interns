@@ -811,6 +811,31 @@
                 </div>
             </div>
 
+            <!-- Student Portal Login & Password Credentials -->
+            <div class="p-3.5 rounded-2xl bg-indigo-50/70 dark:bg-indigo-950/40 border border-indigo-200/80 dark:border-indigo-800/60 space-y-2.5">
+                <div class="flex items-center justify-between">
+                    <div class="flex items-center gap-1.5">
+                        <span class="text-xs font-bold text-indigo-700 dark:text-indigo-400">🔑 Student Login Password</span>
+                        <span class="text-[10px] text-slate-500 dark:text-slate-400 font-normal">(Candidate will use this to sign in at /login)</span>
+                    </div>
+                    <button type="button" onclick="generateRandomStudentPassword('add_applicant_password')" class="text-[10px] font-bold text-indigo-700 dark:text-indigo-300 hover:text-indigo-900 bg-white dark:bg-slate-900 px-2.5 py-1 rounded-lg border border-indigo-200 dark:border-indigo-700 hover:shadow-xs transition cursor-pointer flex items-center gap-1">
+                        <span>⚡ Auto-Generate</span>
+                    </button>
+                </div>
+                <div class="relative">
+                    <input type="text" name="password" id="add_applicant_password" placeholder="Enter password (e.g. Student@123 or click Auto-Generate)" class="w-full px-3.5 py-2 pr-20 rounded-xl adm-input text-xs font-mono font-medium">
+                    <div class="absolute inset-y-0 right-1.5 flex items-center">
+                        <button type="button" onclick="togglePasswordVisibility('add_applicant_password', this)" class="text-xs px-2 py-1 text-slate-500 hover:text-slate-700 dark:hover:text-slate-300 font-medium cursor-pointer" title="Toggle visibility">
+                            👁️
+                        </button>
+                    </div>
+                </div>
+                <div class="flex items-center justify-between text-[10px] text-slate-500 dark:text-slate-400">
+                    <span>💡 If left empty, default password <code class="px-1 py-0.5 rounded bg-white dark:bg-slate-900 border font-mono">Student@123</code> is assigned.</span>
+                    <span class="text-emerald-600 dark:text-emerald-400 font-semibold">Min 6 characters</span>
+                </div>
+            </div>
+
             <div class="grid grid-cols-1 sm:grid-cols-3 gap-3">
                 <div>
                     <div class="flex items-center justify-between mb-1">
@@ -928,6 +953,29 @@
                     <label class="block text-xs font-semibold adm-text-secondary mb-1">Phone Number *</label>
                     <input type="text" name="phone" id="edit_phone" required class="w-full px-3 py-2 rounded-xl adm-input text-xs">
                 </div>
+            </div>
+
+            <!-- Reset Student Password (Optional) -->
+            <div class="p-3.5 rounded-2xl bg-amber-50/70 dark:bg-amber-950/30 border border-amber-200/80 dark:border-amber-800/60 space-y-2">
+                <div class="flex items-center justify-between">
+                    <div class="flex items-center gap-1.5">
+                        <span class="text-xs font-bold text-amber-800 dark:text-amber-400">🔑 Reset Student Password (Optional)</span>
+                    </div>
+                    <button type="button" onclick="generateRandomStudentPassword('edit_new_password')" class="text-[10px] font-bold text-amber-700 dark:text-amber-300 hover:text-amber-900 bg-white dark:bg-slate-900 px-2.5 py-1 rounded-lg border border-amber-200 dark:border-amber-700 hover:shadow-xs transition cursor-pointer flex items-center gap-1">
+                        <span>⚡ Auto-Generate New Password</span>
+                    </button>
+                </div>
+                <div class="relative">
+                    <input type="text" name="new_password" id="edit_new_password" placeholder="Leave blank to keep existing password, or enter new password..." class="w-full px-3.5 py-2 pr-20 rounded-xl adm-input text-xs font-mono font-medium">
+                    <div class="absolute inset-y-0 right-1.5 flex items-center">
+                        <button type="button" onclick="togglePasswordVisibility('edit_new_password', this)" class="text-xs px-2 py-1 text-slate-500 hover:text-slate-700 dark:hover:text-slate-300 font-medium cursor-pointer" title="Toggle visibility">
+                            👁️
+                        </button>
+                    </div>
+                </div>
+                <p class="text-[10px] text-slate-500 dark:text-slate-400">
+                    If candidate forgot their password or requested a reset, enter a new password here.
+                </p>
             </div>
 
             <div class="grid grid-cols-1 sm:grid-cols-3 gap-3">
@@ -1140,6 +1188,10 @@
 @section('scripts')
 <script>
     function openAddApplicantModal() {
+        const passInput = document.getElementById('add_applicant_password');
+        if (passInput && !passInput.value) {
+            generateRandomStudentPassword('add_applicant_password');
+        }
         document.getElementById('addApplicantModal').classList.remove('hidden');
     }
 
@@ -1147,9 +1199,43 @@
         document.getElementById('addApplicantModal').classList.add('hidden');
     }
 
+    function generateRandomStudentPassword(inputId) {
+        const prefixes = ['Student', 'Intern', 'Infinity', 'Learn', 'Bright', 'Ace'];
+        const symbols = ['@', '#', '$', '!'];
+        const prefix = prefixes[Math.floor(Math.random() * prefixes.length)];
+        const symbol = symbols[Math.floor(Math.random() * symbols.length)];
+        const num = Math.floor(1000 + Math.random() * 9000);
+        const pass = `${prefix}${symbol}${num}`;
+        
+        const input = document.getElementById(inputId);
+        if (input) {
+            input.value = pass;
+            input.type = 'text';
+            if (window.gsap) {
+                gsap.fromTo(input, { backgroundColor: 'rgba(99, 102, 241, 0.25)' }, { backgroundColor: '', duration: 0.8 });
+            }
+        }
+    }
+
+    function togglePasswordVisibility(inputId, btn) {
+        const input = document.getElementById(inputId);
+        if (!input) return;
+        if (input.type === 'password') {
+            input.type = 'text';
+            btn.innerText = '🔒';
+            btn.title = 'Hide password';
+        } else {
+            input.type = 'password';
+            btn.innerText = '👁️';
+            btn.title = 'Show password';
+        }
+    }
+
     function openEditApplicantModal(app, user) {
         document.getElementById('editAppNumberLabel').innerText = 'Application: ' + app.application_number;
         document.getElementById('editApplicantForm').action = '/admin/applications/' + app.id + '/update-full';
+        const newPass = document.getElementById('edit_new_password');
+        if (newPass) newPass.value = '';
 
         document.getElementById('edit_name').value = user ? user.name : '';
         document.getElementById('edit_email').value = user ? user.email : '';

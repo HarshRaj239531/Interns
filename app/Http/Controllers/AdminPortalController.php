@@ -292,6 +292,7 @@ class AdminPortalController extends Controller
             'name' => ['required', 'string', 'max:255'],
             'email' => ['required', 'email', 'max:255', 'unique:users,email,'.($user ? $user->id : 0)],
             'phone' => ['required', 'string', 'max:50'],
+            'new_password' => ['nullable', 'string', 'min:6'],
             'college' => ['required', 'string', 'max:255'],
             'degree' => ['required', 'string', 'max:50'],
             'semester' => ['required', 'string', 'max:50'],
@@ -309,11 +310,15 @@ class AdminPortalController extends Controller
         ]);
 
         if ($user) {
-            $user->update([
+            $userData = [
                 'name' => trim($validated['name']),
                 'email' => strtolower(trim($validated['email'])),
                 'phone' => trim($validated['phone']),
-            ]);
+            ];
+            if (! empty($validated['new_password'])) {
+                $userData['password'] = Hash::make(trim($validated['new_password']));
+            }
+            $user->update($userData);
         }
 
         $profile->update([
@@ -337,7 +342,20 @@ class AdminPortalController extends Controller
             'lor_date' => $request->has('lor_issued') ? ($profile->lor_date ?? now()) : null,
         ]);
 
-        return back()->with('success', "Candidate profile & document records updated successfully for {$profile->application_number}!");
+        $redirect = back()->with('success', "Candidate profile & document records updated successfully for {$profile->application_number}!");
+        if (! empty($validated['new_password']) && $user) {
+            $redirect->with('created_student_credentials', [
+                'name' => $user->name,
+                'email' => $user->email,
+                'password' => trim($validated['new_password']),
+                'phone' => $user->phone,
+                'app_number' => $profile->application_number,
+                'degree' => $profile->degree,
+                'domain' => $profile->program_domain,
+            ]);
+        }
+
+        return $redirect;
     }
 
     /**
@@ -349,6 +367,7 @@ class AdminPortalController extends Controller
             'name' => ['required', 'string', 'max:255'],
             'email' => ['required', 'email', 'max:255'],
             'phone' => ['required', 'string', 'max:50'],
+            'password' => ['nullable', 'string', 'min:6'],
             'college' => ['required', 'string', 'max:255'],
             'degree' => ['required', 'string', 'max:50'],
             'semester' => ['required', 'string', 'max:50'],
@@ -359,15 +378,24 @@ class AdminPortalController extends Controller
             'status' => ['required', 'string', 'in:PENDING,APPROVED,ACTIVE,COMPLETED'],
         ]);
 
-        $user = User::firstOrCreate(
-            ['email' => strtolower(trim($validated['email']))],
-            [
+        $plainPassword = ! empty($validated['password']) ? trim($validated['password']) : 'Student@123';
+
+        $user = User::where('email', strtolower(trim($validated['email'])))->first();
+        if ($user) {
+            $user->update([
                 'name' => trim($validated['name']),
                 'phone' => trim($validated['phone']),
-                'password' => Hash::make('Student@123'),
+                'password' => Hash::make($plainPassword),
+            ]);
+        } else {
+            $user = User::create([
+                'name' => trim($validated['name']),
+                'email' => strtolower(trim($validated['email'])),
+                'phone' => trim($validated['phone']),
+                'password' => Hash::make($plainPassword),
                 'role' => 'STUDENT',
-            ]
-        );
+            ]);
+        }
 
         $appNumber = 'INF-2026-'.rand(1000, 9999);
         while (StudentProfile::where('application_number', $appNumber)->exists()) {
@@ -391,7 +419,17 @@ class AdminPortalController extends Controller
             'consent_letter_date' => in_array($validated['status'], ['ACTIVE', 'COMPLETED']) ? now() : null,
         ]);
 
-        return back()->with('success', "New student applicant {$user->name} ({$appNumber}) enrolled successfully!");
+        return back()
+            ->with('success', "New student applicant {$user->name} ({$appNumber}) enrolled successfully with login access!")
+            ->with('created_student_credentials', [
+                'name' => $user->name,
+                'email' => $user->email,
+                'password' => $plainPassword,
+                'phone' => $user->phone,
+                'app_number' => $appNumber,
+                'degree' => $validated['degree'],
+                'domain' => $validated['program_domain'],
+            ]);
     }
 
     /**

@@ -229,7 +229,52 @@
             </div>
         </header>
 
-        <!-- Flash Messages -->
+        <!-- Flash Messages & Credentials Dispatch Card -->
+        @if(session('created_student_credentials'))
+            @php $cred = session('created_student_credentials'); @endphp
+            <div id="studentCredAlert" class="mx-6 md:mx-8 mt-4 p-5 rounded-2xl bg-indigo-50 dark:bg-indigo-950/80 border border-indigo-200 dark:border-indigo-500/40 text-xs shadow-lg space-y-3 motion-reveal">
+                <div class="flex items-start justify-between gap-4">
+                    <div class="space-y-1">
+                        <div class="flex items-center gap-2">
+                            <span class="px-2.5 py-0.5 rounded-full bg-indigo-600 text-white font-bold text-[10px] uppercase tracking-wider">
+                                🎓 Student Portal Access Issued
+                            </span>
+                            <span class="font-bold text-slate-900 dark:text-white text-sm">{{ $cred['name'] }}</span>
+                            <span class="font-mono text-xs text-indigo-600 dark:text-indigo-400 font-bold">({{ $cred['app_number'] }})</span>
+                        </div>
+                        <p class="text-slate-600 dark:text-slate-300 text-xs">
+                            Candidate can now log in at <a href="{{ route('login') }}" target="_blank" class="text-indigo-600 dark:text-indigo-400 font-bold underline">Infinity Interns Portal ({{ route('login') }})</a>.
+                        </p>
+                    </div>
+                    <button onclick="document.getElementById('studentCredAlert').remove()" class="text-slate-400 hover:text-slate-600 dark:hover:text-white font-bold text-xl cursor-pointer">&times;</button>
+                </div>
+
+                <div class="flex flex-wrap items-center gap-3 pt-1">
+                    <div class="px-3.5 py-2 rounded-xl bg-white dark:bg-slate-900 border border-slate-200 dark:border-slate-700 font-mono text-slate-800 dark:text-slate-200 flex items-center gap-2 shadow-xs">
+                        <span class="text-slate-400 select-none">Login Email:</span>
+                        <strong class="text-indigo-600 dark:text-indigo-400">{{ $cred['email'] }}</strong>
+                    </div>
+                    <div class="px-3.5 py-2 rounded-xl bg-white dark:bg-slate-900 border border-slate-200 dark:border-slate-700 font-mono text-slate-800 dark:text-slate-200 flex items-center gap-2 shadow-xs">
+                        <span class="text-slate-400 select-none">Password:</span>
+                        <strong class="text-emerald-600 dark:text-emerald-400 font-bold tracking-wide">{{ $cred['password'] }}</strong>
+                    </div>
+                    <button type="button" onclick="copyStudentCredentials('{{ $cred['email'] }}', '{{ $cred['password'] }}', '{{ addslashes($cred['name']) }}', '{{ $cred['app_number'] }}')" class="px-4 py-2 rounded-xl bg-indigo-600 hover:bg-indigo-700 text-white font-bold text-xs shadow-md shadow-indigo-600/30 flex items-center gap-1.5 cursor-pointer motion-btn-spring transition">
+                        <span>📋 Copy Login Message</span>
+                    </button>
+                    @if(!empty($cred['phone']))
+                        @php
+                            $waNumber = preg_replace('/\D/', '', $cred['phone']);
+                            if(strlen($waNumber) === 10) $waNumber = '91' . $waNumber;
+                            $waText = urlencode("Hello {$cred['name']}, your Infinity Interns Student Portal account is active!\n\nPortal: " . route('login') . "\nApplication ID: {$cred['app_number']}\nEmail: {$cred['email']}\nPassword: {$cred['password']}\n\nPlease log in to access your orientation curriculum and Capstone project.");
+                        @endphp
+                        <a href="https://wa.me/{{ $waNumber }}?text={{ $waText }}" target="_blank" class="px-4 py-2 rounded-xl bg-emerald-600 hover:bg-emerald-700 text-white font-bold text-xs shadow-md shadow-emerald-600/30 flex items-center gap-1.5 cursor-pointer motion-btn-spring transition">
+                            <span>💬 Send to Student via WhatsApp</span>
+                        </a>
+                    @endif
+                </div>
+            </div>
+        @endif
+
         @if(session('success'))
             <div class="mx-6 md:mx-8 mt-4 p-4 rounded-2xl bg-emerald-50 dark:bg-emerald-950/70 border border-emerald-200 dark:border-emerald-500/40 text-emerald-800 dark:text-emerald-200 text-xs font-medium flex items-center justify-between shadow-md">
                 <div class="flex items-center gap-2.5">
@@ -285,16 +330,17 @@
             updateThemeUI(next);
         }
 
-        // Initialize UI icon on load
-        document.addEventListener('DOMContentLoaded', function() {
-            const current = document.documentElement.getAttribute('data-admin-theme') || 'dark';
-            if (current === 'dark') {
-                document.documentElement.classList.add('dark');
-            } else {
-                document.documentElement.classList.remove('dark');
-            }
-            updateThemeUI(current);
-        });
+        // Copy Student Credentials to Clipboard
+        function copyStudentCredentials(email, password, name, appNumber) {
+            const portalUrl = "{{ route('login') }}";
+            const text = `🎓 Infinity Interns – Student Portal Credentials\n\nStudent Name: ${name}\nApplication No: ${appNumber}\nLogin Portal: ${portalUrl}\nEmail: ${email}\nPassword: ${password}\n\nPlease sign in to view your offer letter, orientation materials, and project records.`;
+            
+            navigator.clipboard.writeText(text).then(() => {
+                alert("✓ Login credentials copied to clipboard! You can paste and send them to the student via WhatsApp or Email.");
+            }).catch(() => {
+                prompt("Copy credentials manually:", text);
+            });
+        }
     </script>
 
     @yield('scripts')

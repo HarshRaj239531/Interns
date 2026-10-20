@@ -579,4 +579,114 @@ class InfinityInternsTest extends TestCase
             'name' => 'Indian Institute of Technology Patna',
         ]);
     }
+
+    public function test_admin_can_add_applicant_with_custom_password_and_student_can_login(): void
+    {
+        $admin = User::create([
+            'name' => 'Enrollment Admin',
+            'email' => 'enrollment.admin@infinityinterns.com',
+            'password' => bcrypt('Admin@123'),
+            'role' => 'ADMIN',
+        ]);
+
+        $this->actingAs($admin);
+
+        $customPass = 'InternPass#2026';
+        $studentEmail = 'newstudent.test@example.com';
+
+        $response = $this->post(route('admin.application.store'), [
+            'name' => 'Rohan Varma',
+            'email' => $studentEmail,
+            'phone' => '+91 9988776655',
+            'password' => $customPass,
+            'degree' => 'BSc',
+            'college' => 'Patna Science College',
+            'semester' => '5th Semester',
+            'program_domain' => 'Environment & Sustainable Science',
+            'mentor_name' => 'Dr. K. Sharma',
+            'project_title' => 'EIA River Ganga Study',
+            'attendance_rate' => 92,
+            'status' => 'ACTIVE',
+        ]);
+
+        $response->assertSessionHas('success');
+        $response->assertSessionHas('created_student_credentials');
+
+        // Verify user exists and can authenticate with the custom password
+        $this->assertDatabaseHas('users', [
+            'email' => $studentEmail,
+            'role' => 'STUDENT',
+        ]);
+
+        // Attempt login with the custom password
+        auth()->logout();
+        $loginResponse = $this->post(route('login'), [
+            'email' => $studentEmail,
+            'password' => $customPass,
+        ]);
+
+        $loginResponse->assertRedirect(route('student.dashboard'));
+        $this->assertAuthenticated();
+        $this->assertEquals($studentEmail, auth()->user()->email);
+    }
+
+    public function test_admin_can_reset_student_password(): void
+    {
+        $admin = User::create([
+            'name' => 'Reset Admin',
+            'email' => 'reset.admin@infinityinterns.com',
+            'password' => bcrypt('Admin@123'),
+            'role' => 'ADMIN',
+        ]);
+
+        $student = User::create([
+            'name' => 'Old Student',
+            'email' => 'oldstudent.reset@example.com',
+            'password' => bcrypt('OldPass@123'),
+            'role' => 'STUDENT',
+        ]);
+
+        $profile = StudentProfile::create([
+            'user_id' => $student->id,
+            'application_number' => 'INF-2026-7788',
+            'degree' => 'BA',
+            'college' => 'Magadh Mahila College',
+            'semester' => '4th Semester',
+            'program_domain' => 'Media & Content Strategy',
+            'mentor_name' => 'Advisory Board',
+            'project_title' => 'Digital Journalism',
+            'attendance_rate' => 88,
+            'status' => 'APPROVED',
+        ]);
+
+        $this->actingAs($admin);
+
+        $newPass = 'NewSecurePass#9988';
+        $response = $this->post(route('admin.application.update-full', $profile->id), [
+            'name' => 'Old Student Updated',
+            'email' => 'oldstudent.reset@example.com',
+            'phone' => '+91 9988771122',
+            'new_password' => $newPass,
+            'degree' => 'BA',
+            'college' => 'Magadh Mahila College',
+            'semester' => '4th Semester',
+            'program_domain' => 'Media & Content Strategy',
+            'mentor_name' => 'Advisory Board',
+            'project_title' => 'Digital Journalism',
+            'attendance_rate' => 88,
+            'status' => 'APPROVED',
+        ]);
+
+        $response->assertSessionHas('success');
+
+        // Attempt login with the new password
+        auth()->logout();
+        $loginResponse = $this->post(route('login'), [
+            'email' => 'oldstudent.reset@example.com',
+            'password' => $newPass,
+        ]);
+
+        $loginResponse->assertRedirect(route('student.dashboard'));
+        $this->assertAuthenticated();
+    }
 }
