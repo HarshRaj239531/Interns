@@ -2,6 +2,7 @@
 
 namespace App\Http\Controllers;
 
+use App\Models\CertificateSetting;
 use App\Models\ConsentLetterSetting;
 use App\Models\OfferLetterSetting;
 use App\Models\StudentProfile;
@@ -98,7 +99,9 @@ class StudentPortalController extends Controller
             return back()->with('error', 'Completion certificate has not been generated yet.');
         }
 
-        return view('documents.certificate', compact('user', 'profile'));
+        $settings = CertificateSetting::current();
+
+        return view('documents.certificate', compact('user', 'profile', 'settings'));
     }
 
     public function viewLor()

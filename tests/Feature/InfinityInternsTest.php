@@ -882,4 +882,92 @@ class InfinityInternsTest extends TestCase
             'annexure_text' => 'ANNEXURE I',
         ]);
     }
+
+    public function test_certificate_renders_exact_reference_layout_and_settings(): void
+    {
+        // 1. Create admin user
+        $admin = User::create([
+            'name' => 'Certificate Admin',
+            'email' => 'cert.admin@infinityinterns.com',
+            'password' => bcrypt('Admin@123'),
+            'role' => 'ADMIN',
+        ]);
+
+        $this->actingAs($admin);
+
+        // 2. Access certificate settings page
+        $res = $this->get(route('admin.certificate.settings'));
+        $res->assertStatus(200);
+        $res->assertSee('Certificate of Completion Settings');
+        $res->assertSee('CERTIFICATE OF COMPLETION');
+
+        // 3. Create student with certificate details
+        $studentUser = User::create([
+            'name' => 'Tabish Taj Khurshid',
+            'email' => 'tabish.khurshid@example.com',
+            'phone' => '+91 9876543210',
+            'password' => bcrypt('Student@123'),
+            'role' => 'STUDENT',
+        ]);
+
+        $profile = StudentProfile::create([
+            'user_id' => $studentUser->id,
+            'application_number' => 'INF-2026-9900',
+            'degree' => 'MBA',
+            'college' => 'MAGADH UNIVERSITY, BODH GAYA',
+            'semester' => '4th Semester',
+            'gender' => 'Male',
+            'university_reg_no' => '151103001616',
+            'program_domain' => 'Marketing Management',
+            'status' => 'COMPLETED',
+            'certificate_issued' => true,
+            'certificate_number' => 'II-00012',
+            'certificate_date' => now(),
+            'offer_letter_date' => now()->subDays(45),
+            'marksheet_marks' => 96,
+            'marksheet_grade' => 'Excellent',
+        ]);
+
+        // 4. View Certificate (Admin)
+        $certRes = $this->get(route('admin.application.view-certificate', $profile->id));
+        $certRes->assertStatus(200);
+        $certRes->assertSee('CERTIFICATE OF COMPLETION');
+        $certRes->assertSee('TABISH TAJ KHURSHID');
+        $certRes->assertSee('151103001616');
+        $certRes->assertSee('MAGADH UNIVERSITY, BODH GAYA');
+        $certRes->assertSee('MBA Marketing Management');
+        $certRes->assertSee('45 Days');
+        $certRes->assertSee('Offline');
+        $certRes->assertSee('96% Score');
+        $certRes->assertSee('Excellent');
+        $certRes->assertSee('Rahul Kumar');
+        $certRes->assertSee('II-00012');
+        $certRes->assertSee('SCAN TO VERIFY');
+
+        // 5. Update certificate settings
+        $updateRes = $this->post(route('admin.certificate.settings.update'), [
+            'company_name' => 'INFINITY INTERNS OFFICIAL',
+            'tagline' => 'LEARN • GROW • SUCCEED',
+            'title' => 'CERTIFICATE OF COMPLETION',
+            'director_name' => 'Er. Rahul Kumar',
+            'director_title' => 'Managing Director, Infinity Interns',
+            'company_unit' => 'Infinity A1 Career Counselling Pvt. Ltd.',
+            'default_mode' => 'Offline',
+            'default_duration' => '45 Days',
+            'website_url' => 'https://infinityinterns.com/',
+        ]);
+        $updateRes->assertSessionHas('success');
+        $this->assertDatabaseHas('certificate_settings', [
+            'director_name' => 'Er. Rahul Kumar',
+            'company_name' => 'INFINITY INTERNS OFFICIAL',
+        ]);
+
+        // 6. Reset certificate settings back to defaults
+        $resetRes = $this->post(route('admin.certificate.settings.reset'));
+        $resetRes->assertSessionHas('success');
+        $this->assertDatabaseHas('certificate_settings', [
+            'director_name' => 'Rahul Kumar',
+            'company_name' => 'INFINITY INTERNS',
+        ]);
+    }
 }

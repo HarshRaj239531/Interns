@@ -115,6 +115,12 @@ Route::middleware(['auth', 'admin'])->prefix('admin')->name('admin.')->group(fun
     Route::post('/consent-letter-settings', [AdminPortalController::class, 'updateConsentLetterSettings'])->name('consent-letter.settings.update');
     Route::post('/consent-letter-settings/remove-image', [AdminPortalController::class, 'removeConsentLetterImage'])->name('consent-letter.settings.remove-image');
     Route::post('/consent-letter-settings/reset', [AdminPortalController::class, 'resetConsentLetterSettings'])->name('consent-letter.settings.reset');
+
+    // Certificate Settings & Template Customizer
+    Route::get('/certificate-settings', [AdminPortalController::class, 'certificateSettings'])->name('certificate.settings');
+    Route::post('/certificate-settings', [AdminPortalController::class, 'updateCertificateSettings'])->name('certificate.settings.update');
+    Route::post('/certificate-settings/remove-image', [AdminPortalController::class, 'removeCertificateImage'])->name('certificate.settings.remove-image');
+    Route::post('/certificate-settings/reset', [AdminPortalController::class, 'resetCertificateSettings'])->name('certificate.settings.reset');
 });
 
 // Redirect /super-admin to Admin Dashboard

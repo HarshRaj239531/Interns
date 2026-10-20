@@ -2,6 +2,7 @@
 
 namespace App\Http\Controllers;
 
+use App\Models\CertificateSetting;
 use App\Models\ConsentLetterSetting;
 use App\Models\Degree;
 use App\Models\Inquiry;
@@ -606,8 +607,9 @@ class AdminPortalController extends Controller
     {
         $profile = StudentProfile::with('user')->findOrFail($id);
         $user = $profile->user;
+        $settings = CertificateSetting::current();
 
-        return view('documents.certificate', compact('user', 'profile'));
+        return view('documents.certificate', compact('user', 'profile', 'settings'));
     }
 
     /**
@@ -1382,5 +1384,136 @@ class AdminPortalController extends Controller
         ]);
 
         return back()->with('success', 'Consent letter settings reset to sample template defaults!');
+    }
+
+    /**
+     * Certificate Template Settings Page
+     */
+    public function certificateSettings()
+    {
+        $settings = CertificateSetting::current();
+
+        // Sample student profile for live preview
+        $sampleProfile = StudentProfile::with('user')->whereNotNull('certificate_number')->first()
+            ?? StudentProfile::with('user')->first();
+
+        $sampleUser = $sampleProfile?->user ?? auth()->user();
+
+        return view('admin.certificate-settings', compact('settings', 'sampleProfile', 'sampleUser'));
+    }
+
+    /**
+     * Update Certificate Settings
+     */
+    public function updateCertificateSettings(Request $request)
+    {
+        $settings = CertificateSetting::current();
+
+        $validated = $request->validate([
+            'company_name' => 'required|string|max:255',
+            'tagline' => 'required|string|max:255',
+            'title' => 'required|string|max:255',
+            'director_name' => 'required|string|max:255',
+            'director_title' => 'required|string|max:255',
+            'company_unit' => 'required|string|max:255',
+            'default_mode' => 'required|string|max:50',
+            'default_duration' => 'required|string|max:50',
+            'website_url' => 'required|url|max:255',
+            'stamp_signature' => 'nullable|image|mimes:jpeg,png,jpg,svg,webp|max:3072',
+            'msme_logo' => 'nullable|image|mimes:jpeg,png,jpg,svg,webp|max:3072',
+            'aicte_logo' => 'nullable|image|mimes:jpeg,png,jpg,svg,webp|max:3072',
+        ]);
+
+        $destinationPath = public_path('uploads/certificate');
+        if (! file_exists($destinationPath)) {
+            mkdir($destinationPath, 0755, true);
+        }
+
+        if ($request->hasFile('stamp_signature')) {
+            $file = $request->file('stamp_signature');
+            $fileName = 'stamp_'.time().'.'.$file->getClientOriginalExtension();
+            $file->move($destinationPath, $fileName);
+            $validated['stamp_signature_path'] = 'uploads/certificate/'.$fileName;
+        }
+
+        if ($request->hasFile('msme_logo')) {
+            $file = $request->file('msme_logo');
+            $fileName = 'msme_'.time().'.'.$file->getClientOriginalExtension();
+            $file->move($destinationPath, $fileName);
+            $validated['msme_logo_path'] = 'uploads/certificate/'.$fileName;
+        }
+
+        if ($request->hasFile('aicte_logo')) {
+            $file = $request->file('aicte_logo');
+            $fileName = 'aicte_'.time().'.'.$file->getClientOriginalExtension();
+            $file->move($destinationPath, $fileName);
+            $validated['aicte_logo_path'] = 'uploads/certificate/'.$fileName;
+        }
+
+        $settings->update($validated);
+
+        return back()->with('success', 'Certificate template settings updated successfully!');
+    }
+
+    /**
+     * Remove an uploaded certificate image
+     */
+    public function removeCertificateImage(Request $request)
+    {
+        $type = $request->input('type');
+        $settings = CertificateSetting::current();
+
+        if ($type === 'stamp_signature') {
+            if ($settings->stamp_signature_path && file_exists(public_path($settings->stamp_signature_path)) && str_starts_with($settings->stamp_signature_path, 'uploads/')) {
+                @unlink(public_path($settings->stamp_signature_path));
+            }
+            $settings->update(['stamp_signature_path' => '/images/certificate/stamp_signature.png']);
+
+            return back()->with('success', 'Custom stamp & signature restored to default reference.');
+        }
+
+        if ($type === 'msme_logo') {
+            if ($settings->msme_logo_path && file_exists(public_path($settings->msme_logo_path)) && str_starts_with($settings->msme_logo_path, 'uploads/')) {
+                @unlink(public_path($settings->msme_logo_path));
+            }
+            $settings->update(['msme_logo_path' => '/images/certificate/msme_logo.png']);
+
+            return back()->with('success', 'MSME logo restored to default reference.');
+        }
+
+        if ($type === 'aicte_logo') {
+            if ($settings->aicte_logo_path && file_exists(public_path($settings->aicte_logo_path)) && str_starts_with($settings->aicte_logo_path, 'uploads/')) {
+                @unlink(public_path($settings->aicte_logo_path));
+            }
+            $settings->update(['aicte_logo_path' => '/images/certificate/aicte_logo.png']);
+
+            return back()->with('success', 'AICTE logo restored to default reference.');
+        }
+
+        return back()->with('error', 'Invalid media removal request.');
+    }
+
+    /**
+     * Reset Certificate settings back to reference sample defaults
+     */
+    public function resetCertificateSettings()
+    {
+        $settings = CertificateSetting::current();
+        $settings->update([
+            'company_name' => 'INFINITY INTERNS',
+            'tagline' => 'LEARN • GROW • SUCCEED',
+            'title' => 'CERTIFICATE OF COMPLETION',
+            'director_name' => 'Rahul Kumar',
+            'director_title' => 'Director, Infinity Interns',
+            'company_unit' => 'Infinity A1 Career Counselling Pvt. Ltd.',
+            'stamp_signature_path' => '/images/certificate/stamp_signature.png',
+            'msme_logo_path' => '/images/certificate/msme_logo.png',
+            'aicte_logo_path' => '/images/certificate/aicte_logo.png',
+            'default_mode' => 'Offline',
+            'default_duration' => '45 Days',
+            'website_url' => 'https://infinityinterns.com/',
+        ]);
+
+        return back()->with('success', 'Certificate template settings reset to exact sample defaults!');
     }
 }

@@ -204,6 +204,15 @@
                     </div>
                     <span class="text-[9px] px-1.5 py-0.5 rounded {{ request()->routeIs('admin.consent-letter*') ? 'bg-white/20 text-white' : 'bg-purple-500/10 text-purple-700 dark:text-purple-400 font-bold' }} uppercase">Annexure</span>
                 </a>
+
+                <!-- Certificate Settings -->
+                <a href="{{ route('admin.certificate.settings') }}" class="flex items-center justify-between px-3.5 py-2 rounded-xl transition {{ request()->routeIs('admin.certificate.settings*') ? 'bg-indigo-600 text-white shadow-lg shadow-indigo-600/30 font-bold' : 'text-slate-600 dark:text-slate-400 hover:text-slate-900 dark:hover:text-white hover:bg-slate-100 dark:hover:bg-slate-800/60' }}">
+                    <div class="flex items-center gap-3">
+                        <svg class="w-4 h-4 shrink-0" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M9 12l2 2 4-4M7.835 4.697a3.42 3.42 0 001.946-.806 3.42 3.42 0 014.438 0 3.42 3.42 0 001.946.806 3.42 3.42 0 013.138 3.138 3.42 3.42 0 00.806 1.946 3.42 3.42 0 010 4.438 3.42 3.42 0 00-.806 1.946 3.42 3.42 0 01-3.138 3.138 3.42 3.42 0 00-1.946.806 3.42 3.42 0 01-4.438 0 3.42 3.42 0 00-1.946-.806 3.42 3.42 0 01-3.138-3.138 3.42 3.42 0 00-.806-1.946 3.42 3.42 0 010-4.438 3.42 3.42 0 00.806-1.946 3.42 3.42 0 013.138-3.138z"/></svg>
+                        <span>Certificate Settings</span>
+                    </div>
+                    <span class="text-[9px] px-1.5 py-0.5 rounded {{ request()->routeIs('admin.certificate.settings*') ? 'bg-white/20 text-white' : 'bg-emerald-500/10 text-emerald-700 dark:text-emerald-400 font-bold' }} uppercase">Official</span>
+                </a>
             </nav>
         </div>
 
