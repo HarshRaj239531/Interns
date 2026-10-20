@@ -82,6 +82,13 @@
             loginEmail.placeholder = "student@example.com";
             submitBtn.innerText = "Sign In to Student Portal";
         }
+
+        if (window.gsap) {
+            gsap.fromTo([emailLabel, loginEmail, submitBtn], 
+                { opacity: 0.4, y: 6 }, 
+                { opacity: 1, y: 0, duration: 0.25, ease: 'power2.out' }
+            );
+        }
     }
 </script>
 @endsection

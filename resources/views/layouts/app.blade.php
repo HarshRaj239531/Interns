@@ -547,12 +547,39 @@
                     e.stopPropagation();
                     const isVisible = dropdownMenu.classList.contains('opacity-100');
                     if (isVisible) {
-                        dropdownMenu.classList.remove('opacity-100', 'pointer-events-auto');
-                        dropdownMenu.classList.add('opacity-0', 'pointer-events-none');
+                        if (window.gsap) {
+                            gsap.to(dropdownMenu, {
+                                opacity: 0,
+                                y: -8,
+                                scale: 0.96,
+                                duration: 0.18,
+                                ease: 'power2.in',
+                                onComplete: () => {
+                                    dropdownMenu.classList.remove('opacity-100', 'pointer-events-auto');
+                                    dropdownMenu.classList.add('opacity-0', 'pointer-events-none');
+                                }
+                            });
+                        } else {
+                            dropdownMenu.classList.remove('opacity-100', 'pointer-events-auto');
+                            dropdownMenu.classList.add('opacity-0', 'pointer-events-none');
+                        }
                         dropdownBtn.setAttribute('aria-expanded', 'false');
                     } else {
                         dropdownMenu.classList.remove('opacity-0', 'pointer-events-none');
                         dropdownMenu.classList.add('opacity-100', 'pointer-events-auto');
+                        if (window.gsap) {
+                            gsap.fromTo(dropdownMenu, 
+                                { opacity: 0, y: -10, scale: 0.95 },
+                                { opacity: 1, y: 0, scale: 1, duration: 0.32, ease: 'back.out(1.5)' }
+                            );
+                            const items = dropdownMenu.querySelectorAll('a');
+                            if (items.length > 0) {
+                                gsap.fromTo(items, 
+                                    { opacity: 0, x: -8 },
+                                    { opacity: 1, x: 0, duration: 0.25, stagger: 0.03, ease: 'power2.out' }
+                                );
+                            }
+                        }
                         dropdownBtn.setAttribute('aria-expanded', 'true');
                     }
                 });

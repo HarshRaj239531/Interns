@@ -258,17 +258,55 @@
             btn.classList.remove('bg-indigo-600', 'text-white', 'shadow-md');
             btn.classList.add('bg-white', 'text-slate-700', 'border', 'border-slate-200');
         });
-        event.target.classList.remove('bg-white', 'text-slate-700', 'border');
-        event.target.classList.add('bg-indigo-600', 'text-white', 'shadow-md');
+        if (event && event.currentTarget) {
+            event.currentTarget.classList.remove('bg-white', 'text-slate-700', 'border');
+            event.currentTarget.classList.add('bg-indigo-600', 'text-white', 'shadow-md');
+        }
 
         const cards = document.querySelectorAll('.program-card');
+        const toShow = [];
+        const toHide = [];
+
         cards.forEach(card => {
             if (cat === 'all' || card.classList.contains(cat)) {
-                card.style.display = 'block';
+                toShow.push(card);
             } else {
-                card.style.display = 'none';
+                toHide.push(card);
             }
         });
+
+        if (window.gsap) {
+            if (toHide.length > 0) {
+                gsap.to(toHide, {
+                    scale: 0.95,
+                    opacity: 0,
+                    duration: 0.2,
+                    ease: 'power2.in',
+                    onComplete: () => {
+                        toHide.forEach(c => c.style.display = 'none');
+                        toShow.forEach(c => {
+                            c.style.display = 'block';
+                        });
+                        gsap.fromTo(toShow, 
+                            { scale: 0.96, opacity: 0, y: 15 },
+                            { scale: 1, opacity: 1, y: 0, stagger: 0.08, duration: 0.45, ease: 'back.out(1.4)' }
+                        );
+                        if (window.ScrollTrigger) ScrollTrigger.refresh();
+                    }
+                });
+            } else {
+                toShow.forEach(c => c.style.display = 'block');
+                gsap.fromTo(toShow, 
+                    { scale: 0.96, opacity: 0, y: 15 },
+                    { scale: 1, opacity: 1, y: 0, stagger: 0.08, duration: 0.45, ease: 'back.out(1.4)' }
+                );
+                if (window.ScrollTrigger) ScrollTrigger.refresh();
+            }
+        } else {
+            cards.forEach(card => {
+                card.style.display = (cat === 'all' || card.classList.contains(cat)) ? 'block' : 'none';
+            });
+        }
     }
 </script>
 @endsection

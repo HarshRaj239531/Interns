@@ -81,8 +81,10 @@
             btn.classList.remove('bg-indigo-600', 'text-white', 'shadow-md');
             btn.classList.add('bg-white', 'text-slate-700', 'border', 'border-slate-200');
         });
-        event.target.classList.remove('bg-white', 'text-slate-700', 'border');
-        event.target.classList.add('bg-indigo-600', 'text-white', 'shadow-md');
+        if (event && event.currentTarget) {
+            event.currentTarget.classList.remove('bg-white', 'text-slate-700', 'border');
+            event.currentTarget.classList.add('bg-indigo-600', 'text-white', 'shadow-md');
+        }
 
         applyFilters();
     }
@@ -94,6 +96,8 @@
     function applyFilters() {
         const query = document.getElementById('faqSearch').value.toLowerCase();
         const items = document.querySelectorAll('.faq-item');
+        const toShow = [];
+        const toHide = [];
 
         items.forEach(item => {
             const cat = item.getAttribute('data-cat');
@@ -104,11 +108,24 @@
             const matchQuery = (q.includes(query) || a.includes(query));
 
             if (matchCat && matchQuery) {
-                item.style.display = 'block';
+                toShow.push(item);
             } else {
-                item.style.display = 'none';
+                toHide.push(item);
             }
         });
+
+        if (window.gsap) {
+            toHide.forEach(el => el.style.display = 'none');
+            toShow.forEach(el => el.style.display = 'block');
+            gsap.fromTo(toShow, 
+                { opacity: 0, y: 14 }, 
+                { opacity: 1, y: 0, stagger: 0.04, duration: 0.35, ease: 'power2.out', overwrite: 'auto' }
+            );
+            if (window.ScrollTrigger) ScrollTrigger.refresh();
+        } else {
+            toHide.forEach(el => el.style.display = 'none');
+            toShow.forEach(el => el.style.display = 'block');
+        }
     }
 </script>
 @endsection

@@ -44,12 +44,12 @@
 <section class="py-16 px-4 sm:px-6 lg:px-8 max-w-3xl mx-auto">
     @if($searched)
         @if($profile)
-            <div class="motion-reveal p-8 sm:p-12 rounded-[2.5rem] bg-white border border-emerald-500/40 shadow-2xl relative overflow-hidden">
+            <div class="verification-result-card motion-reveal p-8 sm:p-12 rounded-[2.5rem] bg-white border border-emerald-500/40 shadow-2xl relative overflow-hidden">
                 <div class="absolute top-0 inset-x-0 h-2 bg-gradient-to-r from-emerald-500 via-teal-500 to-indigo-600"></div>
 
                 <div class="flex items-center justify-between pb-6 mb-6 border-b border-slate-100">
                     <div class="flex items-center gap-3">
-                        <div class="w-12 h-12 rounded-2xl bg-emerald-100 text-emerald-700 flex items-center justify-center text-2xl font-bold">
+                        <div class="verify-check-icon w-12 h-12 rounded-2xl bg-emerald-100 text-emerald-700 flex items-center justify-center text-2xl font-bold">
                             ✓
                         </div>
                         <div>
