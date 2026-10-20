@@ -802,4 +802,84 @@ class InfinityInternsTest extends TestCase
             'cin_number' => 'U85500BR2025PTC075319',
         ]);
     }
+
+    public function test_admin_can_view_and_update_consent_letter_settings(): void
+    {
+        $admin = User::create([
+            'name' => 'Super Admin',
+            'email' => 'admin.consent@infinityinterns.com',
+            'password' => bcrypt('Admin@123'),
+            'role' => 'ADMIN',
+        ]);
+
+        $this->actingAs($admin);
+
+        // 1. Visit consent letter settings page
+        $res = $this->get(route('admin.consent-letter.settings'));
+        $res->assertStatus(200);
+        $res->assertSee('Consent Letter Settings');
+        $res->assertSee('GAYA COLLEGE, GAYA.');
+
+        // 2. Update consent letter settings
+        $updateRes = $this->post(route('admin.consent-letter.settings.update'), [
+            'default_college' => 'PATNA SCIENCE COLLEGE, PATNA.',
+            'annexure_text' => 'ANNEXURE I (CBCS NEP)',
+            'letter_title' => 'INSTITUTIONAL UNDERTAKING & CONSENT',
+            'letter_subject' => 'TO WHOMSOEVER IT MAY CONCERN',
+            'letter_no_prefix' => 'PSC/INT/',
+            'credits_text' => 'minimum 06 credits (180 hrs)',
+            'authority_designation' => 'Principal / Dean of Student Welfare',
+            'show_signature_line' => '1',
+        ]);
+        $updateRes->assertSessionHas('success');
+
+        // 3. Verify changes reflected in database
+        $this->assertDatabaseHas('consent_letter_settings', [
+            'default_college' => 'PATNA SCIENCE COLLEGE, PATNA.',
+            'annexure_text' => 'ANNEXURE I (CBCS NEP)',
+            'letter_no_prefix' => 'PSC/INT/',
+        ]);
+
+        // 4. Create student with specific college name and extra details
+        $studentUser = User::create([
+            'name' => 'Priya Kumari',
+            'email' => 'priya.gaya@example.com',
+            'phone' => '+91 9123456789',
+            'password' => bcrypt('Student@123'),
+            'role' => 'STUDENT',
+        ]);
+        $profile = StudentProfile::create([
+            'user_id' => $studentUser->id,
+            'application_number' => 'INF-2026-7788',
+            'degree' => 'BCA',
+            'college' => 'Gaya College, Gaya',
+            'semester' => '3rd Semester',
+            'gender' => 'Female',
+            'father_name' => 'Subhash Kumar',
+            'university_reg_no' => 'MU-2023-9988',
+            'university_roll_no' => '23BCA015',
+            'program_domain' => 'Web Development',
+            'status' => 'APPROVED',
+            'consent_letter_issued' => true,
+            'consent_letter_date' => now(),
+        ]);
+
+        // 5. Verify the candidate's consent letter dynamically formats their enrolled college at the top
+        $consentRes = $this->get(route('admin.application.view-consent-letter', $profile->id));
+        $consentRes->assertStatus(200);
+        // Student's college must appear uppercase at the top:
+        $consentRes->assertSee('GAYA COLLEGE, GAYA');
+        $consentRes->assertSee('Priya Kumari');
+        $consentRes->assertSee('Subhash Kumar');
+        $consentRes->assertSee('MU-2023-9988');
+        $consentRes->assertSee('23BCA015');
+
+        // 6. Test reset to defaults
+        $resetRes = $this->post(route('admin.consent-letter.settings.reset'));
+        $resetRes->assertSessionHas('success');
+        $this->assertDatabaseHas('consent_letter_settings', [
+            'default_college' => 'GAYA COLLEGE, GAYA.',
+            'annexure_text' => 'ANNEXURE I',
+        ]);
+    }
 }

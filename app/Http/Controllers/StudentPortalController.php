@@ -2,6 +2,7 @@
 
 namespace App\Http\Controllers;
 
+use App\Models\ConsentLetterSetting;
 use App\Models\OfferLetterSetting;
 use App\Models\StudentProfile;
 use Illuminate\Http\Request;
@@ -83,7 +84,9 @@ class StudentPortalController extends Controller
             return back()->with('error', 'Consent letter is not released for this application.');
         }
 
-        return view('documents.consent-letter', compact('user', 'profile'));
+        $settings = ConsentLetterSetting::current();
+
+        return view('documents.consent-letter', compact('user', 'profile', 'settings'));
     }
 
     public function viewCertificate()

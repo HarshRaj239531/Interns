@@ -109,6 +109,12 @@ Route::middleware(['auth', 'admin'])->prefix('admin')->name('admin.')->group(fun
     Route::post('/offer-letter-settings', [AdminPortalController::class, 'updateOfferLetterSettings'])->name('offer-letter.settings.update');
     Route::post('/offer-letter-settings/remove-image', [AdminPortalController::class, 'removeOfferLetterImage'])->name('offer-letter.settings.remove-image');
     Route::post('/offer-letter-settings/reset', [AdminPortalController::class, 'resetOfferLetterSettings'])->name('offer-letter.settings.reset');
+
+    // Consent Letter Settings & Template Customizer
+    Route::get('/consent-letter-settings', [AdminPortalController::class, 'consentLetterSettings'])->name('consent-letter.settings');
+    Route::post('/consent-letter-settings', [AdminPortalController::class, 'updateConsentLetterSettings'])->name('consent-letter.settings.update');
+    Route::post('/consent-letter-settings/remove-image', [AdminPortalController::class, 'removeConsentLetterImage'])->name('consent-letter.settings.remove-image');
+    Route::post('/consent-letter-settings/reset', [AdminPortalController::class, 'resetConsentLetterSettings'])->name('consent-letter.settings.reset');
 });
 
 // Redirect /super-admin to Admin Dashboard

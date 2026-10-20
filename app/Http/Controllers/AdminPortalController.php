@@ -2,6 +2,7 @@
 
 namespace App\Http\Controllers;
 
+use App\Models\ConsentLetterSetting;
 use App\Models\Degree;
 use App\Models\Inquiry;
 use App\Models\InternshipStream;
@@ -297,6 +298,10 @@ class AdminPortalController extends Controller
             'college' => ['required', 'string', 'max:255'],
             'degree' => ['required', 'string', 'max:50'],
             'semester' => ['required', 'string', 'max:50'],
+            'gender' => ['nullable', 'string', 'max:50'],
+            'father_name' => ['nullable', 'string', 'max:255'],
+            'university_reg_no' => ['nullable', 'string', 'max:100'],
+            'university_roll_no' => ['nullable', 'string', 'max:100'],
             'program_domain' => ['required', 'string', 'max:255'],
             'mentor_name' => ['required', 'string', 'max:255'],
             'project_title' => ['required', 'string', 'max:255'],
@@ -326,6 +331,10 @@ class AdminPortalController extends Controller
             'college' => trim($validated['college']),
             'degree' => $validated['degree'],
             'semester' => $validated['semester'],
+            'gender' => $request->filled('gender') ? trim($request->gender) : null,
+            'father_name' => $request->filled('father_name') ? trim($request->father_name) : null,
+            'university_reg_no' => $request->filled('university_reg_no') ? trim($request->university_reg_no) : null,
+            'university_roll_no' => $request->filled('university_roll_no') ? trim($request->university_roll_no) : null,
             'program_domain' => $validated['program_domain'],
             'mentor_name' => trim($validated['mentor_name']),
             'project_title' => trim($validated['project_title']),
@@ -372,6 +381,10 @@ class AdminPortalController extends Controller
             'college' => ['required', 'string', 'max:255'],
             'degree' => ['required', 'string', 'max:50'],
             'semester' => ['required', 'string', 'max:50'],
+            'gender' => ['nullable', 'string', 'max:50'],
+            'father_name' => ['nullable', 'string', 'max:255'],
+            'university_reg_no' => ['nullable', 'string', 'max:100'],
+            'university_roll_no' => ['nullable', 'string', 'max:100'],
             'program_domain' => ['required', 'string', 'max:255'],
             'mentor_name' => ['nullable', 'string', 'max:255'],
             'project_title' => ['nullable', 'string', 'max:255'],
@@ -409,6 +422,10 @@ class AdminPortalController extends Controller
             'college' => trim($validated['college']),
             'degree' => $validated['degree'],
             'semester' => $validated['semester'],
+            'gender' => $request->filled('gender') ? trim($request->gender) : null,
+            'father_name' => $request->filled('father_name') ? trim($request->father_name) : null,
+            'university_reg_no' => $request->filled('university_reg_no') ? trim($request->university_reg_no) : null,
+            'university_roll_no' => $request->filled('university_roll_no') ? trim($request->university_roll_no) : null,
             'program_domain' => $validated['program_domain'],
             'mentor_name' => ! empty($validated['mentor_name']) ? $validated['mentor_name'] : 'Faculty Advisory Board',
             'project_title' => ! empty($validated['project_title']) ? $validated['project_title'] : 'Capstone Research Evaluation',
@@ -577,8 +594,9 @@ class AdminPortalController extends Controller
     {
         $profile = StudentProfile::with('user')->findOrFail($id);
         $user = $profile->user;
+        $settings = ConsentLetterSetting::current();
 
-        return view('documents.consent-letter', compact('user', 'profile'));
+        return view('documents.consent-letter', compact('user', 'profile', 'settings'));
     }
 
     /**
@@ -1256,5 +1274,113 @@ class AdminPortalController extends Controller
         ]);
 
         return back()->with('success', 'Offer letter settings reset to sample template defaults!');
+    }
+
+    /**
+     * Consent Letter Settings Dashboard
+     */
+    public function consentLetterSettings()
+    {
+        $settings = ConsentLetterSetting::current();
+        $sampleProfile = StudentProfile::with('user')->where('consent_letter_issued', true)->latest()->first()
+            ?? StudentProfile::with('user')->latest()->first();
+
+        return view('admin.consent-letter-settings', compact('settings', 'sampleProfile'));
+    }
+
+    /**
+     * Update Consent Letter Settings & Media (Stamp, Signature)
+     */
+    public function updateConsentLetterSettings(Request $request)
+    {
+        $settings = ConsentLetterSetting::current();
+
+        $validated = $request->validate([
+            'default_college' => 'required|string|max:255',
+            'annexure_text' => 'required|string|max:100',
+            'letter_title' => 'required|string|max:255',
+            'letter_subject' => 'required|string|max:255',
+            'letter_no_prefix' => 'required|string|max:50',
+            'credits_text' => 'required|string|max:255',
+            'intro_text' => 'nullable|string',
+            'authority_designation' => 'required|string|max:255',
+            'signature' => 'nullable|image|mimes:jpeg,png,jpg,svg,webp|max:3072',
+            'seal' => 'nullable|image|mimes:jpeg,png,jpg,svg,webp|max:3072',
+        ]);
+
+        $validated['show_signature_line'] = $request->has('show_signature_line');
+
+        $destinationPath = public_path('uploads/consent-letter');
+        if (! file_exists($destinationPath)) {
+            mkdir($destinationPath, 0755, true);
+        }
+
+        if ($request->hasFile('signature')) {
+            $file = $request->file('signature');
+            $fileName = 'signature_'.time().'.'.$file->getClientOriginalExtension();
+            $file->move($destinationPath, $fileName);
+            $validated['signature_path'] = 'uploads/consent-letter/'.$fileName;
+        }
+
+        if ($request->hasFile('seal')) {
+            $file = $request->file('seal');
+            $fileName = 'seal_'.time().'.'.$file->getClientOriginalExtension();
+            $file->move($destinationPath, $fileName);
+            $validated['seal_path'] = 'uploads/consent-letter/'.$fileName;
+        }
+
+        $settings->update($validated);
+
+        return back()->with('success', 'Consent Letter template settings updated successfully!');
+    }
+
+    /**
+     * Remove an uploaded image (signature or seal)
+     */
+    public function removeConsentLetterImage(Request $request)
+    {
+        $type = $request->input('type');
+        $settings = ConsentLetterSetting::current();
+
+        if ($type === 'signature') {
+            if ($settings->signature_path && file_exists(public_path($settings->signature_path))) {
+                @unlink(public_path($settings->signature_path));
+            }
+            $settings->update(['signature_path' => null]);
+
+            return back()->with('success', 'Authority signature image removed.');
+        }
+
+        if ($type === 'seal') {
+            if ($settings->seal_path && file_exists(public_path($settings->seal_path))) {
+                @unlink(public_path($settings->seal_path));
+            }
+            $settings->update(['seal_path' => null]);
+
+            return back()->with('success', 'Official seal stamp image removed.');
+        }
+
+        return back()->with('error', 'Invalid media removal request.');
+    }
+
+    /**
+     * Reset Consent Letter settings back to reference sample defaults
+     */
+    public function resetConsentLetterSettings()
+    {
+        $settings = ConsentLetterSetting::current();
+        $settings->update([
+            'default_college' => 'GAYA COLLEGE, GAYA.',
+            'annexure_text' => 'ANNEXURE I',
+            'letter_title' => 'CONSENT LETTER',
+            'letter_subject' => 'TO WHOM IT MAY CONCERN',
+            'letter_no_prefix' => 'GC/CL/',
+            'credits_text' => 'minimum 04 credits (120 hrs)',
+            'intro_text' => 'As part of the curriculum of CBCS UG the students are required to undertake internship of minimum 04 credits (120 hrs) in an organization. In this regard, I am introducing the below mentioned student with the following details for the purpose of internship:',
+            'authority_designation' => 'Signature of HOD / Principal with Seal',
+            'show_signature_line' => true,
+        ]);
+
+        return back()->with('success', 'Consent letter settings reset to sample template defaults!');
     }
 }

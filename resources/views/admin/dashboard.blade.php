@@ -879,6 +879,31 @@
                 </div>
             </div>
 
+            <!-- University & Consent Letter Details -->
+            <div class="grid grid-cols-1 sm:grid-cols-4 gap-3 p-3 rounded-2xl bg-slate-50 dark:bg-slate-900/40 border border-slate-200 dark:border-slate-800">
+                <div>
+                    <label class="block text-[11px] font-semibold adm-text-secondary mb-1">Gender</label>
+                    <select name="gender" class="w-full px-3 py-2 rounded-xl adm-input text-xs">
+                        <option value="">Select Gender</option>
+                        <option value="Female">Female</option>
+                        <option value="Male">Male</option>
+                        <option value="Other">Other</option>
+                    </select>
+                </div>
+                <div>
+                    <label class="block text-[11px] font-semibold adm-text-secondary mb-1">Father's Name</label>
+                    <input type="text" name="father_name" placeholder="e.g. Rameshwar Prasad" class="w-full px-3 py-2 rounded-xl adm-input text-xs">
+                </div>
+                <div>
+                    <label class="block text-[11px] font-semibold adm-text-secondary mb-1">Univ. Reg. Number</label>
+                    <input type="text" name="university_reg_no" placeholder="e.g. 21005678" class="w-full px-3 py-2 rounded-xl adm-input text-xs font-mono">
+                </div>
+                <div>
+                    <label class="block text-[11px] font-semibold adm-text-secondary mb-1">Univ. Roll Number</label>
+                    <input type="text" name="university_roll_no" placeholder="e.g. 21BCA042" class="w-full px-3 py-2 rounded-xl adm-input text-xs font-mono">
+                </div>
+            </div>
+
             <div>
                 <div class="flex items-center justify-between mb-1">
                     <label class="block text-xs font-semibold adm-text-secondary">School / College / Institute Name *</label>
@@ -1016,6 +1041,31 @@
                         <option value="COMPLETED">COMPLETED</option>
                         <option value="REJECTED">REJECTED</option>
                     </select>
+                </div>
+            </div>
+
+            <!-- University & Consent Letter Details -->
+            <div class="grid grid-cols-1 sm:grid-cols-4 gap-3 p-3 rounded-2xl bg-slate-50 dark:bg-slate-900/40 border border-slate-200 dark:border-slate-800">
+                <div>
+                    <label class="block text-[11px] font-semibold adm-text-secondary mb-1">Gender</label>
+                    <select name="gender" id="edit_gender" class="w-full px-3 py-2 rounded-xl adm-input text-xs">
+                        <option value="">Select Gender</option>
+                        <option value="Female">Female</option>
+                        <option value="Male">Male</option>
+                        <option value="Other">Other</option>
+                    </select>
+                </div>
+                <div>
+                    <label class="block text-[11px] font-semibold adm-text-secondary mb-1">Father's Name</label>
+                    <input type="text" name="father_name" id="edit_father_name" placeholder="e.g. Rameshwar Prasad" class="w-full px-3 py-2 rounded-xl adm-input text-xs">
+                </div>
+                <div>
+                    <label class="block text-[11px] font-semibold adm-text-secondary mb-1">Univ. Reg. Number</label>
+                    <input type="text" name="university_reg_no" id="edit_reg_no" placeholder="e.g. 21005678" class="w-full px-3 py-2 rounded-xl adm-input text-xs font-mono">
+                </div>
+                <div>
+                    <label class="block text-[11px] font-semibold adm-text-secondary mb-1">Univ. Roll Number</label>
+                    <input type="text" name="university_roll_no" id="edit_roll_no" placeholder="e.g. 21BCA042" class="w-full px-3 py-2 rounded-xl adm-input text-xs font-mono">
                 </div>
             </div>
 
@@ -1243,6 +1293,10 @@
         document.getElementById('edit_college').value = app.college || '';
         document.getElementById('edit_degree').value = app.degree || 'BSc';
         document.getElementById('edit_semester').value = app.semester || '5th Semester';
+        document.getElementById('edit_gender').value = app.gender || '';
+        document.getElementById('edit_father_name').value = app.father_name || '';
+        document.getElementById('edit_reg_no').value = app.university_reg_no || '';
+        document.getElementById('edit_roll_no').value = app.university_roll_no || '';
         document.getElementById('edit_status').value = app.status || 'PENDING';
         document.getElementById('edit_domain').value = app.program_domain || '';
         document.getElementById('edit_mentor').value = app.mentor_name || '';

@@ -193,6 +193,15 @@
                     </div>
                     <span class="text-[9px] px-1.5 py-0.5 rounded {{ request()->routeIs('admin.offer-letter*') ? 'bg-white/20 text-white' : 'bg-indigo-500/10 text-indigo-700 dark:text-indigo-400 font-bold' }} uppercase">Customize</span>
                 </a>
+
+                <!-- Consent Letter Settings -->
+                <a href="{{ route('admin.consent-letter.settings') }}" class="flex items-center justify-between px-3.5 py-2 rounded-xl transition {{ request()->routeIs('admin.consent-letter*') ? 'bg-indigo-600 text-white shadow-lg shadow-indigo-600/30 font-bold' : 'text-slate-600 dark:text-slate-400 hover:text-slate-900 dark:hover:text-white hover:bg-slate-100 dark:hover:bg-slate-800/60' }}">
+                    <div class="flex items-center gap-3">
+                        <svg class="w-4 h-4 shrink-0" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M9 12l2 2 4-4m5.618-4.016A11.955 11.955 0 0112 2.944a11.955 11.955 0 01-8.618 3.04A12.02 12.02 0 003 9c0 5.591 3.824 10.29 9 11.622 5.176-1.332 9-6.03 9-11.622 0-1.042-.133-2.052-.382-3.016z"/></svg>
+                        <span>Consent Letter Settings</span>
+                    </div>
+                    <span class="text-[9px] px-1.5 py-0.5 rounded {{ request()->routeIs('admin.consent-letter*') ? 'bg-white/20 text-white' : 'bg-purple-500/10 text-purple-700 dark:text-purple-400 font-bold' }} uppercase">Annexure</span>
+                </a>
             </nav>
         </div>
 
