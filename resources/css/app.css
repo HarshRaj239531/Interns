@@ -265,20 +265,15 @@ html.pattern-grid .adm-canvas {
     background-size: 20px 20px !important;
 }
 
-/* Continuous 360 Spin Animation */
-@keyframes spinContinuous {
-    0% { transform: rotate(0deg); }
-    100% { transform: rotate(360deg); }
-}
-
+/* Continuous 360 Spin Animation (Disabled) */
 .animate-spin-continuous {
-    animation: spinContinuous 6s linear infinite !important;
+    animation: none !important;
     display: inline-block;
-    transform-origin: center center;
+    transform: none !important;
 }
 
 .animate-spin-continuous:hover {
-    animation: spinContinuous 1.8s linear infinite !important;
+    animation: none !important;
 }
 
 /* =========================================================
@@ -526,70 +521,18 @@ h1, h2, h3, .font-serif {
    - Zero-FOUC resilient baseline: content always accessible
    ========================================================= */
 
-/* Interactive Magnetic Cursor (Desktop) */
-.gsap-cursor-dot {
-    position: fixed;
-    top: 0;
-    left: 0;
-    width: 6px;
-    height: 6px;
-    border-radius: 50%;
-    background-color: #4338CA;
-    pointer-events: none;
-    z-index: 99999;
-    opacity: 0;
-    transform: translate(-50%, -50%);
-    transition: transform 0.15s ease, background-color 0.2s ease, opacity 0.3s ease;
-}
-
-[data-admin-theme="dark"] .gsap-cursor-dot {
-    background-color: #818CF8;
-}
-
-.gsap-cursor-dot.is-hovering {
-    transform: translate(-50%, -50%) scale(1.8);
-    background-color: #6366F1;
-}
-
+/* Interactive Magnetic Cursor (Disabled as requested) */
+.gsap-cursor-dot,
 .gsap-cursor-glow {
-    position: fixed;
-    top: 0;
-    left: 0;
-    width: 36px;
-    height: 36px;
-    border-radius: 50%;
-    border: 1.5px solid rgba(79, 70, 229, 0.4);
-    background: rgba(99, 102, 241, 0.05);
-    pointer-events: none;
-    z-index: 99998;
-    opacity: 0;
-    transform: translate(-50%, -50%);
-    transition: width 0.22s cubic-bezier(0.16, 1, 0.3, 1), height 0.22s cubic-bezier(0.16, 1, 0.3, 1), background-color 0.2s ease, border-color 0.2s ease, opacity 0.3s ease;
-    backdrop-filter: blur(1px);
-    -webkit-backdrop-filter: blur(1px);
+    display: none !important;
+    opacity: 0 !important;
+    visibility: hidden !important;
+    pointer-events: none !important;
 }
 
-.gsap-cursor-glow.is-hovering {
-    width: 54px;
-    height: 54px;
-    border-color: rgba(99, 102, 241, 0.7);
-    background: rgba(99, 102, 241, 0.12);
-}
-
-[data-admin-theme="dark"] .gsap-cursor-glow {
-    border-color: rgba(129, 140, 248, 0.4);
-    background: rgba(129, 140, 248, 0.06);
-}
-
-[data-admin-theme="dark"] .gsap-cursor-glow.is-hovering {
-    border-color: rgba(165, 180, 252, 0.75);
-    background: rgba(99, 102, 241, 0.18);
-}
-
-/* 3D Hardware Accelerated Cards */
+/* 3D Hardware Accelerated Cards (Public Site only) */
 .motion-card-hover,
-.program-card,
-.adm-card {
+.program-card {
     will-change: transform, box-shadow;
     transform-style: preserve-3d;
     backface-visibility: hidden;
@@ -602,9 +545,42 @@ h1, h2, h3, .font-serif {
     box-shadow: 0 20px 30px -10px rgba(79, 70, 229, 0.12), 0 8px 12px -6px rgba(0, 0, 0, 0.05);
 }
 
-[data-admin-theme="dark"] .motion-card-hover:hover,
-[data-admin-theme="dark"] .adm-card:hover {
-    box-shadow: 0 20px 30px -10px rgba(0, 0, 0, 0.5), 0 0 15px -3px rgba(99, 102, 241, 0.25);
+/* =========================================================
+   ADMIN PANEL MOTION OVERRIDE
+   Completely remove animations, tilts, springs, and delayed reveals in Admin Panel
+   ========================================================= */
+[data-admin-theme],
+[data-admin-theme] *,
+.adm-canvas,
+.adm-canvas * {
+    animation: none !important;
+}
+
+[data-admin-theme] .motion-card-hover,
+[data-admin-theme] .adm-card,
+[data-admin-theme] .motion-btn-spring,
+.adm-canvas .motion-card-hover,
+.adm-canvas .adm-card,
+.adm-canvas .motion-btn-spring {
+    transform: none !important;
+    transform-style: flat !important;
+    will-change: auto !important;
+}
+
+[data-admin-theme] .motion-reveal,
+[data-admin-theme] .motion-reveal-left,
+[data-admin-theme] .motion-reveal-right,
+.adm-canvas .motion-reveal,
+.adm-canvas .motion-reveal-left,
+.adm-canvas .motion-reveal-right {
+    opacity: 1 !important;
+    transform: none !important;
+    visibility: visible !important;
+}
+
+[data-admin-theme] #scrollProgress,
+.adm-canvas #scrollProgress {
+    display: none !important;
 }
 
 /* Magnetic Buttons */

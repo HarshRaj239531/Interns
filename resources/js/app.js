@@ -18,6 +18,12 @@ window.ScrollTrigger = ScrollTrigger;
 // Accessibility & Device detection
 const prefersReducedMotion = window.matchMedia('(prefers-reduced-motion: reduce)').matches;
 const isDesktop = () => window.matchMedia('(pointer: fine)').matches && window.innerWidth >= 1024;
+const isAdminPanel = () => {
+    return document.documentElement.hasAttribute('data-admin-theme') || 
+           (document.body && document.body.classList.contains('adm-canvas')) || 
+           window.location.pathname.includes('/admin') ||
+           document.getElementById('adminMainScroll') !== null;
+};
 
 /**
  * 1. Global High-Precision Scroll Progress Indicator
@@ -322,10 +328,11 @@ function initCounters() {
  */
 function init3DCardTilt() {
     try {
-        if (prefersReducedMotion || !isDesktop()) return;
+        if (prefersReducedMotion || !isDesktop() || isAdminPanel()) return;
 
-        const cards = document.querySelectorAll('.motion-card-hover, .program-card, .adm-card');
+        const cards = document.querySelectorAll('.motion-card-hover, .program-card');
         cards.forEach((card) => {
+            if (card.closest('[data-admin-theme], .adm-canvas, #adminMainScroll')) return;
             const handleMouseMove = (e) => {
                 const rect = card.getBoundingClientRect();
                 const x = e.clientX - rect.left;
@@ -371,10 +378,11 @@ function init3DCardTilt() {
  */
 function initMagneticButtons() {
     try {
-        if (prefersReducedMotion || !isDesktop()) return;
+        if (prefersReducedMotion || !isDesktop() || isAdminPanel()) return;
 
         const buttons = document.querySelectorAll('.motion-btn-spring, .gsap-magnetic');
         buttons.forEach((btn) => {
+            if (btn.closest('[data-admin-theme], .adm-canvas, #adminMainScroll')) return;
             const handleMouseMove = (e) => {
                 const rect = btn.getBoundingClientRect();
                 const centerX = rect.left + rect.width / 2;
@@ -580,67 +588,16 @@ function initDashboardProgress() {
 }
 
 /**
- * 12. Interactive Custom Magnetic Glow Cursor (Desktop)
+ * 12. Custom Magnetic Glow Cursor (Removed as requested)
  */
-function initCustomCursor() {
+function cleanupCustomCursor() {
     try {
-        if (prefersReducedMotion || !isDesktop()) return;
-
-        let dot = document.querySelector('.gsap-cursor-dot');
-        let glow = document.querySelector('.gsap-cursor-glow');
-
-        if (!dot) {
-            dot = document.createElement('div');
-            dot.className = 'gsap-cursor-dot';
-            document.body.appendChild(dot);
-        }
-
-        if (!glow) {
-            glow = document.createElement('div');
-            glow.className = 'gsap-cursor-glow';
-            document.body.appendChild(glow);
-        }
-
-        const setDotX = gsap.quickTo(dot, 'x', { duration: 0.08, ease: 'power3' });
-        const setDotY = gsap.quickTo(dot, 'y', { duration: 0.08, ease: 'power3' });
-        const setGlowX = gsap.quickTo(glow, 'x', { duration: 0.28, ease: 'power2.out' });
-        const setGlowY = gsap.quickTo(glow, 'y', { duration: 0.28, ease: 'power2.out' });
-
-        let isVisible = false;
-
-        window.addEventListener('mousemove', (e) => {
-            if (!isVisible) {
-                isVisible = true;
-                gsap.to([dot, glow], { opacity: 1, duration: 0.3 });
-            }
-            setDotX(e.clientX);
-            setDotY(e.clientY);
-            setGlowX(e.clientX);
-            setGlowY(e.clientY);
-        });
-
-        document.addEventListener('mouseleave', () => {
-            isVisible = false;
-            gsap.to([dot, glow], { opacity: 0, duration: 0.3 });
-        });
-
-        const interactiveSelector = 'a, button, input, select, textarea, .motion-card-hover, .program-card, .adm-card, [role="button"]';
-        
-        document.addEventListener('mouseover', (e) => {
-            if (e.target.closest(interactiveSelector)) {
-                glow.classList.add('is-hovering');
-                dot.classList.add('is-hovering');
-            }
-        });
-
-        document.addEventListener('mouseout', (e) => {
-            if (e.target.closest(interactiveSelector)) {
-                glow.classList.remove('is-hovering');
-                dot.classList.remove('is-hovering');
-            }
-        });
+        const dot = document.querySelector('.gsap-cursor-dot');
+        if (dot) dot.remove();
+        const glow = document.querySelector('.gsap-cursor-glow');
+        if (glow) glow.remove();
     } catch (e) {
-        console.warn('GSAP CustomCursor:', e);
+        console.warn('cleanupCustomCursor:', e);
     }
 }
 
@@ -673,6 +630,29 @@ function initVerifyPageMotion() {
  * Master Bootstrap for GSAP
  */
 function bootstrapGSAP() {
+    cleanupCustomCursor();
+
+    // If on admin panel, disable all animations to ensure a stable, distraction-free interface
+    if (isAdminPanel()) {
+        document.querySelectorAll('.motion-reveal, .motion-reveal-left, .motion-reveal-right').forEach((el) => {
+            el.style.opacity = '1';
+            el.style.transform = 'none';
+            el.style.visibility = 'visible';
+        });
+
+        document.querySelectorAll('.motion-counter').forEach((el) => {
+            const rawText = el.innerText.trim();
+            const targetVal = parseInt(el.getAttribute('data-target') || rawText.replace(/\D/g, ''), 10);
+            if (!isNaN(targetVal) && targetVal > 0) {
+                const prefix = el.getAttribute('data-prefix') || '';
+                const suffix = el.getAttribute('data-suffix') || (rawText.includes('+') ? '+' : (rawText.includes('%') ? '%' : ''));
+                el.innerText = `${prefix}${targetVal.toLocaleString()}${suffix}`;
+            }
+        });
+
+        return; // Skip all GSAP animations in Admin Panel
+    }
+
     initScrollProgress();
     initNavbarMotion();
     initHeroTimeline();
@@ -684,7 +664,6 @@ function bootstrapGSAP() {
     initModalMotion();
     initSmoothScroll();
     initDashboardProgress();
-    initCustomCursor();
     initVerifyPageMotion();
 
     // Ensure ScrollTrigger positions are recalculated accurately after layout settles

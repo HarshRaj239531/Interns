@@ -76,9 +76,6 @@
     @vite(['resources/css/app.css', 'resources/js/app.js'])
 </head>
 <body class="h-full min-h-screen md:h-screen md:overflow-hidden adm-canvas font-sans antialiased flex flex-col md:flex-row">
-    <!-- Top Scroll Progress Indicator (Framer Motion) -->
-    <div id="scrollProgress" class="fixed top-0 left-0 right-0 h-[3px] bg-gradient-to-r from-indigo-500 via-purple-500 to-emerald-400 z-[999] origin-left scale-x-0 pointer-events-none"></div>
-
     <!-- Sidebar (Independent Fixed-Height Split Container) -->
     <aside class="w-full md:w-64 adm-sidebar border-r flex flex-col shrink-0 md:h-screen md:max-h-screen z-40 select-none">
         <!-- Brand (Pinned Header) -->
@@ -296,7 +293,7 @@
         <!-- Top App Bar -->
         <header class="h-16 adm-header border-b px-6 md:px-8 flex items-center justify-between shrink-0 sticky top-0 z-30">
             <div class="flex items-center gap-2.5">
-                <span class="w-2.5 h-2.5 rounded-full bg-emerald-500 animate-pulse"></span>
+                <span class="w-2.5 h-2.5 rounded-full bg-emerald-500"></span>
                 <span class="text-xs adm-text-secondary font-medium">UGC Central Dispatch System • Active</span>
             </div>
 
@@ -309,17 +306,16 @@
                     <span id="themeLabel" class="hidden sm:inline">Theme</span>
                 </button>
 
-                <!-- Continuously Animated Spinning Cog / Appearance Studio Trigger Button -->
+                <!-- Appearance Studio Trigger Button -->
                 <button type="button" onclick="openAdminCustomizer()" id="adminThemeStudioBtn" title="Open Admin Theme & Appearance Studio" class="relative group flex items-center gap-2 px-3.5 py-1.5 rounded-full border border-indigo-500/30 bg-gradient-to-r from-indigo-500/10 via-purple-500/10 to-pink-500/10 hover:from-indigo-500/20 hover:to-purple-500/20 text-indigo-700 dark:text-indigo-300 text-xs font-bold transition cursor-pointer shadow-xs overflow-hidden">
                     <span class="absolute inset-0 bg-indigo-500/5 group-hover:bg-indigo-500/10 transition"></span>
-                    <!-- Continuous Smooth 360-degree Rotating Cog Icon (Always spins) -->
-                    <svg class="w-4 h-4 text-indigo-600 dark:text-indigo-400 animate-spin-continuous transition-transform" fill="none" stroke="currentColor" viewBox="0 0 24 24" xmlns="http://www.w3.org/2000/svg">
+                    <svg class="w-4 h-4 text-indigo-600 dark:text-indigo-400 animate-spin-continuous" fill="none" stroke="currentColor" viewBox="0 0 24 24" xmlns="http://www.w3.org/2000/svg">
                         <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M10.325 4.317c.426-1.756 2.924-1.756 3.35 0a1.724 1.724 0 002.573 1.066c1.543-.94 3.31.826 2.37 2.37a1.724 1.724 0 001.065 2.572c1.756.426 1.756 2.924 0 3.35a1.724 1.724 0 00-1.066 2.573c.94 1.543-.826 3.31-2.37 2.37a1.724 1.724 0 00-2.572 1.065c-.426 1.756-2.924 1.756-3.35 0a1.724 1.724 0 00-2.573-1.066c-1.543.94-3.31-.826-2.37-2.37a1.724 1.724 0 00-1.065-2.572c-1.756-.426-1.756-2.924 0-3.35a1.724 1.724 0 001.066-2.573c-.94-1.543.826-3.31 2.37-2.37.996.608 2.296.07 2.572-1.065z"></path>
                         <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M15 12a3 3 0 11-6 0 3 3 0 016 0z"></path>
                     </svg>
                     <span class="relative z-10 flex items-center gap-1.5">
                         <span class="font-semibold">Customize</span>
-                        <span class="w-1.5 h-1.5 rounded-full bg-emerald-400 animate-pulse"></span>
+                        <span class="w-1.5 h-1.5 rounded-full bg-emerald-400"></span>
                     </span>
                 </button>
 
@@ -415,8 +411,8 @@
         <div class="p-5 border-b border-slate-800 flex items-center justify-between shrink-0 bg-slate-950/60 backdrop-blur-md">
             <div class="flex items-center gap-3">
                 <div class="w-9 h-9 rounded-xl bg-indigo-500/20 border border-indigo-500/30 flex items-center justify-center text-indigo-400">
-                    <!-- Spinning Cog Icon in Drawer Title -->
-                    <svg class="w-5 h-5 animate-spin-continuous" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                    <!-- Cog Icon in Drawer Title -->
+                    <svg class="w-5 h-5" fill="none" stroke="currentColor" viewBox="0 0 24 24">
                         <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M10.325 4.317c.426-1.756 2.924-1.756 3.35 0a1.724 1.724 0 002.573 1.066c1.543-.94 3.31.826 2.37 2.37a1.724 1.724 0 001.065 2.572c1.756.426 1.756 2.924 0 3.35a1.724 1.724 0 00-1.066 2.573c.94 1.543-.826 3.31-2.37 2.37a1.724 1.724 0 00-2.572 1.065c-.426 1.756-2.924 1.756-3.35 0a1.724 1.724 0 00-2.573-1.066c-1.543.94-3.31-.826-2.37-2.37a1.724 1.724 0 00-1.065-2.572c-1.756-.426-1.756-2.924 0-3.35a1.724 1.724 0 001.066-2.573c-.94-1.543.826-3.31 2.37-2.37.996.608 2.296.07 2.572-1.065z"></path>
                         <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M15 12a3 3 0 11-6 0 3 3 0 016 0z"></path>
                     </svg>
