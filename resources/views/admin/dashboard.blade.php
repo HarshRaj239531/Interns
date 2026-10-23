@@ -223,6 +223,13 @@
                                     <span class="font-mono text-[10px] text-indigo-600 dark:text-indigo-400 font-semibold">{{ $rapp->application_number }}</span>
                                 </div>
                                 <span class="text-[11px] adm-text-muted block truncate">{{ $rapp->college }} • {{ $rapp->program_domain }}</span>
+                                @if($rapp->father_name || $rapp->university_reg_no)
+                                    <span class="text-[10px] text-slate-500 dark:text-slate-400 block truncate mt-0.5">
+                                        @if($rapp->father_name) <span class="adm-text-muted">Father:</span> <strong class="text-slate-700 dark:text-slate-300 font-semibold">{{ $rapp->father_name }}</strong> @endif
+                                        @if($rapp->father_name && $rapp->university_reg_no) • @endif
+                                        @if($rapp->university_reg_no) <span class="font-mono bg-slate-200/70 dark:bg-slate-800 px-1 py-0.2 rounded text-[9.5px]">Reg: {{ $rapp->university_reg_no }}</span> @endif
+                                    </span>
+                                @endif
                             </div>
                         </div>
 
@@ -559,6 +566,16 @@
                                     </div>
                                     <span class="font-mono text-indigo-600 dark:text-indigo-400 text-[11px] block font-semibold">{{ $app->application_number }}</span>
                                     <span class="adm-text-muted text-[11px] block">{{ $app->user->email ?? 'N/A' }} • {{ $app->user->phone ?? 'N/A' }}</span>
+                                    @if($app->father_name || $app->university_reg_no)
+                                        <div class="mt-1 flex flex-wrap items-center gap-x-2 gap-y-0.5 text-[10.5px]">
+                                            @if($app->father_name)
+                                                <span class="adm-text-secondary"><span class="adm-text-muted">Father:</span> <strong class="font-semibold">{{ $app->father_name }}</strong></span>
+                                            @endif
+                                            @if($app->university_reg_no)
+                                                <span class="font-mono text-slate-700 dark:text-slate-300 bg-slate-100 dark:bg-slate-800/80 px-1.5 py-0.2 rounded text-[10px] border border-slate-200 dark:border-slate-700"><span class="adm-text-muted">Reg:</span> {{ $app->university_reg_no }}</span>
+                                            @endif
+                                        </div>
+                                    @endif
                                 </div>
                             </div>
                         </td>
@@ -734,6 +751,16 @@
                                     </div>
                                     <span class="font-mono text-indigo-600 dark:text-indigo-400 text-[11px] block font-semibold">{{ $app->application_number }}</span>
                                     <span class="adm-text-muted text-[11px] block">{{ $app->user->email ?? 'N/A' }} • {{ $app->user->phone ?? 'N/A' }}</span>
+                                    @if($app->father_name || $app->university_reg_no)
+                                        <div class="mt-1 flex flex-wrap items-center gap-x-2 gap-y-0.5 text-[10.5px]">
+                                            @if($app->father_name)
+                                                <span class="adm-text-secondary"><span class="adm-text-muted">Father:</span> <strong class="font-semibold">{{ $app->father_name }}</strong></span>
+                                            @endif
+                                            @if($app->university_reg_no)
+                                                <span class="font-mono text-slate-700 dark:text-slate-300 bg-slate-100 dark:bg-slate-800/80 px-1.5 py-0.2 rounded text-[10px] border border-slate-200 dark:border-slate-700"><span class="adm-text-muted">Reg:</span> {{ $app->university_reg_no }}</span>
+                                            @endif
+                                        </div>
+                                    @endif
                                     <span class="text-[10px] text-slate-400 dark:text-slate-500 block">Applied {{ $app->created_at ? $app->created_at->format('d M Y') : 'N/A' }} {{-- Time commented out: , {{ $app->created_at?->format('h:i A') }} --}}</span>
                                 </div>
                             </div>

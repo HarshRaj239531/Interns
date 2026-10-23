@@ -59,6 +59,20 @@
                     <span class="adm-text font-bold">{{ $profile->degree }} ({{ $profile->semester }})</span>
                 </div>
 
+                @if($profile->father_name)
+                <div class="flex items-center justify-between">
+                    <span class="adm-text-muted">Father's Name:</span>
+                    <span class="adm-text font-medium text-right max-w-[200px] truncate">{{ $profile->father_name }}</span>
+                </div>
+                @endif
+
+                @if($profile->university_reg_no)
+                <div class="flex items-center justify-between">
+                    <span class="adm-text-muted">Univ. Reg. Number:</span>
+                    <span class="font-mono font-semibold text-indigo-600 dark:text-indigo-400 text-right">{{ $profile->university_reg_no }}</span>
+                </div>
+                @endif
+
                 <div class="flex items-center justify-between">
                     <span class="adm-text-muted">Enrolled College:</span>
                     <span class="adm-text font-semibold text-right max-w-[200px] truncate" title="{{ $profile->college }}">{{ $profile->college }}</span>

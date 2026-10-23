@@ -156,6 +156,8 @@ class SiteController extends Controller
 
         $validated = $request->validate([
             'name' => ['required', 'string', 'max:255'],
+            'father_name' => ['nullable', 'string', 'max:255'],
+            'university_reg_no' => ['nullable', 'string', 'max:100'],
             'email' => ['required', 'string', 'email', 'max:255', 'unique:users,email'],
             'phone' => ['required', 'string', 'max:50'],
             'password' => ['required', 'string', 'min:6'],
@@ -195,6 +197,8 @@ class SiteController extends Controller
             'degree' => $validated['degree'],
             'college' => trim($validated['college']),
             'semester' => $validated['semester'],
+            'father_name' => $request->filled('father_name') ? trim($request->father_name) : null,
+            'university_reg_no' => $request->filled('university_reg_no') ? trim($request->university_reg_no) : null,
             'program_domain' => $validated['program_domain'],
             'status' => 'PENDING',
             'offer_letter_issued' => false,

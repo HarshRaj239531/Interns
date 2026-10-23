@@ -78,6 +78,9 @@ class AdminPortalController extends Controller
                     ->orWhere('certificate_number', 'like', "%{$search}%")
                     ->orWhere('lor_number', 'like', "%{$search}%")
                     ->orWhere('mentor_name', 'like', "%{$search}%")
+                    ->orWhere('father_name', 'like', "%{$search}%")
+                    ->orWhere('university_reg_no', 'like', "%{$search}%")
+                    ->orWhere('university_roll_no', 'like', "%{$search}%")
                     ->orWhereHas('user', function ($uq) use ($search) {
                         $uq->where('name', 'like', "%{$search}%")
                             ->orWhere('email', 'like', "%{$search}%")
@@ -364,6 +367,9 @@ class AdminPortalController extends Controller
                         ->orWhere('program_domain', 'like', "%{$search}%")
                         ->orWhere('certificate_number', 'like', "%{$search}%")
                         ->orWhere('lor_number', 'like', "%{$search}%")
+                        ->orWhere('father_name', 'like', "%{$search}%")
+                        ->orWhere('university_reg_no', 'like', "%{$search}%")
+                        ->orWhere('university_roll_no', 'like', "%{$search}%")
                         ->orWhereHas('user', function ($uq) use ($search) {
                             $uq->where('name', 'like', "%{$search}%")
                                 ->orWhere('email', 'like', "%{$search}%")
@@ -1423,6 +1429,8 @@ class AdminPortalController extends Controller
                 ->where('application_number', $search)
                 ->orWhere('certificate_number', $search)
                 ->orWhere('lor_number', $search)
+                ->orWhere('university_reg_no', $search)
+                ->orWhere('father_name', 'like', "%{$search}%")
                 ->orWhereHas('user', function ($q) use ($search) {
                     $q->where('email', $search)->orWhere('name', 'like', "%{$search}%");
                 })

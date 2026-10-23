@@ -55,22 +55,30 @@
                 </span>
             </div>
 
-            <div class="grid grid-cols-1 sm:grid-cols-2 gap-4 text-xs">
+            <div class="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 gap-4 text-xs">
                 <div class="p-4 rounded-2xl bg-[#FAFBF9] border border-slate-200/80">
                     <span class="text-[10px] text-slate-400 uppercase font-bold block mb-0.5">Enrolled College / Institute</span>
-                    <span class="font-semibold text-slate-900 text-sm">{{ $profile->college }}</span>
+                    <span class="font-semibold text-slate-900 text-sm truncate block" title="{{ $profile->college }}">{{ $profile->college }}</span>
                 </div>
                 <div class="p-4 rounded-2xl bg-[#FAFBF9] border border-slate-200/80">
                     <span class="text-[10px] text-slate-400 uppercase font-bold block mb-0.5">Program Domain Track</span>
-                    <span class="font-semibold text-indigo-700 text-sm">{{ $profile->program_domain }}</span>
+                    <span class="font-semibold text-indigo-700 text-sm truncate block" title="{{ $profile->program_domain }}">{{ $profile->program_domain }}</span>
                 </div>
                 <div class="p-4 rounded-2xl bg-[#FAFBF9] border border-slate-200/80">
                     <span class="text-[10px] text-slate-400 uppercase font-bold block mb-0.5">Student Email</span>
-                    <span class="font-semibold text-slate-900 text-sm">{{ $user->email }}</span>
+                    <span class="font-semibold text-slate-900 text-sm truncate block">{{ $user->email }}</span>
+                </div>
+                <div class="p-4 rounded-2xl bg-[#FAFBF9] border border-slate-200/80">
+                    <span class="text-[10px] text-slate-400 uppercase font-bold block mb-0.5">Father's Name</span>
+                    <span class="font-semibold text-slate-900 text-sm truncate block">{{ $profile->father_name ?: 'Not Provided' }}</span>
+                </div>
+                <div class="p-4 rounded-2xl bg-[#FAFBF9] border border-slate-200/80">
+                    <span class="text-[10px] text-slate-400 uppercase font-bold block mb-0.5">Univ. Registration No.</span>
+                    <span class="font-mono font-semibold text-indigo-600 text-sm truncate block">{{ $profile->university_reg_no ?: 'Not Provided' }}</span>
                 </div>
                 <div class="p-4 rounded-2xl bg-[#FAFBF9] border border-slate-200/80">
                     <span class="text-[10px] text-slate-400 uppercase font-bold block mb-0.5">Assigned Faculty Mentor</span>
-                    <span class="font-semibold text-slate-900 text-sm">{{ $profile->mentor_name }}</span>
+                    <span class="font-semibold text-slate-900 text-sm truncate block">{{ $profile->mentor_name }}</span>
                 </div>
             </div>
 

@@ -98,6 +98,35 @@ class InfinityInternsTest extends TestCase
         ]);
     }
 
+    public function test_student_application_submission_with_father_name_and_reg_no(): void
+    {
+        $response = $this->post(route('apply'), [
+            'name' => 'Rahul Sharma',
+            'father_name' => 'Rameshwar Sharma',
+            'university_reg_no' => '21005678',
+            'email' => 'rahul.sharma@example.com',
+            'phone' => '9876543210',
+            'password' => 'Student@123',
+            'degree' => 'BSc',
+            'college' => 'Patna Science College',
+            'semester' => '5th Semester',
+            'program_domain' => 'Science, Environment & Data Skills',
+        ]);
+
+        $response->assertSessionHas('success');
+        $this->assertDatabaseHas('student_profiles', [
+            'father_name' => 'Rameshwar Sharma',
+            'university_reg_no' => '21005678',
+            'degree' => 'BSc',
+        ]);
+
+        $admin = User::factory()->create(['role' => 'ADMIN']);
+        $adminResponse = $this->actingAs($admin)->get(route('admin.dashboard', ['search' => '21005678']));
+        $adminResponse->assertStatus(200);
+        $adminResponse->assertSee('Rameshwar Sharma');
+        $adminResponse->assertSee('21005678');
+    }
+
     public function test_certificate_verification_with_valid_and_invalid_codes(): void
     {
         $user = User::factory()->create(['role' => 'STUDENT']);
