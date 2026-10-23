@@ -50,6 +50,24 @@ class AdminPortalController extends Controller
             $query->where('program_domain', $request->domain);
         }
 
+        // College filter
+        if ($request->filled('college') && $request->college !== 'all') {
+            $query->where('college', $request->college);
+        }
+
+        // Document Status filter
+        if ($request->filled('doc_status') && $request->doc_status !== 'all') {
+            match ($request->doc_status) {
+                'cert_pending' => $query->where('certificate_issued', false),
+                'cert_issued' => $query->where('certificate_issued', true),
+                'offer_pending' => $query->where('offer_letter_issued', false),
+                'offer_issued' => $query->where('offer_letter_issued', true),
+                'lor_pending' => $query->where('lor_issued', false),
+                'lor_issued' => $query->where('lor_issued', true),
+                default => null,
+            };
+        }
+
         // Global search
         if ($request->filled('search')) {
             $search = trim($request->search);
@@ -74,7 +92,11 @@ class AdminPortalController extends Controller
             $query->latest();
         }
 
-        $applications = $query->paginate(15)->withQueryString();
+        $perPage = in_array((int) $request->input('per_page', 15), [10, 15, 25, 50, 100], true)
+            ? (int) $request->input('per_page', 15)
+            : 15;
+
+        $applications = $query->paginate($perPage)->withQueryString();
 
         $stats = [
             'total' => StudentProfile::count(),
@@ -111,6 +133,329 @@ class AdminPortalController extends Controller
             'recentApplications',
             'recentCertificates'
         ));
+    }
+
+    /**
+     * Perform Bulk Operations on Selected Applications / Enrolled Students
+     */
+    public function bulkAction(Request $request)
+    {
+        $validated = $request->validate([
+            'action' => ['required', 'string', 'in:certificate,offer_letter,consent_letter,lor,status,delete'],
+            'selected_ids' => ['required', 'array', 'min:1'],
+            'selected_ids.*' => ['integer', 'exists:student_profiles,id'],
+            'status' => ['nullable', 'string', 'in:PENDING,APPROVED,ACTIVE,COMPLETED,REJECTED'],
+            'internship_start_date' => ['nullable', 'date'],
+            'internship_end_date' => ['nullable', 'date'],
+            'certificate_date' => ['nullable', 'date'],
+            'certificate_prefix' => ['nullable', 'string', 'max:30'],
+            'lor_date' => ['nullable', 'date'],
+            'lor_remarks' => ['nullable', 'string', 'max:500'],
+        ]);
+
+        $profiles = StudentProfile::with('user')->whereIn('id', $validated['selected_ids'])->get();
+        $count = $profiles->count();
+
+        if ($count === 0) {
+            return back()->with('error', 'No valid students selected for bulk operation.');
+        }
+
+        return match ($validated['action']) {
+            'certificate' => $this->handleBulkCertificate($profiles, $request),
+            'offer_letter' => $this->handleBulkOfferLetter($profiles),
+            'consent_letter' => $this->handleBulkConsentLetter($profiles),
+            'lor' => $this->handleBulkLor($profiles, $request),
+            'status' => $this->handleBulkStatus($profiles, $validated['status'] ?? 'ACTIVE'),
+            'delete' => $this->handleBulkDelete($profiles),
+            default => back()->with('error', 'Invalid bulk action requested.'),
+        };
+    }
+
+    /**
+     * Batch Issue Certificates
+     */
+    protected function handleBulkCertificate($profiles, Request $request)
+    {
+        $prefix = trim($request->input('certificate_prefix', 'UGC-INF-')) ?: 'UGC-INF-';
+        $certDate = $request->filled('certificate_date') ? $request->certificate_date : now();
+        $startDate = $request->input('internship_start_date');
+        $endDate = $request->input('internship_end_date');
+
+        $issuedCount = 0;
+        foreach ($profiles as $profile) {
+            $certNum = $profile->certificate_number;
+            if (empty($certNum)) {
+                do {
+                    $certNum = $prefix.rand(100000, 999999);
+                } while (StudentProfile::where('certificate_number', $certNum)->where('id', '!=', $profile->id)->exists());
+            }
+
+            $sDate = $startDate ?: ($profile->internship_start_date ? $profile->internship_start_date->format('Y-m-d') : null);
+            $eDate = $endDate ?: ($profile->internship_end_date ? $profile->internship_end_date->format('Y-m-d') : now()->format('Y-m-d'));
+
+            $profile->update([
+                'certificate_issued' => true,
+                'certificate_number' => $certNum,
+                'certificate_date' => $certDate,
+                'internship_start_date' => $sDate,
+                'internship_end_date' => $eDate,
+                'status' => 'COMPLETED',
+            ]);
+            $issuedCount++;
+        }
+
+        return back()->with('success', "Batch Certificate Issuance complete! Generated & approved UGC certificates for {$issuedCount} student(s).");
+    }
+
+    /**
+     * Batch Issue Offer Letters
+     */
+    protected function handleBulkOfferLetter($profiles)
+    {
+        $issuedCount = 0;
+        foreach ($profiles as $profile) {
+            $profile->update([
+                'offer_letter_issued' => true,
+                'offer_letter_date' => now(),
+                'status' => $profile->status === 'PENDING' ? 'APPROVED' : $profile->status,
+            ]);
+            $issuedCount++;
+        }
+
+        return back()->with('success', "Batch Offer Letter release complete! Successfully released for {$issuedCount} student(s).");
+    }
+
+    /**
+     * Batch Issue Consent Letters
+     */
+    protected function handleBulkConsentLetter($profiles)
+    {
+        $issuedCount = 0;
+        foreach ($profiles as $profile) {
+            $profile->update([
+                'consent_letter_issued' => true,
+                'consent_letter_date' => now(),
+            ]);
+            $issuedCount++;
+        }
+
+        return back()->with('success', "Batch Consent Undertakings released for {$issuedCount} student(s).");
+    }
+
+    /**
+     * Batch Issue Letters of Recommendation
+     */
+    protected function handleBulkLor($profiles, Request $request)
+    {
+        $lorDate = $request->filled('lor_date') ? $request->lor_date : now();
+        $remarks = $request->input('lor_remarks') ?: 'Demonstrated exceptional technical aptitude and commitment to academic excellence.';
+        $issuedCount = 0;
+
+        foreach ($profiles as $profile) {
+            $lorNum = $profile->lor_number;
+            if (empty($lorNum)) {
+                do {
+                    $lorNum = 'INF-LOR-2026-'.rand(1000, 9999);
+                } while (StudentProfile::where('lor_number', $lorNum)->where('id', '!=', $profile->id)->exists());
+            }
+
+            $profile->update([
+                'lor_issued' => true,
+                'lor_number' => $lorNum,
+                'lor_date' => $lorDate,
+                'lor_remarks' => $remarks,
+            ]);
+            $issuedCount++;
+        }
+
+        return back()->with('success', "Batch Letter of Recommendation (LOR) issuance complete for {$issuedCount} student(s).");
+    }
+
+    /**
+     * Batch Change Status
+     */
+    protected function handleBulkStatus($profiles, string $newStatus)
+    {
+        $count = 0;
+        foreach ($profiles as $profile) {
+            $update = ['status' => $newStatus];
+            if ($newStatus === 'APPROVED') {
+                if (! $profile->offer_letter_issued) {
+                    $update['offer_letter_issued'] = true;
+                    $update['offer_letter_date'] = now();
+                }
+                if (! $profile->consent_letter_issued) {
+                    $update['consent_letter_issued'] = true;
+                    $update['consent_letter_date'] = now();
+                }
+            }
+            $profile->update($update);
+            $count++;
+        }
+
+        return back()->with('success', "Application status successfully changed to {$newStatus} for {$count} student(s).");
+    }
+
+    /**
+     * Batch Delete
+     */
+    protected function handleBulkDelete($profiles)
+    {
+        $count = $profiles->count();
+        foreach ($profiles as $profile) {
+            $profile->delete();
+        }
+
+        return back()->with('success', "Successfully deleted {$count} student record(s) from registry.");
+    }
+
+    /**
+     * Export applications / enrolled students to CSV
+     */
+    public function exportApplications(Request $request)
+    {
+        $query = StudentProfile::with('user');
+
+        if ($request->filled('selected_ids')) {
+            $ids = is_array($request->selected_ids) ? $request->selected_ids : explode(',', $request->selected_ids);
+            $query->whereIn('id', array_filter($ids));
+        } elseif ($request->filled('ids')) {
+            $ids = is_array($request->ids) ? $request->ids : explode(',', $request->ids);
+            $query->whereIn('id', array_filter($ids));
+        } else {
+            $tab = $request->input('tab', 'overview');
+            if ($tab === 'enrolled') {
+                $query->whereIn('status', ['APPROVED', 'ACTIVE', 'COMPLETED']);
+            } elseif ($tab === 'pending_cert') {
+                $query->whereIn('status', ['APPROVED', 'ACTIVE', 'COMPLETED'])
+                    ->where('certificate_issued', false);
+            } elseif ($tab === 'issued_cert') {
+                $query->where('certificate_issued', true);
+            }
+
+            if ($request->filled('status') && $request->status !== 'all') {
+                $query->where('status', $request->status);
+            }
+            if ($request->filled('degree') && $request->degree !== 'all') {
+                $query->where('degree', $request->degree);
+            }
+            if ($request->filled('domain') && $request->domain !== 'all') {
+                $query->where('program_domain', $request->domain);
+            }
+            if ($request->filled('college') && $request->college !== 'all') {
+                $query->where('college', $request->college);
+            }
+            if ($request->filled('doc_status') && $request->doc_status !== 'all') {
+                match ($request->doc_status) {
+                    'cert_pending' => $query->where('certificate_issued', false),
+                    'cert_issued' => $query->where('certificate_issued', true),
+                    'offer_pending' => $query->where('offer_letter_issued', false),
+                    'offer_issued' => $query->where('offer_letter_issued', true),
+                    'lor_pending' => $query->where('lor_issued', false),
+                    'lor_issued' => $query->where('lor_issued', true),
+                    default => null,
+                };
+            }
+            if ($request->filled('search')) {
+                $search = trim($request->search);
+                $query->where(function ($q) use ($search) {
+                    $q->where('application_number', 'like', "%{$search}%")
+                        ->orWhere('college', 'like', "%{$search}%")
+                        ->orWhere('program_domain', 'like', "%{$search}%")
+                        ->orWhere('certificate_number', 'like', "%{$search}%")
+                        ->orWhere('lor_number', 'like', "%{$search}%")
+                        ->orWhereHas('user', function ($uq) use ($search) {
+                            $uq->where('name', 'like', "%{$search}%")
+                                ->orWhere('email', 'like', "%{$search}%")
+                                ->orWhere('phone', 'like', "%{$search}%");
+                        });
+                });
+            }
+        }
+
+        $records = $query->latest()->get();
+        $filename = 'student_registry_export_'.now()->format('Y_m_d_His').'.csv';
+
+        $headers = [
+            'Content-Type' => 'text/csv; charset=UTF-8',
+            'Content-Disposition' => "attachment; filename=\"{$filename}\"",
+            'Pragma' => 'no-cache',
+            'Cache-Control' => 'must-revalidate, post-check=0, pre-check=0',
+            'Expires' => '0',
+        ];
+
+        $callback = function () use ($records) {
+            $handle = fopen('php://output', 'w');
+            fwrite($handle, "\xEF\xBB\xBF");
+
+            fputcsv($handle, [
+                'Application Number',
+                'Candidate Name',
+                'Email',
+                'Phone',
+                'Degree Program',
+                'Current Semester',
+                'College / Institute',
+                'Internship Domain Track',
+                'Father Name',
+                'Univ Reg Number',
+                'Univ Roll Number',
+                'Attendance Rate',
+                'Assigned Mentor',
+                'Capstone Project',
+                'Status',
+                'Offer Letter Issued',
+                'Consent Letter Issued',
+                'Certificate Issued',
+                'Certificate Number',
+                'Internship Start Date',
+                'Internship End Date',
+                'Certificate Issue Date',
+                'LOR Issued',
+                'LOR Reference Number',
+                'Scorecard Issued',
+                'Marksheet Grade',
+                'Marksheet Marks',
+                'Enrolled At',
+            ]);
+
+            foreach ($records as $r) {
+                fputcsv($handle, [
+                    $r->application_number,
+                    $r->user->name ?? 'N/A',
+                    $r->user->email ?? 'N/A',
+                    $r->user->phone ?? 'N/A',
+                    $r->degree,
+                    $r->semester,
+                    $r->college,
+                    $r->program_domain,
+                    $r->father_name ?? '',
+                    $r->university_reg_no ?? '',
+                    $r->university_roll_no ?? '',
+                    $r->attendance_rate.'%',
+                    $r->mentor_name,
+                    $r->project_title,
+                    $r->status,
+                    $r->offer_letter_issued ? 'YES' : 'NO',
+                    $r->consent_letter_issued ? 'YES' : 'NO',
+                    $r->certificate_issued ? 'YES' : 'NO',
+                    $r->certificate_number ?? '',
+                    $r->internship_start_date ? $r->internship_start_date->format('d/m/Y') : '',
+                    $r->internship_end_date ? $r->internship_end_date->format('d/m/Y') : '',
+                    $r->certificate_date ? $r->certificate_date->format('d/m/Y') : '',
+                    $r->lor_issued ? 'YES' : 'NO',
+                    $r->lor_number ?? '',
+                    $r->marksheet_issued ? 'YES' : 'NO',
+                    $r->marksheet_grade ?? '',
+                    $r->marksheet_marks ?? '',
+                    $r->created_at ? $r->created_at->format('d/m/Y H:i') : '',
+                ]);
+            }
+
+            fclose($handle);
+        };
+
+        return response()->stream($callback, 200, $headers);
     }
 
     /**
@@ -490,74 +835,6 @@ class AdminPortalController extends Controller
         ]);
 
         return back()->with('success', "Certificate {$oldCert} for {$profile->application_number} has been revoked.");
-    }
-
-    /**
-     * Export Filtered Applications as CSV
-     */
-    public function exportApplications(Request $request)
-    {
-        $query = StudentProfile::with('user');
-
-        if ($request->filled('status') && $request->status !== 'all') {
-            $query->where('status', $request->status);
-        }
-        if ($request->filled('degree') && $request->degree !== 'all') {
-            $query->where('degree', $request->degree);
-        }
-        if ($request->filled('domain') && $request->domain !== 'all') {
-            $query->where('program_domain', $request->domain);
-        }
-
-        $profiles = $query->latest()->get();
-
-        $filename = 'infinity_interns_applications_'.date('Ymd_His').'.csv';
-        $headers = [
-            'Content-Type' => 'text/csv',
-            'Content-Disposition' => "attachment; filename=\"{$filename}\"",
-        ];
-
-        $callback = function () use ($profiles) {
-            $file = fopen('php://output', 'w');
-            fputcsv($file, [
-                'Application Number',
-                'Candidate Name',
-                'Email',
-                'Phone',
-                'College',
-                'Degree',
-                'Semester',
-                'Program Domain',
-                'Status',
-                'Attendance %',
-                'Mentor',
-                'Project Title',
-                'Certificate Issued',
-                'Certificate Number',
-            ]);
-
-            foreach ($profiles as $p) {
-                fputcsv($file, [
-                    $p->application_number,
-                    $p->user->name ?? '',
-                    $p->user->email ?? '',
-                    $p->user->phone ?? '',
-                    $p->college,
-                    $p->degree,
-                    $p->semester,
-                    $p->program_domain,
-                    $p->status,
-                    $p->attendance_rate.'%',
-                    $p->mentor_name,
-                    $p->project_title,
-                    $p->certificate_issued ? 'YES' : 'NO',
-                    $p->certificate_number ?? '',
-                ]);
-            }
-            fclose($file);
-        };
-
-        return response()->stream($callback, 200, $headers);
     }
 
     /**

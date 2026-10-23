@@ -57,7 +57,9 @@ Route::middleware(['auth', 'admin'])->prefix('admin')->name('admin.')->group(fun
     Route::post('/applications/{id}/update-details', [AdminPortalController::class, 'updateDetails'])->name('application.update-details');
     Route::post('/applications/{id}/update-full', [AdminPortalController::class, 'updateFullApplicant'])->name('application.update-full');
     Route::post('/applications/store', [AdminPortalController::class, 'storeApplicant'])->name('application.store');
+    Route::post('/applications/bulk-action', [AdminPortalController::class, 'bulkAction'])->name('applications.bulk-action');
     Route::get('/applications/export', [AdminPortalController::class, 'exportApplications'])->name('applications.export');
+    Route::post('/applications/export', [AdminPortalController::class, 'exportApplications'])->name('applications.export.post');
     Route::post('/applications/{id}/revoke-certificate', [AdminPortalController::class, 'revokeCertificate'])->name('application.revoke-certificate');
     Route::delete('/applications/{id}', [AdminPortalController::class, 'deleteApplication'])->name('application.delete');
 

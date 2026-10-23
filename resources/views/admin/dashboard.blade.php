@@ -372,60 +372,122 @@
     </div>
 
     <!-- Filter & Search Toolbar -->
-    <div class="p-4 rounded-2xl adm-card">
-        <form action="{{ route('admin.dashboard') }}" method="GET" class="flex flex-col lg:flex-row items-center justify-between gap-3 w-full">
+    <div class="p-4 sm:p-5 rounded-2xl adm-card space-y-3">
+        <form action="{{ route('admin.dashboard') }}" method="GET" class="space-y-3">
             <input type="hidden" name="tab" value="{{ $tab }}">
 
-            <div class="relative flex-1 w-full min-w-[240px]">
-                <div class="absolute inset-y-0 left-0 pl-3.5 flex items-center pointer-events-none adm-text-muted">
-                    <svg class="w-4 h-4" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M21 21l-6-6m2-5a7 7 0 11-14 0 7 7 0 0114 0z"/></svg>
+            <!-- Row 1: Search Bar & Primary Actions -->
+            <div class="flex flex-col sm:flex-row items-center gap-2.5">
+                <div class="relative flex-1 w-full">
+                    <div class="absolute inset-y-0 left-0 pl-3.5 flex items-center pointer-events-none adm-text-muted">
+                        <svg class="w-4 h-4" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M21 21l-6-6m2-5a7 7 0 11-14 0 7 7 0 0114 0z"/></svg>
+                    </div>
+                    <input type="text" name="search" value="{{ request('search') }}" placeholder="Search by student name, college, email, phone, application ID, or certificate serial..." class="w-full pl-10 pr-4 py-2.5 rounded-xl adm-input text-xs placeholder-slate-400">
                 </div>
-                <input type="text" name="search" value="{{ request('search') }}" placeholder="Search by student name, college, email, phone, application ID, or certificate no..." class="w-full pl-10 pr-4 py-2.5 rounded-xl adm-input text-xs placeholder-slate-400">
+
+                <div class="flex items-center gap-2 w-full sm:w-auto shrink-0">
+                    <button type="submit" class="flex-1 sm:flex-initial px-5 py-2.5 rounded-xl bg-indigo-600 hover:bg-indigo-700 text-white text-xs font-bold transition shadow-md shadow-indigo-600/30 cursor-pointer flex items-center justify-center gap-1.5">
+                        <svg class="w-3.5 h-3.5" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M3 4a1 1 0 011-1h16a1 1 0 011 1v2.586a1 1 0 01-.293.707l-6.414 6.414a1 1 0 00-.293.707V17l-4 4v-6.586a1 1 0 00-.293-.707L3.293 7.293A1 1 0 013 6.586V4z"/></svg>
+                        <span>Apply Filters</span>
+                    </button>
+
+                    @if(request('search') || (request('status') && request('status') !== 'all') || (request('degree') && request('degree') !== 'all') || (request('domain') && request('domain') !== 'all') || (request('college') && request('college') !== 'all') || (request('doc_status') && request('doc_status') !== 'all') || request('per_page'))
+                        <a href="{{ route('admin.dashboard', ['tab' => $tab]) }}" class="px-3.5 py-2.5 rounded-xl bg-slate-100 dark:bg-slate-800 hover:bg-slate-200 dark:hover:bg-slate-700 text-slate-700 dark:text-slate-300 border border-slate-300 dark:border-slate-700 text-xs font-semibold transition cursor-pointer" title="Reset all active filters">
+                            ✕ Reset
+                        </a>
+                    @endif
+
+                    <a href="{{ route('admin.applications.export', request()->all()) }}" class="flex items-center gap-1.5 px-3.5 py-2.5 rounded-xl bg-emerald-50 dark:bg-emerald-950/40 hover:bg-emerald-100 dark:hover:bg-emerald-900/40 text-emerald-700 dark:text-emerald-300 border border-emerald-200 dark:border-emerald-800/60 text-xs font-bold transition shadow-xs cursor-pointer" title="Export all currently filtered students to CSV spreadsheet">
+                        <svg class="w-3.5 h-3.5" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M4 16v1a3 3 0 003 3h10a3 3 0 003-3v-1m-4-4l-4 4m0 0l-4-4m4 4V4"/></svg>
+                        <span class="hidden md:inline">Export Filtered CSV</span>
+                        <span class="md:hidden">Export</span>
+                    </a>
+                </div>
             </div>
 
-            <div class="flex items-center flex-wrap gap-2.5 w-full lg:w-auto">
-                <select name="status" class="px-3 py-2.5 rounded-xl adm-input text-xs">
-                    <option value="all" {{ request('status') == 'all' ? 'selected' : '' }}>All Statuses</option>
-                    <option value="PENDING" {{ request('status') == 'PENDING' ? 'selected' : '' }}>Pending</option>
-                    <option value="APPROVED" {{ request('status') == 'APPROVED' ? 'selected' : '' }}>Approved</option>
-                    <option value="ACTIVE" {{ request('status') == 'ACTIVE' ? 'selected' : '' }}>Active</option>
-                    <option value="COMPLETED" {{ request('status') == 'COMPLETED' ? 'selected' : '' }}>Completed</option>
-                    <option value="REJECTED" {{ request('status') == 'REJECTED' ? 'selected' : '' }}>Rejected</option>
-                </select>
+            <!-- Row 2: Deep Filtration Dropdowns -->
+            <div class="grid grid-cols-2 sm:grid-cols-3 lg:grid-cols-6 gap-2 pt-1 border-t border-slate-200/60 dark:border-slate-800/60 text-xs">
+                <!-- Status Filter -->
+                <div>
+                    <label class="block text-[10px] font-semibold adm-text-muted mb-0.5">Status</label>
+                    <select name="status" class="w-full px-2.5 py-1.5 rounded-xl adm-input text-xs">
+                        <option value="all" {{ request('status') == 'all' ? 'selected' : '' }}>All Statuses</option>
+                        <option value="PENDING" {{ request('status') == 'PENDING' ? 'selected' : '' }}>Pending</option>
+                        <option value="APPROVED" {{ request('status') == 'APPROVED' ? 'selected' : '' }}>Approved</option>
+                        <option value="ACTIVE" {{ request('status') == 'ACTIVE' ? 'selected' : '' }}>Active</option>
+                        <option value="COMPLETED" {{ request('status') == 'COMPLETED' ? 'selected' : '' }}>Completed</option>
+                        <option value="REJECTED" {{ request('status') == 'REJECTED' ? 'selected' : '' }}>Rejected</option>
+                    </select>
+                </div>
 
-                <select name="degree" class="px-3 py-2.5 rounded-xl adm-input text-xs">
-                    <option value="all" {{ request('degree') == 'all' ? 'selected' : '' }}>All Degrees</option>
-                    @if(isset($degrees))
-                        @foreach($degrees as $deg)
-                            <option value="{{ $deg->code }}" {{ request('degree') == $deg->code ? 'selected' : '' }}>{{ $deg->code }} ({{ $deg->name }})</option>
+                <!-- Degree Filter -->
+                <div>
+                    <label class="block text-[10px] font-semibold adm-text-muted mb-0.5">Degree Program</label>
+                    <select name="degree" class="w-full px-2.5 py-1.5 rounded-xl adm-input text-xs">
+                        <option value="all" {{ request('degree') == 'all' ? 'selected' : '' }}>All Degrees</option>
+                        @if(isset($degrees))
+                            @foreach($degrees as $deg)
+                                <option value="{{ $deg->code }}" {{ request('degree') == $deg->code ? 'selected' : '' }}>{{ $deg->code }} ({{ $deg->name }})</option>
+                            @endforeach
+                        @else
+                            <option value="BA" {{ request('degree') == 'BA' ? 'selected' : '' }}>BA</option>
+                            <option value="BSc" {{ request('degree') == 'BSc' ? 'selected' : '' }}>BSc</option>
+                            <option value="BBA" {{ request('degree') == 'BBA' ? 'selected' : '' }}>BBA</option>
+                            <option value="BCA" {{ request('degree') == 'BCA' ? 'selected' : '' }}>BCA</option>
+                            <option value="BCom" {{ request('degree') == 'BCom' ? 'selected' : '' }}>BCom</option>
+                        @endif
+                    </select>
+                </div>
+
+                <!-- Specialization Domain Track -->
+                <div>
+                    <label class="block text-[10px] font-semibold adm-text-muted mb-0.5">Domain / Stream</label>
+                    <select name="domain" class="w-full px-2.5 py-1.5 rounded-xl adm-input text-xs">
+                        <option value="all" {{ request('domain') == 'all' ? 'selected' : '' }}>All Streams</option>
+                        @foreach($streams as $stream)
+                            <option value="{{ $stream->title }}" {{ request('domain') == $stream->title ? 'selected' : '' }}>
+                                {{ $stream->title }} ({{ $stream->code }})
+                            </option>
                         @endforeach
-                    @else
-                        <option value="BA" {{ request('degree') == 'BA' ? 'selected' : '' }}>BA</option>
-                        <option value="BSc" {{ request('degree') == 'BSc' ? 'selected' : '' }}>BSc</option>
-                        <option value="BBA" {{ request('degree') == 'BBA' ? 'selected' : '' }}>BBA</option>
-                        <option value="BCA" {{ request('degree') == 'BCA' ? 'selected' : '' }}>BCA</option>
-                        <option value="BCom" {{ request('degree') == 'BCom' ? 'selected' : '' }}>BCom</option>
-                    @endif
-                </select>
+                    </select>
+                </div>
 
-                <select name="domain" class="px-3 py-2.5 rounded-xl adm-input text-xs max-w-xs">
-                    <option value="all" {{ request('domain') == 'all' ? 'selected' : '' }}>All Streams (Dynamic)</option>
-                    @foreach($streams as $stream)
-                        <option value="{{ $stream->title }}" {{ request('domain') == $stream->title ? 'selected' : '' }}>
-                            {{ $stream->title }} ({{ $stream->code }})
-                        </option>
-                    @endforeach
-                </select>
+                <!-- College / University Filter -->
+                <div>
+                    <label class="block text-[10px] font-semibold adm-text-muted mb-0.5">College / Institute</label>
+                    <select name="college" class="w-full px-2.5 py-1.5 rounded-xl adm-input text-xs">
+                        <option value="all" {{ request('college') == 'all' ? 'selected' : '' }}>All Colleges</option>
+                        @if(isset($schools))
+                            @foreach($schools as $sch)
+                                <option value="{{ $sch->name }}" {{ request('college') == $sch->name ? 'selected' : '' }}>{{ $sch->name }}</option>
+                            @endforeach
+                        @endif
+                    </select>
+                </div>
 
-                <button type="submit" class="px-5 py-2.5 rounded-xl bg-indigo-600 hover:bg-indigo-700 text-white text-xs font-bold transition shadow-md shadow-indigo-600/30 cursor-pointer">
-                    Filter
-                </button>
+                <!-- Document Status Filter -->
+                <div>
+                    <label class="block text-[10px] font-semibold adm-text-muted mb-0.5">Document Stage</label>
+                    <select name="doc_status" class="w-full px-2.5 py-1.5 rounded-xl adm-input text-xs">
+                        <option value="all" {{ request('doc_status') == 'all' ? 'selected' : '' }}>All Documents</option>
+                        <option value="cert_pending" {{ request('doc_status') == 'cert_pending' ? 'selected' : '' }}>⏳ Cert Pending</option>
+                        <option value="cert_issued" {{ request('doc_status') == 'cert_issued' ? 'selected' : '' }}>🎓 Cert Issued</option>
+                        <option value="offer_pending" {{ request('doc_status') == 'offer_pending' ? 'selected' : '' }}>📄 Offer Pending</option>
+                        <option value="offer_issued" {{ request('doc_status') == 'offer_issued' ? 'selected' : '' }}>✓ Offer Issued</option>
+                        <option value="lor_issued" {{ request('doc_status') == 'lor_issued' ? 'selected' : '' }}>📜 LOR Issued</option>
+                    </select>
+                </div>
 
-                @if(request('search') || (request('status') && request('status') !== 'all') || (request('degree') && request('degree') !== 'all') || (request('domain') && request('domain') !== 'all'))
-                    <a href="{{ route('admin.dashboard', ['tab' => $tab]) }}" class="px-3.5 py-2.5 rounded-xl bg-slate-100 dark:bg-slate-800 hover:bg-slate-200 dark:hover:bg-slate-700 text-slate-700 dark:text-slate-300 border border-slate-300 dark:border-slate-700 text-xs font-semibold transition cursor-pointer">
-                        Reset
-                    </a>
-                @endif
+                <!-- Per Page Records -->
+                <div>
+                    <label class="block text-[10px] font-semibold adm-text-muted mb-0.5">Show Rows</label>
+                    <select name="per_page" onchange="this.form.submit()" class="w-full px-2.5 py-1.5 rounded-xl adm-input text-xs">
+                        <option value="15" {{ request('per_page', 15) == 15 ? 'selected' : '' }}>15 Records</option>
+                        <option value="25" {{ request('per_page') == 25 ? 'selected' : '' }}>25 Records</option>
+                        <option value="50" {{ request('per_page') == 50 ? 'selected' : '' }}>50 Records</option>
+                        <option value="100" {{ request('per_page') == 100 ? 'selected' : '' }}>100 Records</option>
+                    </select>
+                </div>
             </div>
         </form>
     </div>
@@ -468,6 +530,9 @@
                 {{-- ENROLLED INTERNS & CERTIFICATIONS TABLE --}}
                 <thead class="adm-table-head uppercase text-[10px] tracking-wider border-b">
                     <tr>
+                        <th class="py-3.5 px-3 w-10 text-center font-bold">
+                            <input type="checkbox" id="selectAllMasterEnrolled" onchange="toggleSelectAllTable(this)" class="w-4 h-4 rounded border-slate-300 dark:border-slate-700 text-indigo-600 focus:ring-indigo-500 cursor-pointer" title="Select all on this page">
+                        </th>
                         <th class="py-3.5 px-4 font-bold">Intern & ID</th>
                         <th class="py-3.5 px-4 font-bold">Degree & Mentor</th>
                         <th class="py-3.5 px-4 font-bold">Stream & Attendance</th>
@@ -478,7 +543,10 @@
                 </thead>
                 <tbody class="divide-y divide-slate-200 dark:divide-slate-800">
                     @forelse($applications as $app)
-                    <tr class="adm-table-row transition">
+                    <tr class="adm-table-row transition" id="row-app-{{ $app->id }}">
+                        <td class="py-4 px-3 w-10 text-center">
+                            <input type="checkbox" value="{{ $app->id }}" class="student-row-cb w-4 h-4 rounded border-slate-300 dark:border-slate-700 text-indigo-600 focus:ring-indigo-500 cursor-pointer" onchange="handleStudentRowSelect(this)">
+                        </td>
                         <!-- Student Info -->
                         <td class="py-4 px-4">
                             <div class="flex items-center gap-3">
@@ -625,7 +693,7 @@
                     </tr>
                     @empty
                     <tr>
-                        <td colspan="6" class="py-12 text-center adm-text-muted text-xs">
+                        <td colspan="7" class="py-12 text-center adm-text-muted text-xs">
                             No enrolled student records match the selected criteria.
                         </td>
                     </tr>
@@ -635,6 +703,9 @@
                 {{-- ALL APPLICATIONS: CLEAN REVIEW & APPROVE / REJECT TABLE --}}
                 <thead class="adm-table-head uppercase text-[10px] tracking-wider border-b">
                     <tr>
+                        <th class="py-3.5 px-3 w-10 text-center font-bold">
+                            <input type="checkbox" id="selectAllMasterAll" onchange="toggleSelectAllTable(this)" class="w-4 h-4 rounded border-slate-300 dark:border-slate-700 text-indigo-600 focus:ring-indigo-500 cursor-pointer" title="Select all on this page">
+                        </th>
                         <th class="py-3.5 px-4 font-bold">Applicant & ID</th>
                         <th class="py-3.5 px-4 font-bold">Degree & Institute</th>
                         <th class="py-3.5 px-4 font-bold">Internship Stream</th>
@@ -644,7 +715,10 @@
                 </thead>
                 <tbody class="divide-y divide-slate-200 dark:divide-slate-800">
                     @forelse($applications as $app)
-                    <tr class="adm-table-row transition {{ $app->status === 'PENDING' ? 'bg-amber-50/40 dark:bg-amber-950/15' : '' }}">
+                    <tr class="adm-table-row transition {{ $app->status === 'PENDING' ? 'bg-amber-50/40 dark:bg-amber-950/15' : '' }}" id="row-app-{{ $app->id }}">
+                        <td class="py-4 px-3 w-10 text-center">
+                            <input type="checkbox" value="{{ $app->id }}" class="student-row-cb w-4 h-4 rounded border-slate-300 dark:border-slate-700 text-indigo-600 focus:ring-indigo-500 cursor-pointer" onchange="handleStudentRowSelect(this)">
+                        </td>
                         <!-- Applicant Info -->
                         <td class="py-4 px-4">
                             <div class="flex items-center gap-3">
@@ -759,7 +833,7 @@
                     </tr>
                     @empty
                     <tr>
-                        <td colspan="5" class="py-12 text-center adm-text-muted text-xs">
+                        <td colspan="6" class="py-12 text-center adm-text-muted text-xs">
                             No student applications match the selected criteria.
                         </td>
                     </tr>
@@ -1274,6 +1348,153 @@
         </form>
     </div>
 </div>
+<!-- 6. Bulk Action Floating Command Dock -->
+<div id="bulkActionBar" class="fixed bottom-6 left-1/2 -translate-x-1/2 z-40 transition-all duration-300 transform translate-y-28 opacity-0 pointer-events-none max-w-5xl w-[94vw] sm:w-auto">
+    <div class="rounded-2xl adm-card shadow-2xl border border-indigo-200 dark:border-indigo-800/80 p-2 sm:p-2.5 flex flex-wrap items-center justify-between gap-2.5 backdrop-blur-xl bg-white/95 dark:bg-slate-900/95 ring-4 ring-indigo-500/10">
+        
+        <!-- Selection Counter & Deselect -->
+        <div class="flex items-center gap-2 pl-2">
+            <span class="relative flex h-2.5 w-2.5">
+                <span class="animate-ping absolute inline-flex h-full w-full rounded-full bg-indigo-400 opacity-75"></span>
+                <span class="relative inline-flex rounded-full h-2.5 w-2.5 bg-indigo-600"></span>
+            </span>
+            <span class="text-xs font-bold adm-text whitespace-nowrap">
+                <span id="bulkSelectedCount" class="text-indigo-600 dark:text-indigo-400 font-extrabold text-sm">0</span> Selected
+            </span>
+            <button type="button" onclick="clearAllSelections()" class="text-[11px] font-semibold adm-text-muted hover:text-rose-500 transition cursor-pointer ml-1 underline decoration-dotted">
+                Clear
+            </button>
+        </div>
+
+        <div class="h-5 w-px bg-slate-200 dark:bg-slate-700 hidden sm:block"></div>
+
+        <!-- Action Buttons Group -->
+        <div class="flex items-center gap-1.5 flex-wrap">
+            <!-- 1. Bulk Certificates -->
+            <button type="button" onclick="openBulkCertificateModal()" class="inline-flex items-center gap-1.5 px-3 py-1.5 rounded-xl bg-emerald-600 hover:bg-emerald-500 text-white text-xs font-bold shadow-sm shadow-emerald-600/30 transition cursor-pointer" title="Generate UGC Certificates with Start/End dates">
+                <svg class="w-3.5 h-3.5" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2.5" d="M9 12l2 2 4-4M7.835 4.697a3.42 3.42 0 001.946-.806 3.42 3.42 0 014.438 0 3.42 3.42 0 001.946.806 3.42 3.42 0 013.138 3.138 3.42 3.42 0 00.806 1.946 3.42 3.42 0 010 4.438 3.42 3.42 0 00-.806 1.946 3.42 3.42 0 01-3.138 3.138 3.42 3.42 0 00-1.946.806 3.42 3.42 0 01-4.438 0 3.42 3.42 0 00-1.946-.806 3.42 3.42 0 01-3.138-3.138 3.42 3.42 0 00-.806-1.946 3.42 3.42 0 010-4.438 3.42 3.42 0 00.806-1.946 3.42 3.42 0 013.138-3.138z"/></svg>
+                <span>Issue Certs</span>
+            </button>
+
+            <!-- 2. Bulk Offer Letters -->
+            <button type="button" onclick="submitBulkAction('offer_letter', 'Generate and issue official Offer Letters for all selected students?')" class="inline-flex items-center gap-1.5 px-3 py-1.5 rounded-xl bg-blue-600 hover:bg-blue-500 text-white text-xs font-bold shadow-sm shadow-blue-600/30 transition cursor-pointer" title="Release official Internship Offer Letters">
+                <svg class="w-3.5 h-3.5" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2.5" d="M9 12h6m-6 4h6m2 5H7a2 2 0 01-2-2V5a2 2 0 012-2h5.586a1 1 0 01.707.293l5.414 5.414a1 1 0 01.293.707V19a2 2 0 01-2 2z"/></svg>
+                <span>Offer Letters</span>
+            </button>
+
+            <!-- 3. Bulk LOR -->
+            <button type="button" onclick="submitBulkAction('lor', 'Issue official Letters of Recommendation (LOR) for all selected students?')" class="inline-flex items-center gap-1.5 px-3 py-1.5 rounded-xl bg-amber-600 hover:bg-amber-500 text-white text-xs font-bold shadow-sm shadow-amber-600/30 transition cursor-pointer" title="Release Letters of Recommendation">
+                <svg class="w-3.5 h-3.5" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2.5" d="M12 6.253v13m0-13C10.832 5.477 9.246 5 7.5 5S4.168 5.477 3 6.253v13C4.168 18.477 5.754 18 7.5 18s3.332.477 4.5 1.253m0-13C13.168 5.477 14.754 5 16.5 5c1.747 0 3.332.477 4.5 1.253v13C19.832 18.477 18.247 18 16.5 18c-1.746 0-3.332.477-4.5 1.253"/></svg>
+                <span>Issue LORs</span>
+            </button>
+
+            <!-- 4. Bulk Consent Undertaking -->
+            <button type="button" onclick="submitBulkAction('consent_letter', 'Issue Consent Undertakings for all selected students?')" class="inline-flex items-center gap-1.5 px-3 py-1.5 rounded-xl bg-purple-600 hover:bg-purple-500 text-white text-xs font-bold shadow-sm shadow-purple-600/30 transition cursor-pointer" title="Release Consent Undertakings">
+                <svg class="w-3.5 h-3.5" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2.5" d="M9 5H7a2 2 0 00-2 2v12a2 2 0 002 2h10a2 2 0 002-2V7a2 2 0 00-2-2h-2M9 5a2 2 0 002 2h2a2 2 0 002-2M9 5a2 2 0 012-2h2a2 2 0 012 2"/></svg>
+                <span>Consent</span>
+            </button>
+
+            <!-- 5. Change Status Dropdown -->
+            <select onchange="if(this.value){ submitBulkStatusChange(this.value); this.value=''; }" class="px-2.5 py-1.5 rounded-xl adm-input text-xs font-semibold cursor-pointer">
+                <option value="">Change Status...</option>
+                <option value="APPROVED">✓ Approve & Enroll</option>
+                <option value="ACTIVE">⚡ Mark Active</option>
+                <option value="COMPLETED">🎓 Mark Completed</option>
+                <option value="PENDING">⏳ Mark Pending</option>
+                <option value="REJECTED">✕ Mark Rejected</option>
+            </select>
+
+            <!-- 6. Export Selected CSV -->
+            <button type="button" onclick="submitBulkExport()" class="inline-flex items-center gap-1.5 px-3 py-1.5 rounded-xl bg-slate-100 dark:bg-slate-800 hover:bg-slate-200 dark:hover:bg-slate-700 text-slate-800 dark:text-slate-200 border border-slate-300 dark:border-slate-700 text-xs font-semibold transition cursor-pointer" title="Export selected records to CSV">
+                <svg class="w-3.5 h-3.5" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M4 16v1a3 3 0 003 3h10a3 3 0 003-3v-1m-4-4l-4 4m0 0l-4-4m4 4V4"/></svg>
+                <span>CSV</span>
+            </button>
+
+            <!-- 7. Delete Selected -->
+            <button type="button" onclick="submitBulkAction('delete', 'CAUTION: Permanently delete all selected student applications? This cannot be undone!')" class="p-1.5 rounded-xl text-slate-400 hover:text-rose-600 hover:bg-rose-50 dark:hover:bg-rose-950/40 border border-transparent hover:border-rose-300 dark:hover:border-rose-800 transition cursor-pointer" title="Delete selected records">
+                <svg class="w-4 h-4" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M19 7l-.867 12.142A2 2 0 0116.138 21H7.862a2 2 0 01-1.995-1.858L5 7m5 4v6m4-6v6m1-10V4a1 1 0 00-1-1h-4a1 1 0 00-1 1v3M4 7h16"/></svg>
+            </button>
+        </div>
+
+    </div>
+</div>
+
+<!-- 7. Bulk Certificate Generation Modal -->
+<div id="bulkCertModal" class="hidden fixed inset-0 z-50 flex items-center justify-center p-3 sm:p-4 bg-black/70 backdrop-blur-sm" onclick="if(event.target === this) closeBulkCertModal()">
+    <div class="w-full max-w-lg max-h-[92vh] overflow-y-auto rounded-3xl adm-card p-6 shadow-2xl space-y-4 border border-emerald-500/30">
+        <div class="flex items-center justify-between pb-3 border-b border-slate-200 dark:border-slate-800">
+            <div class="flex items-center gap-2.5">
+                <div class="w-9 h-9 rounded-xl bg-emerald-100 dark:bg-emerald-950/60 text-emerald-600 dark:text-emerald-400 flex items-center justify-center font-bold text-lg">
+                    🎓
+                </div>
+                <div>
+                    <h3 class="text-base font-bold text-emerald-600 dark:text-emerald-400">Bulk Certificate Generation</h3>
+                    <p class="text-[11px] adm-text-muted" id="bulkCertCountSubtitle">Batch release UGC verified credentials for selected students</p>
+                </div>
+            </div>
+            <button type="button" onclick="closeBulkCertModal()" class="w-8 h-8 rounded-xl flex items-center justify-center adm-text-muted hover:adm-text hover:bg-slate-100 dark:hover:bg-slate-800 transition font-bold text-lg cursor-pointer" title="Close">&times;</button>
+        </div>
+
+        <form id="bulkCertForm" onsubmit="event.preventDefault(); submitBulkCertificates();" class="space-y-4">
+            <div>
+                <label class="block text-xs font-semibold adm-text-secondary mb-1">Certificate Serial Prefix</label>
+                <input type="text" id="bulk_cert_prefix" value="UGC-INF-" required class="w-full px-3 py-2 rounded-xl adm-input text-xs font-mono font-bold">
+                <p class="text-[10px] adm-text-muted mt-1">Each certificate will be given a guaranteed unique serial (e.g. UGC-INF-682194).</p>
+            </div>
+
+            <div class="grid grid-cols-1 sm:grid-cols-2 gap-3">
+                <div>
+                    <label class="block text-xs font-semibold adm-text-secondary mb-1">Internship Starting Date *</label>
+                    <input type="date" id="bulk_internship_start_date" required class="w-full px-3 py-2 rounded-xl adm-input text-xs">
+                </div>
+                <div>
+                    <label class="block text-xs font-semibold adm-text-secondary mb-1">Internship Ending Date *</label>
+                    <input type="date" id="bulk_internship_end_date" required class="w-full px-3 py-2 rounded-xl adm-input text-xs">
+                </div>
+            </div>
+
+            <div>
+                <label class="block text-xs font-semibold adm-text-secondary mb-1">Official Issue Date</label>
+                <input type="date" id="bulk_certificate_date" value="{{ date('Y-m-d') }}" required class="w-full px-3 py-2 rounded-xl adm-input text-xs">
+            </div>
+
+            <div class="p-3.5 rounded-2xl bg-emerald-50 dark:bg-emerald-950/40 border border-emerald-200 dark:border-emerald-800/40 text-xs text-emerald-800 dark:text-emerald-200 space-y-1">
+                <div class="font-bold flex items-center gap-1.5">
+                    <svg class="w-4 h-4 text-emerald-600 shrink-0" fill="currentColor" viewBox="0 0 20 20"><path fill-rule="evenodd" d="M10 18a8 8 0 100-16 8 8 0 000 16zm3.707-9.293a1 1 0 00-1.414-1.414L9 10.586 7.707 9.293a1 1 0 00-1.414 1.414l2 2a1 1 0 001.414 0l4-4z" clip-rule="evenodd"/></path></svg>
+                    Automatic Actions on Approval:
+                </div>
+                <ul class="list-disc pl-5 text-[11px] space-y-0.5 text-emerald-700 dark:text-emerald-300">
+                    <li>Generates institutional verifiable certificate with secure QR link.</li>
+                    <li>Updates students' status to <strong>COMPLETED</strong>.</li>
+                    <li>Saves exact start date, end date, and completion date in student profile.</li>
+                </ul>
+            </div>
+
+            <div class="flex justify-end gap-2 pt-2">
+                <button type="button" onclick="closeBulkCertModal()" class="px-4 py-2 rounded-xl bg-slate-100 dark:bg-slate-800 hover:bg-slate-200 dark:hover:bg-slate-700 text-slate-700 dark:text-slate-300 border border-slate-300 dark:border-slate-700 text-xs font-semibold transition cursor-pointer">Cancel</button>
+                <button type="submit" class="px-5 py-2 rounded-xl bg-emerald-600 hover:bg-emerald-700 text-white text-xs font-bold transition shadow-lg shadow-emerald-600/30 cursor-pointer">Generate & Issue For All Selected</button>
+            </div>
+        </form>
+    </div>
+</div>
+
+<!-- Hidden Generic Bulk Form -->
+<form id="genericBulkForm" method="POST" action="{{ route('admin.applications.bulk-action') }}" class="hidden">
+    @csrf
+    <input type="hidden" name="action" id="bulk_form_action" value="">
+    <input type="hidden" name="status" id="bulk_form_status" value="">
+    <input type="hidden" name="internship_start_date" id="bulk_form_start_date" value="">
+    <input type="hidden" name="internship_end_date" id="bulk_form_end_date" value="">
+    <input type="hidden" name="certificate_date" id="bulk_form_cert_date" value="">
+    <input type="hidden" name="certificate_prefix" id="bulk_form_cert_prefix" value="">
+    <div id="bulk_form_ids_container"></div>
+</form>
+
+<!-- Hidden Bulk Export Form -->
+<form id="bulkExportForm" method="POST" action="{{ route('admin.applications.export.post') }}" class="hidden">
+    @csrf
+    <div id="bulk_export_ids_container"></div>
+</form>
 @endsection
 
 @section('scripts')
@@ -1432,7 +1653,243 @@
             closeCertApprovalModal();
             closeLorModal();
             closeMarksheetModal();
+            closeBulkCertModal();
         }
     });
+
+    // ==========================================
+    // BULK ACTIONS & SELECTION ENGINE
+    // ==========================================
+    function getSelectedCheckboxes() {
+        return Array.from(document.querySelectorAll('.student-row-cb:checked'));
+    }
+
+    function getSelectedStudentIds() {
+        return getSelectedCheckboxes().map(cb => cb.value);
+    }
+
+    function handleStudentRowSelect(cb) {
+        const row = document.getElementById('row-app-' + cb.value);
+        if (row) {
+            if (cb.checked) {
+                row.classList.add('bg-indigo-50/50', 'dark:bg-indigo-950/25');
+            } else {
+                row.classList.remove('bg-indigo-50/50', 'dark:bg-indigo-950/25');
+            }
+        }
+        updateBulkActionBar();
+    }
+
+    function toggleSelectAllTable(masterCheckbox) {
+        const checkboxes = document.querySelectorAll('.student-row-cb');
+        checkboxes.forEach(cb => {
+            cb.checked = masterCheckbox.checked;
+            const row = document.getElementById('row-app-' + cb.value);
+            if (row) {
+                if (cb.checked) {
+                    row.classList.add('bg-indigo-50/50', 'dark:bg-indigo-950/25');
+                } else {
+                    row.classList.remove('bg-indigo-50/50', 'dark:bg-indigo-950/25');
+                }
+            }
+        });
+
+        const master1 = document.getElementById('selectAllMasterEnrolled');
+        const master2 = document.getElementById('selectAllMasterAll');
+        if (master1 && master1 !== masterCheckbox) master1.checked = masterCheckbox.checked;
+        if (master2 && master2 !== masterCheckbox) master2.checked = masterCheckbox.checked;
+
+        updateBulkActionBar();
+    }
+
+    function clearAllSelections() {
+        const checkboxes = document.querySelectorAll('.student-row-cb');
+        checkboxes.forEach(cb => {
+            cb.checked = false;
+            const row = document.getElementById('row-app-' + cb.value);
+            if (row) {
+                row.classList.remove('bg-indigo-50/50', 'dark:bg-indigo-950/25');
+            }
+        });
+        const master1 = document.getElementById('selectAllMasterEnrolled');
+        const master2 = document.getElementById('selectAllMasterAll');
+        if (master1) master1.checked = false;
+        if (master2) master2.checked = false;
+        updateBulkActionBar();
+    }
+
+    function updateBulkActionBar() {
+        const count = getSelectedCheckboxes().length;
+        const countSpan = document.getElementById('bulkSelectedCount');
+        const bar = document.getElementById('bulkActionBar');
+        if (countSpan) countSpan.innerText = count;
+
+        if (bar) {
+            if (count > 0) {
+                bar.classList.remove('translate-y-28', 'opacity-0', 'pointer-events-none');
+                bar.classList.add('translate-y-0', 'opacity-100', 'pointer-events-auto');
+            } else {
+                bar.classList.add('translate-y-28', 'opacity-0', 'pointer-events-none');
+                bar.classList.remove('translate-y-0', 'opacity-100', 'pointer-events-auto');
+            }
+        }
+    }
+
+    // Modal: Bulk Certificate Generation
+    function openBulkCertificateModal() {
+        const selectedIds = getSelectedStudentIds();
+        if (selectedIds.length === 0) {
+            alert('Please select at least one student first.');
+            return;
+        }
+
+        const countSubtitle = document.getElementById('bulkCertCountSubtitle');
+        if (countSubtitle) {
+            countSubtitle.innerText = `Batch release UGC verifiable credentials for ${selectedIds.length} selected candidate(s)`;
+        }
+
+        const startDateInput = document.getElementById('bulk_internship_start_date');
+        const endDateInput = document.getElementById('bulk_internship_end_date');
+        const certDateInput = document.getElementById('bulk_certificate_date');
+
+        if (startDateInput && !startDateInput.value) {
+            const d = new Date();
+            d.setDate(d.getDate() - 45);
+            startDateInput.value = d.toISOString().split('T')[0];
+        }
+        if (endDateInput && !endDateInput.value) {
+            endDateInput.value = new Date().toISOString().split('T')[0];
+        }
+        if (certDateInput && !certDateInput.value) {
+            certDateInput.value = new Date().toISOString().split('T')[0];
+        }
+
+        document.getElementById('bulkCertModal').classList.remove('hidden');
+        document.body.style.overflow = 'hidden';
+    }
+
+    function closeBulkCertModal() {
+        document.getElementById('bulkCertModal').classList.add('hidden');
+        document.body.style.overflow = '';
+    }
+
+    function submitBulkCertificates() {
+        const selectedIds = getSelectedStudentIds();
+        if (selectedIds.length === 0) {
+            alert('No students selected.');
+            return;
+        }
+
+        const prefix = document.getElementById('bulk_cert_prefix').value;
+        const startDate = document.getElementById('bulk_internship_start_date').value;
+        const endDate = document.getElementById('bulk_internship_end_date').value;
+        const certDate = document.getElementById('bulk_certificate_date').value;
+
+        if (!startDate || !endDate) {
+            alert('Please specify both the starting date and ending date for the certificates.');
+            return;
+        }
+
+        const form = document.getElementById('genericBulkForm');
+        document.getElementById('bulk_form_action').value = 'certificate';
+        document.getElementById('bulk_form_cert_prefix').value = prefix;
+        document.getElementById('bulk_form_start_date').value = startDate;
+        document.getElementById('bulk_form_end_date').value = endDate;
+        document.getElementById('bulk_form_cert_date').value = certDate;
+
+        const container = document.getElementById('bulk_form_ids_container');
+        container.innerHTML = '';
+        selectedIds.forEach(id => {
+            const input = document.createElement('input');
+            input.type = 'hidden';
+            input.name = 'selected_ids[]';
+            input.value = id;
+            container.appendChild(input);
+        });
+
+        closeBulkCertModal();
+        form.submit();
+    }
+
+    function submitBulkAction(action, confirmMsg) {
+        const selectedIds = getSelectedStudentIds();
+        if (selectedIds.length === 0) {
+            alert('Please select at least one student first.');
+            return;
+        }
+
+        if (confirmMsg && !confirm(confirmMsg + ` (${selectedIds.length} candidate(s) selected)`)) {
+            return;
+        }
+
+        const form = document.getElementById('genericBulkForm');
+        document.getElementById('bulk_form_action').value = action;
+        document.getElementById('bulk_form_status').value = '';
+        document.getElementById('bulk_form_start_date').value = '';
+        document.getElementById('bulk_form_end_date').value = '';
+        document.getElementById('bulk_form_cert_date').value = '';
+        document.getElementById('bulk_form_cert_prefix').value = '';
+
+        const container = document.getElementById('bulk_form_ids_container');
+        container.innerHTML = '';
+        selectedIds.forEach(id => {
+            const input = document.createElement('input');
+            input.type = 'hidden';
+            input.name = 'selected_ids[]';
+            input.value = id;
+            container.appendChild(input);
+        });
+
+        form.submit();
+    }
+
+    function submitBulkStatusChange(newStatus) {
+        const selectedIds = getSelectedStudentIds();
+        if (selectedIds.length === 0) {
+            alert('Please select at least one student first.');
+            return;
+        }
+
+        if (!confirm(`Update status of ${selectedIds.length} selected student(s) to "${newStatus}"?`)) {
+            return;
+        }
+
+        const form = document.getElementById('genericBulkForm');
+        document.getElementById('bulk_form_action').value = 'status';
+        document.getElementById('bulk_form_status').value = newStatus;
+
+        const container = document.getElementById('bulk_form_ids_container');
+        container.innerHTML = '';
+        selectedIds.forEach(id => {
+            const input = document.createElement('input');
+            input.type = 'hidden';
+            input.name = 'selected_ids[]';
+            input.value = id;
+            container.appendChild(input);
+        });
+
+        form.submit();
+    }
+
+    function submitBulkExport() {
+        const selectedIds = getSelectedStudentIds();
+        if (selectedIds.length === 0) {
+            alert('Please select at least one student to export, or use the "Export CSV" button in the filter bar above.');
+            return;
+        }
+
+        const form = document.getElementById('bulkExportForm');
+        const container = document.getElementById('bulk_export_ids_container');
+        container.innerHTML = '';
+        selectedIds.forEach(id => {
+            const input = document.createElement('input');
+            input.type = 'hidden';
+            input.name = 'selected_ids[]';
+            input.value = id;
+            container.appendChild(input);
+        });
+
+        form.submit();
+    }
 </script>
 @endsection
