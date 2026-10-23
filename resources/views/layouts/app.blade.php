@@ -8,7 +8,22 @@
     <link rel="icon" type="image/svg+xml" href="/favicon.svg">
     @vite(['resources/css/app.css', 'resources/js/app.js'])
 </head>
-<body class="bg-[#FAFBF9] text-[#1E293B] flex flex-col min-h-screen font-sans selection:bg-indigo-600 selection:text-white">
+<body class="bg-[#FAFBF9] text-[#1E293B] flex flex-col min-h-screen font-sans selection:bg-indigo-600 selection:text-white relative overflow-x-hidden">
+    <!-- Global Animated Background System (Modern Gradient Mesh & Floating Orbs) -->
+    <div class="fixed inset-0 pointer-events-none z-0 overflow-hidden" aria-hidden="true">
+        <!-- Floating Fluid Color Blobs -->
+        <div class="blob-anim-1 absolute -top-40 -left-40 w-[650px] h-[650px] bg-gradient-to-br from-indigo-300/35 via-purple-300/25 to-pink-200/20 rounded-full blur-[130px]"></div>
+        <div class="blob-anim-2 absolute top-1/3 -right-40 w-[600px] h-[600px] bg-gradient-to-bl from-blue-300/30 via-indigo-300/25 to-emerald-200/20 rounded-full blur-[140px]"></div>
+        <div class="blob-anim-3 absolute -bottom-40 left-1/4 w-[700px] h-[700px] bg-gradient-to-tr from-purple-200/30 via-pink-200/25 to-amber-100/30 rounded-full blur-[150px]"></div>
+        <div class="blob-anim-4 absolute top-2/3 -left-32 w-[500px] h-[500px] bg-gradient-to-r from-emerald-200/25 to-teal-200/20 rounded-full blur-[130px]"></div>
+
+        <!-- Subtle Animated Shimmer Grid Overlay -->
+        <div class="absolute inset-0 site-animated-grid opacity-40"></div>
+
+        <!-- Ambient Cursor Spotlight Follower -->
+        <div id="ambientSpotlight" class="absolute w-[600px] h-[600px] -top-[300px] -left-[300px] rounded-full bg-radial from-indigo-500/15 via-purple-500/5 to-transparent blur-[80px] pointer-events-none transition-transform duration-100 ease-out opacity-0 md:opacity-100"></div>
+    </div>
+
     <!-- Top Scroll Progress Indicator (Framer Motion) -->
     <div id="scrollProgress" class="fixed top-0 left-0 right-0 h-[3px] bg-gradient-to-r from-indigo-500 via-purple-500 to-emerald-400 z-[999] origin-left scale-x-0 pointer-events-none"></div>
 
@@ -163,15 +178,15 @@
                     </a>
                 @endauth
 
-                <button onclick="openApplyModal()" class="px-4 sm:px-5 py-2 text-xs font-bold text-white bg-gradient-to-r from-indigo-600 to-indigo-700 hover:from-indigo-500 hover:to-indigo-600 rounded-full shadow-md shadow-indigo-600/25 transition transform hover:-translate-y-0.5 active:scale-95 flex items-center gap-1.5 cursor-pointer">
+                <button onclick="openApplyModal()" class="btn-animated-sheen btn-glow-pulse px-4 sm:px-5 py-2 text-xs font-bold text-white bg-gradient-to-r from-indigo-600 via-indigo-500 to-purple-600 hover:from-indigo-500 hover:to-purple-500 rounded-full shadow-lg shadow-indigo-600/30 transition-all duration-300 transform hover:-translate-y-0.5 active:scale-95 flex items-center gap-1.5 cursor-pointer group">
                     <span>Apply Now</span>
-                    <svg class="w-3.5 h-3.5" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M14 5l7 7m0 0l-7 7m7-7H3"/></svg>
+                    <svg class="w-3.5 h-3.5 transition-transform duration-300 group-hover:translate-x-1" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2.5" d="M14 5l7 7m0 0l-7 7m7-7H3"/></svg>
                 </button>
             </div>
 
             <!-- Mobile Action & Hamburger Toggle -->
             <div class="flex lg:hidden items-center gap-2">
-                <button onclick="openApplyModal()" class="px-3.5 py-1.5 text-xs font-bold text-white bg-indigo-600 rounded-full shadow-xs active:scale-95 transition">
+                <button onclick="openApplyModal()" class="btn-animated-sheen px-3.5 py-1.5 text-xs font-bold text-white bg-gradient-to-r from-indigo-600 to-purple-600 rounded-full shadow-md shadow-indigo-600/25 active:scale-95 transition">
                     Apply
                 </button>
                 <button onclick="toggleMobileNav()" id="mobileMenuBtn" aria-label="Toggle navigation menu" class="p-2 text-slate-700 hover:text-slate-900 rounded-full hover:bg-slate-100 transition cursor-pointer">
@@ -224,51 +239,53 @@
                     </a>
                 @endauth
             </div>
-            <button onclick="openApplyModal(); toggleMobileNav();" class="w-full text-center py-2.5 text-xs font-bold text-white bg-indigo-600 hover:bg-indigo-700 rounded-full shadow-lg shadow-indigo-600/30 transition cursor-pointer">
+            <button onclick="openApplyModal(); toggleMobileNav();" class="btn-animated-sheen w-full text-center py-2.5 text-xs font-bold text-white bg-gradient-to-r from-indigo-600 to-purple-600 hover:from-indigo-500 hover:to-purple-500 rounded-full shadow-lg shadow-indigo-600/30 transition cursor-pointer">
                 Apply For Internship →
             </button>
         </div>
     </div>
 
-    <!-- Flash Notifications -->
-    <div class="max-w-4xl mx-auto px-4 pt-24 pb-2 w-full">
-        @if(session('success'))
-            <div class="p-4 mb-4 rounded-2xl bg-emerald-50 border border-emerald-200 text-emerald-800 text-xs sm:text-sm font-medium flex items-center justify-between shadow-sm">
-                <div class="flex items-center gap-2.5">
-                    <svg class="w-5 h-5 text-emerald-600 shrink-0" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M9 12l2 2 4-4m6 2a9 9 0 11-18 0 9 9 0 0118 0z"/></svg>
-                    <span>{{ session('success') }}</span>
+    <!-- Flash Notifications (Only rendered when there are active messages) -->
+    @if(session('success') || session('error') || $errors->any())
+        <div class="max-w-4xl mx-auto px-4 pt-24 pb-2 w-full relative z-10">
+            @if(session('success'))
+                <div class="p-4 mb-4 rounded-2xl bg-emerald-50 border border-emerald-200 text-emerald-800 text-xs sm:text-sm font-medium flex items-center justify-between shadow-sm">
+                    <div class="flex items-center gap-2.5">
+                        <svg class="w-5 h-5 text-emerald-600 shrink-0" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M9 12l2 2 4-4m6 2a9 9 0 11-18 0 9 9 0 0118 0z"/></svg>
+                        <span>{{ session('success') }}</span>
+                    </div>
+                    <button onclick="this.parentElement.remove()" class="text-emerald-600 hover:text-emerald-900 font-bold text-base">&times;</button>
                 </div>
-                <button onclick="this.parentElement.remove()" class="text-emerald-600 hover:text-emerald-900 font-bold text-base">&times;</button>
-            </div>
-        @endif
+            @endif
 
-        @if(session('error'))
-            <div class="p-4 mb-4 rounded-2xl bg-rose-50 border border-rose-200 text-rose-800 text-xs sm:text-sm font-medium flex items-center justify-between shadow-sm">
-                <div class="flex items-center gap-2.5">
-                    <svg class="w-5 h-5 text-rose-600 shrink-0" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M12 8v4m0 4h.01M21 12a9 9 0 11-18 0 9 9 0 0118 0z"/></svg>
-                    <span>{{ session('error') }}</span>
+            @if(session('error'))
+                <div class="p-4 mb-4 rounded-2xl bg-rose-50 border border-rose-200 text-rose-800 text-xs sm:text-sm font-medium flex items-center justify-between shadow-sm">
+                    <div class="flex items-center gap-2.5">
+                        <svg class="w-5 h-5 text-rose-600 shrink-0" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M12 8v4m0 4h.01M21 12a9 9 0 11-18 0 9 9 0 0118 0z"/></svg>
+                        <span>{{ session('error') }}</span>
+                    </div>
+                    <button onclick="this.parentElement.remove()" class="text-rose-600 hover:text-rose-900 font-bold text-base">&times;</button>
                 </div>
-                <button onclick="this.parentElement.remove()" class="text-rose-600 hover:text-rose-900 font-bold text-base">&times;</button>
-            </div>
-        @endif
+            @endif
 
-        @if($errors->any())
-            <div class="p-4 mb-4 rounded-2xl bg-rose-50 border border-rose-200 text-rose-800 text-xs font-medium space-y-1">
-                <div class="font-bold flex items-center gap-1.5">
-                    <svg class="w-4 h-4 text-rose-600" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M12 8v4m0 4h.01M21 12a9 9 0 11-18 0 9 9 0 0118 0z"/></svg>
-                    <span>Please correct the errors below:</span>
+            @if($errors->any())
+                <div class="p-4 mb-4 rounded-2xl bg-rose-50 border border-rose-200 text-rose-800 text-xs font-medium space-y-1">
+                    <div class="font-bold flex items-center gap-1.5">
+                        <svg class="w-4 h-4 text-rose-600" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M12 8v4m0 4h.01M21 12a9 9 0 11-18 0 9 9 0 0118 0z"/></svg>
+                        <span>Please correct the errors below:</span>
+                    </div>
+                    <ul class="list-disc pl-5">
+                        @foreach($errors->all() as $err)
+                            <li>{{ $err }}</li>
+                        @endforeach
+                    </ul>
                 </div>
-                <ul class="list-disc pl-5">
-                    @foreach($errors->all() as $err)
-                        <li>{{ $err }}</li>
-                    @endforeach
-                </ul>
-            </div>
-        @endif
-    </div>
+            @endif
+        </div>
+    @endif
 
     <!-- Main Page Content -->
-    <main class="flex-grow">
+    <main class="flex-grow relative z-10">
         @yield('content')
     </main>
 
@@ -604,6 +621,37 @@
                     }
                 });
             }
+        });
+
+        // Ambient mouse spotlight glow (Desktop only, public website)
+        document.addEventListener('mousemove', function(e) {
+            const spot = document.getElementById('ambientSpotlight');
+            if (spot && window.innerWidth >= 768) {
+                spot.style.transform = `translate3d(${e.clientX}px, ${e.clientY}px, 0)`;
+            }
+        });
+
+        // Interactive Button Click Ripple Feedback
+        document.addEventListener('click', function(e) {
+            const btn = e.target.closest('button, .motion-btn-spring, a.rounded-full');
+            if (!btn || btn.closest('[data-admin-theme], .adm-canvas, #adminMainScroll')) return;
+            
+            const circle = document.createElement('span');
+            const diameter = Math.max(btn.clientWidth, btn.clientHeight);
+            const radius = diameter / 2;
+            const rect = btn.getBoundingClientRect();
+            
+            circle.style.width = circle.style.height = `${diameter}px`;
+            circle.style.left = `${e.clientX - rect.left - radius}px`;
+            circle.style.top = `${e.clientY - rect.top - radius}px`;
+            circle.classList.add('ripple-circle');
+            
+            const ripple = btn.getElementsByClassName('ripple-circle')[0];
+            if (ripple) ripple.remove();
+            
+            btn.classList.add('ripple-fx');
+            btn.appendChild(circle);
+            setTimeout(() => { if (circle) circle.remove(); }, 650);
         });
 
         @if($errors->any())

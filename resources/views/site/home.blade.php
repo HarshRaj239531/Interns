@@ -3,114 +3,490 @@
 @section('title', 'Infinity Interns – UGC-Focused Internship & Skill Development')
 
 @section('content')
-<!-- Hero Section -->
-<section id="home" class="relative min-h-[90vh] pt-24 pb-20 flex flex-col items-center justify-center overflow-hidden bg-[#F6F8F5]">
-    <div class="absolute inset-0 z-0 pointer-events-none">
-        <div class="motion-orb absolute top-1/4 left-1/2 -translate-x-1/2 -translate-y-1/2 w-[700px] h-[500px] bg-indigo-100/50 rounded-full blur-[120px]"></div>
-        <div class="motion-orb absolute top-1/3 right-10 w-[450px] h-[450px] bg-purple-100/40 rounded-full blur-[130px]"></div>
-        <div class="motion-orb absolute bottom-10 left-10 w-[500px] h-[400px] bg-emerald-100/40 rounded-full blur-[140px]"></div>
-        <div class="absolute inset-0 bg-[radial-gradient(#94a3b8_1px,transparent_1px)] [background-size:28px_28px] opacity-15"></div>
+<!-- Hero Section (Light Mode: Expansive 2-Column Showcase with Balanced Width & Zero Empty Space) -->
+<section id="home" class="relative pt-20 sm:pt-24 pb-12 lg:pb-16 flex items-center justify-center overflow-hidden bg-[#FAFBF9] text-slate-900">
+    <!-- Ambient Luminous Gradient Mesh & Orbs (Light Mode) -->
+    <div class="absolute inset-0 z-0 pointer-events-none overflow-hidden">
+        <!-- Top Left Cyan-Teal Glow -->
+        <div class="blob-anim-1 absolute -top-24 -left-24 w-[620px] h-[620px] bg-gradient-to-br from-cyan-200/50 via-teal-100/40 to-transparent rounded-full blur-[120px]"></div>
+        <!-- Center Right Indigo-Purple Glow -->
+        <div class="blob-anim-2 absolute top-1/4 right-0 w-[680px] h-[680px] bg-gradient-to-bl from-indigo-200/45 via-purple-100/35 to-sky-100/25 rounded-full blur-[130px]"></div>
+        <!-- Bottom Left Emerald-Teal Glow -->
+        <div class="blob-anim-3 absolute -bottom-20 left-1/4 w-[580px] h-[580px] bg-gradient-to-tr from-emerald-100/40 via-teal-100/30 to-transparent rounded-full blur-[140px]"></div>
+        <!-- Subtle Animated Dot Grid for Depth -->
+        <div class="absolute inset-0 opacity-40 pointer-events-none" style="background-image: radial-gradient(rgba(99, 102, 241, 0.15) 1.2px, transparent 1.2px); background-size: 26px 26px;"></div>
+        <!-- Soft Bottom Vignette Fade -->
+        <div class="absolute bottom-0 inset-x-0 h-24 bg-gradient-to-t from-[#FAFBF9] to-transparent"></div>
     </div>
 
-    <div class="relative z-10 text-center px-4 w-full max-w-5xl mx-auto">
-        <!-- UGC Badge -->
-        <div class="motion-hero-badge inline-flex items-center gap-2 px-4 py-1.5 rounded-full bg-white border border-indigo-100 shadow-xs text-indigo-700 mb-8">
-            <svg class="w-4 h-4 text-indigo-600" fill="currentColor" viewBox="0 0 20 20"><path d="M9.049 2.927c.3-.921 1.603-.921 1.902 0l1.07 3.292a1 1 0 00.95.69h3.462c.969 0 1.371 1.24.588 1.81l-2.8 2.034a1 1 0 00-.364 1.118l1.07 3.292c.3.921-.755 1.688-1.54 1.118l-2.8-2.034a1 1 0 00-1.175 0l-2.8 2.034c-.784.57-1.838-.197-1.539-1.118l1.07-3.292a1 1 0 00-.364-1.118L2.98 8.72c-.783-.57-.38-1.81.588-1.81h3.461a1 1 0 00.951-.69l1.07-3.292z"/></svg>
-            <span class="text-xs font-bold tracking-[0.2em] uppercase">UGC-Focused Internship Program</span>
-        </div>
+    <div class="relative z-10 w-full max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 pt-1 pb-4">
+        <div class="grid grid-cols-1 lg:grid-cols-12 gap-8 lg:gap-12 items-center">
+            
+            <!-- ==================== LEFT COLUMN: HEADLINE, CTA, BADGES & HIGHLIGHTS ==================== -->
+            <div class="lg:col-span-6 flex flex-col items-start text-left">
+                <!-- UGC Badge with Glowing Conic Border -->
+                <div class="motion-hero-badge inline-flex items-center gap-2.5 px-4 py-1.5 rounded-full bg-white/95 backdrop-blur-md border border-teal-200/90 shadow-md shadow-teal-500/10 text-teal-800 mb-6 gradient-border-glow">
+                    <span class="relative flex h-2.5 w-2.5">
+                        <span class="animate-ping absolute inline-flex h-full w-full rounded-full bg-teal-400 opacity-75"></span>
+                        <span class="relative inline-flex rounded-full h-2.5 w-2.5 bg-teal-600"></span>
+                    </span>
+                    <span class="text-xs font-bold tracking-[0.2em] uppercase">UGC-Accredited Internship Program 2026</span>
+                </div>
 
-        <!-- Headline -->
-        <h1 class="motion-hero-title text-4xl sm:text-6xl md:text-7xl font-serif leading-[1.08] tracking-tight mb-8 text-slate-900">
-            Learn In-Demand Skills & <br class="hidden sm:block">
-            <span class="text-indigo-700 italic pr-3 relative inline-block">
-                Get Certified
-                <svg class="absolute w-full h-3.5 -bottom-1.5 left-0 text-indigo-300" viewBox="0 0 200 9" fill="none">
-                    <path d="M2.00018 7.37072C50.2989 -0.669527 122.956 -1.68412 198.057 7.37072" stroke="currentColor" stroke-width="3" stroke-linecap="round"/>
+                <!-- Headline with High-Contrast Typography & Iridescent Gradient -->
+                <h1 class="motion-hero-title text-4xl sm:text-5xl lg:text-6xl font-sans font-extrabold tracking-tight text-slate-900 leading-[1.08] mb-6">
+                    Unlock your potential with <br>
+                    <span class="text-transparent bg-clip-text bg-gradient-to-r from-teal-600 via-indigo-600 to-cyan-600 animate-text-gradient font-extrabold italic">
+                        world-class learning.
+                    </span>
+                </h1>
+
+                <!-- Subheading -->
+                <p class="motion-hero-sub text-base sm:text-lg text-slate-600 font-normal leading-relaxed mb-8 max-w-xl">
+                    Access a wide range of UGC-aligned internship programs designed to help undergraduate students achieve their career goals, mentored by industry experts with verified academic credits.
+                </p>
+
+                <!-- CTA Buttons Row -->
+                <div class="motion-hero-cta flex flex-col sm:flex-row items-stretch sm:items-center gap-3.5 mb-7 w-full sm:w-auto">
+                    <button onclick="openApplyModal()" class="btn-animated-sheen btn-glow-pulse h-13 px-8 text-sm sm:text-base font-bold text-white bg-gradient-to-r from-teal-500 via-cyan-600 to-teal-500 hover:from-teal-400 hover:to-cyan-500 rounded-full shadow-lg shadow-teal-500/25 transition-all duration-300 flex items-center justify-center gap-2.5 cursor-pointer active:scale-95 group">
+                        <span>Get Started for Free</span>
+                        <svg class="w-4 h-4 transition-transform duration-300 group-hover:translate-x-1" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2.5" d="M14 5l7 7m0 0l-7 7m7-7H3"/></svg>
+                    </button>
+
+                    <a href="#programs" class="h-13 px-7 text-sm font-bold text-slate-700 hover:text-indigo-600 bg-white hover:bg-slate-50 border border-slate-200 hover:border-indigo-300 rounded-full shadow-2xs hover:shadow-md transition-all duration-300 flex items-center justify-center gap-2 cursor-pointer active:scale-95">
+                        <span>Explore Programs</span>
+                        <svg class="w-4 h-4 text-slate-400 group-hover:text-indigo-600 transition-colors" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M19 9l-7 7-7-7"/></svg>
+                    </a>
+                </div>
+
+                <!-- Degree Stream Badges -->
+                <div class="flex flex-wrap items-center gap-2 text-xs text-slate-500 font-medium mb-8">
+                    <span class="font-semibold text-slate-700">Programs For:</span>
+                    @foreach(['BA', 'BSc', 'BBA', 'BCA', 'BCom'] as $deg)
+                        <span class="px-3 py-1 rounded-full bg-white border border-slate-200 text-slate-800 font-bold shadow-2xs hover:border-teal-300 hover:text-teal-700 transition">{{ $deg }}</span>
+                    @endforeach
+                    <span class="text-slate-400">& related degrees</span>
+                </div>
+
+                <!-- 4 Value Pillar Highlights (Fills Left Side Beautifully) -->
+                <div class="grid grid-cols-2 gap-3 pt-5 border-t border-slate-200/80 w-full">
+                    <div class="flex items-start gap-3 p-3 rounded-2xl bg-white/90 backdrop-blur-sm border border-slate-200/80 shadow-2xs hover:border-teal-300 transition">
+                        <span class="text-xl">🎖️</span>
+                        <div>
+                            <div class="text-xs font-bold text-slate-900">UGC Aligned</div>
+                            <div class="text-[11px] text-slate-500">NEP-2020 4-Credit Ready</div>
+                        </div>
+                    </div>
+                    <div class="flex items-start gap-3 p-3 rounded-2xl bg-white/90 backdrop-blur-sm border border-slate-200/80 shadow-2xs hover:border-teal-300 transition">
+                        <span class="text-xl">⚡</span>
+                        <div>
+                            <div class="text-xs font-bold text-slate-900">Real Capstones</div>
+                            <div class="text-[11px] text-slate-500">Hands-on Deliverables</div>
+                        </div>
+                    </div>
+                    <div class="flex items-start gap-3 p-3 rounded-2xl bg-white/90 backdrop-blur-sm border border-slate-200/80 shadow-2xs hover:border-teal-300 transition">
+                        <span class="text-xl">📜</span>
+                        <div>
+                            <div class="text-xs font-bold text-slate-900">Verified Certificate</div>
+                            <div class="text-[11px] text-slate-500">Tamper-Proof QR Code</div>
+                        </div>
+                    </div>
+                    <div class="flex items-start gap-3 p-3 rounded-2xl bg-white/90 backdrop-blur-sm border border-slate-200/80 shadow-2xs hover:border-teal-300 transition">
+                        <span class="text-xl">🤝</span>
+                        <div>
+                            <div class="text-xs font-bold text-slate-900">1-on-1 Mentorship</div>
+                            <div class="text-[11px] text-slate-500">4.9/5 Student Rating</div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+
+            <!-- ==================== RIGHT COLUMN: DIGITAL WORKSTATION SHOWCASE (ANIMATED WITH NO OVERLAY CARDS) ==================== -->
+            <div class="lg:col-span-6 relative w-full pt-4 lg:pt-0">
+                <!-- Vector Illustration: Modern Workstation Monitor, Foliage, Student Typing, and Stand -->
+                <svg class="w-full h-auto drop-shadow-[0_20px_50px_rgba(15,23,42,0.15)]" viewBox="0 0 1000 620" fill="none" xmlns="http://www.w3.org/2000/svg">
+                    <defs>
+                        <!-- Inline CSS Animations for Silky-Smooth 60FPS Performance -->
+                        <style>
+                            @keyframes typingLeftHand {
+                                0%, 100% { transform: translateY(0px) rotate(0deg); }
+                                50% { transform: translateY(-4px) rotate(-3deg); }
+                            }
+                            @keyframes typingRightHand {
+                                0%, 100% { transform: translateY(-3px) rotate(2deg); }
+                                50% { transform: translateY(2px) rotate(-2deg); }
+                            }
+                            @keyframes studentBodySway {
+                                0%, 100% { transform: translateY(0px); }
+                                50% { transform: translateY(-1.5px); }
+                            }
+                            @keyframes laptopScreenPulse {
+                                0%, 100% { opacity: 0.82; filter: drop-shadow(0 0 4px rgba(56,189,248,0.4)); }
+                                50% { opacity: 1; filter: drop-shadow(0 0 14px rgba(56,189,248,0.95)); }
+                            }
+                            @keyframes keystrokeSpark1 {
+                                0% { opacity: 0; transform: translateY(0) scale(0.6); }
+                                50% { opacity: 0.9; transform: translateY(-8px) scale(1); }
+                                100% { opacity: 0; transform: translateY(-16px) scale(0.2); }
+                            }
+                            @keyframes keystrokeSpark2 {
+                                0% { opacity: 0; transform: translateY(0) scale(0.6); }
+                                50% { opacity: 0.8; transform: translateY(-10px) scale(1.1); }
+                                100% { opacity: 0; transform: translateY(-20px) scale(0.3); }
+                            }
+                            @keyframes gridScanAnim {
+                                0% { transform: translateY(0px); opacity: 0; }
+                                20% { opacity: 0.7; }
+                                80% { opacity: 0.7; }
+                                100% { transform: translateY(320px); opacity: 0; }
+                            }
+                            @keyframes cursorBlink {
+                                0%, 49% { opacity: 1; }
+                                50%, 100% { opacity: 0; }
+                            }
+                            @keyframes statusDotPulse {
+                                0%, 100% { opacity: 1; transform: scale(1); }
+                                50% { opacity: 0.45; transform: scale(0.8); }
+                            }
+                            @keyframes leafSwayL {
+                                0%, 100% { transform: rotate(0deg); }
+                                50% { transform: rotate(-2.5deg); }
+                            }
+                            @keyframes leafSwayR {
+                                0%, 100% { transform: rotate(0deg); }
+                                50% { transform: rotate(2.5deg); }
+                            }
+
+                            .anim-typing-l {
+                                animation: typingLeftHand 0.22s ease-in-out infinite;
+                                transform-origin: 295px 452px;
+                            }
+                            .anim-typing-r {
+                                animation: typingRightHand 0.22s ease-in-out infinite;
+                                transform-origin: 308px 454px;
+                            }
+                            .anim-student-body {
+                                animation: studentBodySway 1.8s ease-in-out infinite;
+                                transform-origin: 250px 530px;
+                            }
+                            .anim-laptop-pulse {
+                                animation: laptopScreenPulse 1.6s ease-in-out infinite;
+                            }
+                            .anim-keystroke-1 {
+                                animation: keystrokeSpark1 1.2s ease-out infinite;
+                                transform-origin: 304px 448px;
+                            }
+                            .anim-keystroke-2 {
+                                animation: keystrokeSpark2 1.4s ease-out infinite 0.5s;
+                                transform-origin: 316px 449px;
+                            }
+                            .anim-grid-scan {
+                                animation: gridScanAnim 4s ease-in-out infinite;
+                            }
+                            .anim-cursor {
+                                animation: cursorBlink 0.8s infinite;
+                            }
+                            .anim-status-dot {
+                                animation: statusDotPulse 1.5s ease-in-out infinite;
+                                transform-origin: 704px 112px;
+                            }
+                            .anim-leaf-left {
+                                animation: leafSwayL 5.5s ease-in-out infinite;
+                                transform-origin: 170px 520px;
+                            }
+                            .anim-leaf-right {
+                                animation: leafSwayR 6s ease-in-out infinite;
+                                transform-origin: 830px 520px;
+                            }
+                        </style>
+
+                        <!-- Screen Gradient (Cyan-Blue Workspace Matching Screenshot) -->
+                        <linearGradient id="screenGrad" x1="0%" y1="0%" x2="100%" y2="100%">
+                            <stop offset="0%" stop-color="#2D7BB5"/>
+                            <stop offset="50%" stop-color="#1B598A"/>
+                            <stop offset="100%" stop-color="#0E3D63"/>
+                        </linearGradient>
+
+                        <!-- Monitor Coordinate Grid Pattern (Matching Screenshot) -->
+                        <pattern id="monitorGrid" width="60" height="60" patternUnits="userSpaceOnUse">
+                            <rect width="60" height="60" fill="none"/>
+                            <path d="M 60 0 L 0 0 0 60" fill="none" stroke="#38BDF8" stroke-width="0.9" stroke-opacity="0.22"/>
+                        </pattern>
+
+                        <!-- Monitor Outer Bezel (Sleek Slate-Navy) -->
+                        <linearGradient id="bezelGrad" x1="0%" y1="0%" x2="100%" y2="100%">
+                            <stop offset="0%" stop-color="#1E293B"/>
+                            <stop offset="50%" stop-color="#0F172A"/>
+                            <stop offset="100%" stop-color="#020617"/>
+                        </linearGradient>
+
+                        <!-- Stand Gradient -->
+                        <linearGradient id="standGrad" x1="0%" y1="0%" x2="0%" y2="100%">
+                            <stop offset="0%" stop-color="#64748B"/>
+                            <stop offset="100%" stop-color="#334155"/>
+                        </linearGradient>
+
+                        <!-- Base Plate Gradient -->
+                        <linearGradient id="baseGrad" x1="0%" y1="0%" x2="100%" y2="0%">
+                            <stop offset="0%" stop-color="#475569"/>
+                            <stop offset="50%" stop-color="#94A3B8"/>
+                            <stop offset="100%" stop-color="#475569"/>
+                        </linearGradient>
+
+                        <!-- Character Teal Sweatshirt Gradient -->
+                        <linearGradient id="charTealGrad" x1="0%" y1="0%" x2="100%" y2="100%">
+                            <stop offset="0%" stop-color="#00C49F"/>
+                            <stop offset="50%" stop-color="#00A887"/>
+                            <stop offset="100%" stop-color="#007B65"/>
+                        </linearGradient>
+
+                        <!-- Character Laptop Screen Glow -->
+                        <linearGradient id="laptopGlow" x1="0%" y1="0%" x2="100%" y2="100%">
+                            <stop offset="0%" stop-color="#BAE6FD"/>
+                            <stop offset="100%" stop-color="#38BDF8"/>
+                        </linearGradient>
+
+                        <!-- Foliage Gradients -->
+                        <linearGradient id="leafCyanBlue" x1="0%" y1="0%" x2="100%" y2="100%">
+                            <stop offset="0%" stop-color="#38BDF8"/>
+                            <stop offset="50%" stop-color="#0284C7"/>
+                            <stop offset="100%" stop-color="#0369A1"/>
+                        </linearGradient>
+                        <linearGradient id="leafLightCyan" x1="0%" y1="0%" x2="100%" y2="100%">
+                            <stop offset="0%" stop-color="#7DD3FC"/>
+                            <stop offset="70%" stop-color="#0EA5E9"/>
+                            <stop offset="100%" stop-color="#0284C7"/>
+                        </linearGradient>
+                        <linearGradient id="leafDeepTeal" x1="0%" y1="0%" x2="100%" y2="100%">
+                            <stop offset="0%" stop-color="#2DD4BF"/>
+                            <stop offset="50%" stop-color="#0D9488"/>
+                            <stop offset="100%" stop-color="#115E59"/>
+                        </linearGradient>
+                        <linearGradient id="leafCyanWash" x1="0%" y1="0%" x2="100%" y2="100%">
+                            <stop offset="0%" stop-color="#A5F3FC"/>
+                            <stop offset="60%" stop-color="#38BDF8"/>
+                            <stop offset="100%" stop-color="#0284C7"/>
+                        </linearGradient>
+
+                        <!-- Desk Ambient Soft Shadow -->
+                        <radialGradient id="deskGlow" cx="50%" cy="50%" r="50%">
+                            <stop offset="0%" stop-color="#0EA5E9" stop-opacity="0.25"/>
+                            <stop offset="60%" stop-color="#0284C7" stop-opacity="0.08"/>
+                            <stop offset="100%" stop-color="#FAFBF9" stop-opacity="0"/>
+                        </radialGradient>
+                    </defs>
+
+                    <!-- Ambient Desk Reflection -->
+                    <ellipse cx="500" cy="565" rx="380" ry="25" fill="url(#deskGlow)"/>
+
+                    <!-- ==================== LEFT FOLIAGE BOTANICAL CLUSTER (SWAYING IN BREEZE) ==================== -->
+                    <g id="left-foliage" class="anim-leaf-left">
+                        <!-- Back Deep Leaf (Monstera Fan) -->
+                        <path d="M 170 510 C 90 440 30 350 40 210 C 55 195 75 210 75 230 C 80 180 100 195 105 220 C 120 170 145 185 140 215 C 160 160 185 175 175 220 C 190 260 185 380 170 510 Z" fill="url(#leafDeepTeal)" opacity="0.95"/>
+                        <path d="M 115 340 C 130 290 145 240 155 200" stroke="#5EEAD4" stroke-width="2" stroke-linecap="round" opacity="0.5"/>
+                        <path d="M 125 320 C 105 300 80 295 65 300" stroke="#5EEAD4" stroke-width="1.5" stroke-linecap="round" opacity="0.4"/>
+                        <path d="M 135 280 C 115 260 95 255 80 260" stroke="#5EEAD4" stroke-width="1.5" stroke-linecap="round" opacity="0.4"/>
+
+                        <!-- Mid Leaf (Cyan-Blue Monstera) -->
+                        <path d="M 190 520 C 100 450 35 370 45 280 C 65 270 85 285 85 305 C 85 250 110 265 115 290 C 125 240 150 255 145 285 C 165 235 190 250 185 295 C 195 360 195 440 190 520 Z" fill="url(#leafCyanBlue)"/>
+                        <path d="M 130 380 C 150 320 165 280 175 250" stroke="#BAE6FD" stroke-width="2" stroke-linecap="round" opacity="0.5"/>
+                        <path d="M 135 370 C 115 350 90 350 75 355" stroke="#BAE6FD" stroke-width="1.5" stroke-linecap="round" opacity="0.4"/>
+
+                        <!-- Foreground Light Cyan Frond -->
+                        <path d="M 210 530 C 130 480 80 430 90 350 C 110 340 125 360 120 375 C 125 330 150 345 150 365 C 165 320 190 335 185 375 C 195 425 205 470 210 530 Z" fill="url(#leafLightCyan)"/>
+
+                        <!-- Small Accent Sprout Leaf -->
+                        <path d="M 225 530 C 180 490 140 470 145 420 C 160 415 175 430 170 445 C 185 410 205 425 200 455 C 215 480 220 505 225 530 Z" fill="url(#leafCyanWash)"/>
+                    </g>
+
+                    <!-- ==================== RIGHT FOLIAGE BOTANICAL CLUSTER (SWAYING IN BREEZE) ==================== -->
+                    <g id="right-foliage" class="anim-leaf-right">
+                        <!-- Back Deep Leaf -->
+                        <path d="M 830 510 C 910 440 970 350 960 210 C 945 195 925 210 925 230 C 920 180 900 195 895 220 C 880 170 855 185 860 215 C 840 160 815 175 825 220 C 810 260 815 380 830 510 Z" fill="url(#leafDeepTeal)" opacity="0.95"/>
+                        <path d="M 885 340 C 870 290 855 240 845 200" stroke="#5EEAD4" stroke-width="2" stroke-linecap="round" opacity="0.5"/>
+                        <path d="M 875 320 C 895 300 920 295 935 300" stroke="#5EEAD4" stroke-width="1.5" stroke-linecap="round" opacity="0.4"/>
+                        <path d="M 865 280 C 885 260 905 255 920 260" stroke="#5EEAD4" stroke-width="1.5" stroke-linecap="round" opacity="0.4"/>
+
+                        <!-- Mid Leaf (Tropical Green as in screenshot) -->
+                        <path d="M 810 520 C 900 450 965 370 955 280 C 935 270 915 285 915 305 C 915 250 890 265 885 290 C 875 240 850 255 855 285 C 835 235 810 250 815 295 C 805 360 805 440 810 520 Z" fill="url(#leafCyanBlue)"/>
+                        <path d="M 870 380 C 850 320 835 280 825 250" stroke="#BAE6FD" stroke-width="2" stroke-linecap="round" opacity="0.5"/>
+                        <path d="M 865 370 C 885 350 910 350 925 355" stroke="#BAE6FD" stroke-width="1.5" stroke-linecap="round" opacity="0.4"/>
+
+                        <!-- Foreground Light Cyan Frond -->
+                        <path d="M 790 530 C 870 480 920 430 910 350 C 890 340 875 360 880 375 C 875 330 850 345 850 365 C 835 320 810 335 815 375 C 805 425 795 470 790 530 Z" fill="url(#leafLightCyan)"/>
+
+                        <!-- Small Accent Sprout Leaf -->
+                        <path d="M 775 530 C 820 490 860 470 855 420 C 840 415 825 430 830 445 C 815 410 795 425 800 455 C 785 480 780 505 775 530 Z" fill="url(#leafCyanWash)"/>
+
+                        <!-- Desk Plant Base Element (Matching Screenshot at Bottom-Right) -->
+                        <path d="M 765 540 C 765 490 790 480 820 480 C 850 480 875 490 875 540 Z" fill="url(#charTealGrad)" opacity="0.9"/>
+                    </g>
+
+                    <!-- ==================== MONITOR DISPLAY ==================== -->
+                    <g id="monitor-unit">
+                        <!-- Stand Neck -->
+                        <path d="M 465 470 L 535 470 L 545 540 L 455 540 Z" fill="url(#standGrad)"/>
+                        <path d="M 465 470 L 468 470 L 458 540 L 455 540 Z" fill="#94A3B8" opacity="0.5"/>
+
+                        <!-- Stand Base Plate -->
+                        <rect x="370" y="538" width="260" height="14" rx="7" fill="url(#baseGrad)" stroke="#CBD5E1" stroke-width="1"/>
+
+                        <!-- Monitor Outer Chassis -->
+                        <rect x="180" y="70" width="640" height="404" rx="26" fill="url(#bezelGrad)" stroke="#38BDF8" stroke-width="2" stroke-opacity="0.4"/>
+
+                        <!-- Monitor Top Camera Dot & LED -->
+                        <circle cx="500" cy="82" r="3.5" fill="#040916"/>
+                        <circle cx="510" cy="82" r="1.5" fill="#34D399"/>
+
+                        <!-- Inner Screen Area (Blue Background) -->
+                        <rect x="194" y="94" width="612" height="364" rx="16" fill="url(#screenGrad)"/>
+
+                        <!-- Coordinate Grid Pattern (Matching User Screenshot) -->
+                        <rect x="194" y="128" width="612" height="330" fill="url(#monitorGrid)"/>
+
+                        <!-- Ambient Grid Scanline Sweep -->
+                        <line x1="194" y1="128" x2="806" y2="128" stroke="#38BDF8" stroke-width="2" stroke-opacity="0.4" class="anim-grid-scan"/>
+
+                        <!-- Screen Browser Navigation Header (Matching Screenshot) -->
+                        <rect x="194" y="94" width="612" height="34" rx="16" fill="#081E3B" opacity="0.95"/>
+                        <rect x="194" y="112" width="612" height="16" fill="#081E3B" opacity="0.95"/>
+                        <!-- 3 Window Control Dots -->
+                        <circle cx="216" cy="111" r="4.5" fill="#EF4444"/>
+                        <circle cx="230" cy="111" r="4.5" fill="#F59E0B"/>
+                        <circle cx="244" cy="111" r="4.5" fill="#10B981"/>
+                        <!-- URL Capsule -->
+                        <rect x="290" y="103" width="280" height="18" rx="9" fill="#0D284D" stroke="#38BDF8" stroke-width="0.8" stroke-opacity="0.3"/>
+                        <text x="315" y="116" fill="#BAE6FD" font-size="10" font-family="sans-serif" font-weight="500">infinityinterns.org/ugc-portal/workspace</text>
+                        <path d="M 303 115 L 303 112 C 303 110.5 304 109.5 305.5 109.5 C 307 109.5 308 110.5 308 112 L 308 115 Z M 301.5 115 L 309.5 115 L 309.5 119 L 301.5 119 Z" fill="#38BDF8"/>
+                        <!-- Active Status Chip (Matching Screenshot) -->
+                        <rect x="690" y="103" width="100" height="18" rx="9" fill="#0D284D" stroke="#10B981" stroke-width="0.8" stroke-opacity="0.5"/>
+                        <circle cx="704" cy="112" r="3" fill="#10B981" class="anim-status-dot"/>
+                        <text x="714" y="116" fill="#6EE7B7" font-size="9" font-family="sans-serif" font-weight="700">UGC ACTIVE</text>
+
+                        <!-- ==================== INSIDE SCREEN: LIVE TYPING CODE TERMINAL (ANIMATED) ==================== -->
+                        <g id="screen-live-ide">
+                            <!-- Code Window Frame Floating over Grid -->
+                            <rect x="340" y="150" width="446" height="266" rx="12" fill="#061830" fill-opacity="0.85" stroke="#38BDF8" stroke-width="1" stroke-opacity="0.35"/>
+                            
+                            <!-- Window Header -->
+                            <rect x="340" y="150" width="446" height="26" rx="12" fill="#030E20" fill-opacity="0.95"/>
+                            <rect x="340" y="164" width="446" height="12" fill="#030E20" fill-opacity="0.95"/>
+                            <circle cx="356" cy="163" r="3.5" fill="#64748B"/>
+                            <circle cx="367" cy="163" r="3.5" fill="#64748B"/>
+                            <circle cx="378" cy="163" r="3.5" fill="#64748B"/>
+                            
+                            <rect x="398" y="155" width="136" height="18" rx="5" fill="#0B264A"/>
+                            <text x="410" y="167" fill="#7DD3FC" font-size="8.5" font-family="monospace" font-weight="bold">📄 CapstoneProject.tsx</text>
+                            <rect x="542" y="155" width="85" height="18" rx="5" fill="#061830" fill-opacity="0.5"/>
+                            <text x="552" y="167" fill="#64748B" font-size="8.5" font-family="monospace">terminal</text>
+
+                            <!-- Syntax Highlighted Live Code -->
+                            <g font-family="monospace" font-size="9">
+                                <text x="358" y="196" fill="#64748B">// UGC Accredited Live Workspace • Active Typing</text>
+                                
+                                <text x="358" y="216" fill="#F472B6">import <tspan fill="#38BDF8">{ verifyMilestone }</tspan> <tspan fill="#F472B6">from</tspan> <tspan fill="#34D399">'@ugc/intern-nep'</tspan>;</text>
+                                
+                                <text x="358" y="236" fill="#F472B6">const <tspan fill="#FBBF24">internship</tspan> = <tspan fill="#60A5FA">new</tspan> <tspan fill="#38BDF8">CapstoneCohort</tspan>({</text>
+                                <text x="372" y="254" fill="#94A3B8">candidate: <tspan fill="#34D399">"Undergraduate Scholar"</tspan>,</text>
+                                <text x="372" y="272" fill="#94A3B8">framework: <tspan fill="#34D399">"NEP-2020 Aligned (4 Credits)"</tspan>,</text>
+                                <text x="372" y="290" fill="#94A3B8">progress: <tspan fill="#34D399">"Week 4 of 6 • On Track"</tspan>,</text>
+                                <text x="372" y="308" fill="#94A3B8">evaluation: <tspan fill="#10B981">"PASSED (94% Verified)"</tspan></text>
+                                <text x="358" y="326" fill="#F472B6">});</text>
+
+                                <!-- Live CLI Terminal Execution Box with Blinking Cursor -->
+                                <rect x="352" y="342" width="422" height="58" rx="8" fill="#020A17" stroke="#1E3A5F" stroke-width="1"/>
+                                <text x="366" y="362" fill="#38BDF8" font-weight="bold">> deploy --verified-cohort --generate-lor</text>
+                                <!-- Blinking Terminal Cursor -->
+                                <rect x="635" y="352" width="6.5" height="12" fill="#38BDF8" class="anim-cursor"/>
+                                <text x="366" y="382" fill="#34D399" font-weight="bold">✓ Build Succeeded • 4 Academic Credits & QR LOR Issued</text>
+                            </g>
+                        </g>
+                    </g>
+
+                    <!-- ==================== STUDENT CHARACTER (WITH ACTIVE TYPING ANIMATION AS IN SCREENSHOT) ==================== -->
+                    <g id="student-character" class="anim-student-body">
+                        <!-- Body / Torso in Teal Sweater (Matching Screenshot Shape & Color) -->
+                        <path d="M 195 530 C 195 435 215 390 250 385 C 285 390 305 435 305 530 Z" fill="url(#charTealGrad)"/>
+                        <path d="M 240 432 C 250 450 260 450 270 432" stroke="#007B65" stroke-width="2" stroke-linecap="round"/>
+                        <path d="M 220 482 C 245 492 275 492 300 482" stroke="#007B65" stroke-width="2" stroke-linecap="round"/>
+
+                        <!-- Neck -->
+                        <rect x="242" y="358" width="16" height="28" rx="4" fill="#FAD4C0"/>
+
+                        <!-- Head / Face -->
+                        <ellipse cx="250" cy="336" rx="20" ry="24" fill="#FAD4C0"/>
+
+                        <!-- Modern Dark Hair -->
+                        <path d="M 230 334 C 229 310 244 300 261 305 C 274 310 273 322 271 334 C 264 318 254 315 239 322 Z" fill="#0F172A"/>
+                        <path d="M 227 335 C 225 322 231 312 239 310 C 234 320 232 330 232 340 Z" fill="#0F172A"/>
+
+                        <!-- Eyes / Brow focused down toward laptop -->
+                        <ellipse cx="257" cy="332" rx="2.2" ry="1.5" fill="#0F172A"/>
+                        <path d="M 254 327 C 257 326 261 327 263 329" stroke="#0F172A" stroke-width="1.5" stroke-linecap="round"/>
+
+                        <!-- White Mask / Collar (As in reference screenshot) -->
+                        <path d="M 245 340 C 251 339 263 339 268 344 C 269 352 263 360 253 360 C 245 360 242 352 245 340 Z" fill="#FFFFFF" stroke="#CBD5E1" stroke-width="1"/>
+                        <path d="M 245 346 C 239 344 235 342 233 340" stroke="#FFFFFF" stroke-width="1.2" stroke-linecap="round"/>
+
+                        <!-- Right Arm angled to keyboard -->
+                        <path d="M 220 425 C 235 450 265 465 295 460 C 305 458 310 450 305 440 C 285 440 260 430 245 410 Z" fill="#00A887"/>
+
+                        <!-- Laptop tilted upwards (Matching Screenshot) -->
+                        <g id="student-laptop">
+                            <!-- Base / Keyboard Tray -->
+                            <polygon points="274,453 335,453 326,462 265,462" fill="#475569"/>
+                            <polygon points="278,454 328,454 322,460 272,460" fill="#0F172A"/>
+                            <!-- Laptop Screen Lid -->
+                            <polygon points="278,450 322,400 330,404 290,455" fill="#1E293B"/>
+                            <!-- Glowing Screen Display (Pulsing with typing reflection) -->
+                            <polygon points="281,448 320,403 327,406 290,452" fill="url(#laptopGlow)" class="anim-laptop-pulse"/>
+                            <circle cx="304" cy="428" r="2.5" fill="#FFFFFF" opacity="0.95"/>
+                            <!-- Keystroke Sparks floating up from keyboard -->
+                            <circle cx="304" cy="448" r="2.5" fill="#38BDF8" class="anim-keystroke-1"/>
+                            <circle cx="316" cy="449" r="2" fill="#A5F3FC" class="anim-keystroke-2"/>
+                        </g>
+
+                        <!-- ANIMATED TYPING HANDS (Realistic, energetic alternating typing motion!) -->
+                        <g id="animated-typing-hands">
+                            <!-- Left Hand Typing -->
+                            <ellipse cx="295" cy="452" rx="7" ry="4.5" fill="#FAD4C0" class="anim-typing-l"/>
+                            <!-- Right Hand Typing -->
+                            <ellipse cx="308" cy="454" rx="6.5" ry="4" fill="#F3D5B5" class="anim-typing-r"/>
+                        </g>
+                    </g>
                 </svg>
-            </span>
-            with Infinity Interns.
-        </h1>
-
-        <!-- Subheading -->
-        <p class="motion-hero-sub max-w-3xl mx-auto text-base sm:text-lg text-slate-600 font-light mb-10 leading-relaxed px-4">
-            <strong class="text-slate-800 font-semibold">Internships are an essential milestone in your college degree.</strong>
-            Turn university requirements into a real career advantage with hands-on skill development and UGC-aligned internship programs designed for undergraduate students.
-        </p>
-
-        <!-- Highlights Grid -->
-        <div class="motion-hero-cards grid grid-cols-2 sm:grid-cols-4 gap-3 max-w-3xl mx-auto mb-10 text-left">
-            <div class="motion-card-hover flex flex-col p-4 bg-white/95 backdrop-blur-sm rounded-2xl border border-slate-200/80 shadow-xs hover:shadow-md transition">
-                <span class="text-indigo-600 mb-1 text-lg">🎖️</span>
-                <span class="text-[10px] font-bold uppercase tracking-wider text-slate-400">UGC Focus</span>
-                <span class="text-slate-900 font-semibold text-xs sm:text-sm">Undergraduate</span>
             </div>
-            <div class="motion-card-hover flex flex-col p-4 bg-white/95 backdrop-blur-sm rounded-2xl border border-slate-200/80 shadow-xs hover:shadow-md transition">
-                <span class="text-emerald-600 mb-1 text-lg">⚡</span>
-                <span class="text-[10px] font-bold uppercase tracking-wider text-slate-400">Methodology</span>
-                <span class="text-slate-900 font-semibold text-xs sm:text-sm">Hands-on Projects</span>
-            </div>
-            <div class="motion-card-hover flex flex-col p-4 bg-white/95 backdrop-blur-sm rounded-2xl border border-slate-200/80 shadow-xs hover:shadow-md transition">
-                <span class="text-purple-600 mb-1 text-lg">📜</span>
-                <span class="text-[10px] font-bold uppercase tracking-wider text-slate-400">Accreditation</span>
-                <span class="text-slate-900 font-semibold text-xs sm:text-sm">Verified Certificate</span>
-            </div>
-            <div class="motion-card-hover flex flex-col p-4 bg-white/95 backdrop-blur-sm rounded-2xl border border-slate-200/80 shadow-xs hover:shadow-md transition">
-                <span class="text-cyan-600 mb-1 text-lg">🤝</span>
-                <span class="text-[10px] font-bold uppercase tracking-wider text-slate-400">Support</span>
-                <span class="text-slate-900 font-semibold text-xs sm:text-sm">Mentor Guided</span>
-            </div>
-        </div>
 
-        <!-- CTA Buttons -->
-        <div class="motion-hero-cta flex flex-col sm:flex-row items-center justify-center gap-4">
-            <button onclick="openApplyModal()" class="motion-btn-spring w-full sm:w-auto h-13 px-8 text-sm font-bold text-white bg-indigo-600 hover:bg-indigo-700 rounded-full shadow-xl shadow-indigo-600/25 hover:shadow-indigo-600/40 transition-all flex items-center justify-center gap-2 group cursor-pointer active:scale-95">
-                <span>Start Your Journey</span>
-                <svg class="w-4 h-4 transition-transform group-hover:translate-x-1" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M14 5l7 7m0 0l-7 7m7-7H3"/></svg>
-            </button>
-
-            <a href="#journey" class="motion-btn-spring w-full sm:w-auto h-13 px-8 text-sm font-semibold text-slate-700 hover:text-slate-900 bg-white hover:bg-slate-50 border border-slate-200/90 rounded-full shadow-xs hover:shadow-md transition-all flex items-center justify-center gap-2 cursor-pointer active:scale-95">
-                <span>How It Works</span>
-                <svg class="w-4 h-4 text-slate-400" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M19 9l-7 7-7-7"/></svg>
-            </a>
-        </div>
-
-        <!-- Stream Badges -->
-        <div class="motion-reveal pt-10 flex flex-wrap items-center justify-center gap-2 text-xs text-slate-500 font-medium">
-            <span>Programs Tailored For:</span>
-            @foreach(['BA', 'BSc', 'BBA', 'BCA', 'BCom'] as $deg)
-                <span class="px-2.5 py-0.5 rounded-full bg-white border border-slate-200 text-slate-800 font-semibold shadow-xs">{{ $deg }}</span>
-            @endforeach
-            <span class="text-slate-400 font-normal">& related degrees</span>
         </div>
     </div>
 </section>
 
-<!-- Live Impact Stats Strip with Framer Motion Animated Numbers -->
-<section class="py-10 bg-white/90 backdrop-blur-md border-y border-slate-200/80 relative z-20 shadow-xs">
+<!-- Live Impact Stats Strip with Animated Numbers (Luminous Light Mode Glass Styling) -->
+<section class="py-10 bg-white/90 backdrop-blur-xl border-y border-slate-200/80 relative z-20 shadow-xs">
     <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
         <div class="motion-stagger grid grid-cols-2 lg:grid-cols-4 gap-4 sm:gap-6 text-center">
-            <div class="p-5 rounded-3xl bg-[#FAFBF9] border border-slate-200/80 motion-card-hover shadow-xs">
+            <div class="p-5 rounded-3xl bg-[#FAFBF9]/90 border border-slate-200/80 hover:border-indigo-300 hover:shadow-md transition-all duration-300 shadow-2xs glass-interactive-card group">
                 <div class="text-3xl sm:text-4xl font-serif font-extrabold text-indigo-600 mb-1 motion-counter" data-target="{{ $stats['total_students'] ?? 1420 }}" data-suffix="+">
                     {{ number_format($stats['total_students'] ?? 1420) }}+
                 </div>
                 <div class="text-xs font-bold text-slate-800">Undergraduate Learners</div>
                 <div class="text-[10px] text-slate-500 uppercase tracking-wider mt-0.5">Enrolled Nationwide</div>
             </div>
-            <div class="p-5 rounded-3xl bg-[#FAFBF9] border border-slate-200/80 motion-card-hover shadow-xs">
+            <div class="p-5 rounded-3xl bg-[#FAFBF9]/90 border border-slate-200/80 hover:border-emerald-300 hover:shadow-md transition-all duration-300 shadow-2xs glass-interactive-card group">
                 <div class="text-3xl sm:text-4xl font-serif font-extrabold text-emerald-600 mb-1 motion-counter" data-target="{{ $stats['active_interns'] ?? 890 }}" data-suffix="+">
                     {{ number_format($stats['active_interns'] ?? 890) }}+
                 </div>
                 <div class="text-xs font-bold text-slate-800">Active Live Interns</div>
                 <div class="text-[10px] text-slate-500 uppercase tracking-wider mt-0.5">Executing Capstones</div>
             </div>
-            <div class="p-5 rounded-3xl bg-[#FAFBF9] border border-slate-200/80 motion-card-hover shadow-xs">
+            <div class="p-5 rounded-3xl bg-[#FAFBF9]/90 border border-slate-200/80 hover:border-purple-300 hover:shadow-md transition-all duration-300 shadow-2xs glass-interactive-card group">
                 <div class="text-3xl sm:text-4xl font-serif font-extrabold text-purple-600 mb-1 motion-counter" data-target="{{ $stats['certificates_issued'] ?? 520 }}" data-suffix="+">
                     {{ number_format($stats['certificates_issued'] ?? 520) }}+
                 </div>
                 <div class="text-xs font-bold text-slate-800">Verified Certificates</div>
                 <div class="text-[10px] text-slate-500 uppercase tracking-wider mt-0.5">Issued & Accredited</div>
             </div>
-            <div class="p-5 rounded-3xl bg-[#FAFBF9] border border-slate-200/80 motion-card-hover shadow-xs">
+            <div class="p-5 rounded-3xl bg-[#FAFBF9]/90 border border-slate-200/80 hover:border-cyan-300 hover:shadow-md transition-all duration-300 shadow-2xs glass-interactive-card group">
                 <div class="text-3xl sm:text-4xl font-serif font-extrabold text-cyan-600 mb-1 motion-counter" data-target="{{ $stats['partner_colleges'] ?? 24 }}" data-suffix="+">
                     {{ $stats['partner_colleges'] ?? 24 }}+
                 </div>
@@ -120,6 +496,43 @@
         </div>
     </div>
 </section>
+
+<!-- Modern Infinite Institutional Marquee Ribbon -->
+<div class="py-3.5 bg-gradient-to-r from-indigo-900 via-indigo-950 to-slate-900 text-white overflow-hidden relative z-20 shadow-md">
+    <div class="marquee-container">
+        <div class="marquee-track flex items-center gap-8 text-xs font-semibold tracking-wider uppercase text-indigo-200">
+            <span class="flex items-center gap-2"><span class="w-2 h-2 rounded-full bg-emerald-400 animate-ping"></span> UGC Guidelines 2026 Compliant</span>
+            <span class="text-indigo-400">•</span>
+            <span class="flex items-center gap-2">🎓 NEP-2020 Semester Credit Aligned</span>
+            <span class="text-indigo-400">•</span>
+            <span class="flex items-center gap-2">🏛️ Patna University Affiliated Colleges</span>
+            <span class="text-indigo-400">•</span>
+            <span class="flex items-center gap-2">⚡ 4 to 8 Weeks Hands-on Research Capstone</span>
+            <span class="text-indigo-400">•</span>
+            <span class="flex items-center gap-2">🔒 Tamper-Proof QR Public Verification</span>
+            <span class="text-indigo-400">•</span>
+            <span class="flex items-center gap-2">📜 Official Letter of Recommendation (LOR)</span>
+            <span class="text-indigo-400">•</span>
+            <span class="flex items-center gap-2">⭐ 100% Academic Semester Recognition</span>
+            <span class="text-indigo-400">•</span>
+            <!-- Repeated loop for infinite smoothness -->
+            <span class="flex items-center gap-2"><span class="w-2 h-2 rounded-full bg-emerald-400 animate-ping"></span> UGC Guidelines 2026 Compliant</span>
+            <span class="text-indigo-400">•</span>
+            <span class="flex items-center gap-2">🎓 NEP-2020 Semester Credit Aligned</span>
+            <span class="text-indigo-400">•</span>
+            <span class="flex items-center gap-2">🏛️ Patna University Affiliated Colleges</span>
+            <span class="text-indigo-400">•</span>
+            <span class="flex items-center gap-2">⚡ 4 to 8 Weeks Hands-on Research Capstone</span>
+            <span class="text-indigo-400">•</span>
+            <span class="flex items-center gap-2">🔒 Tamper-Proof QR Public Verification</span>
+            <span class="text-indigo-400">•</span>
+            <span class="flex items-center gap-2">📜 Official Letter of Recommendation (LOR)</span>
+            <span class="text-indigo-400">•</span>
+            <span class="flex items-center gap-2">⭐ 100% Academic Semester Recognition</span>
+            <span class="text-indigo-400">•</span>
+        </div>
+    </div>
+</div>
 
 <!-- Values / Pillars Section -->
 <section class="py-16 bg-[#FAFBF9] border-b border-slate-200/60">
@@ -206,15 +619,15 @@
                         <span class="px-2.5 py-1 text-[11px] font-medium rounded-full bg-white text-slate-700 border border-slate-200">Public Survey</span>
                         <span class="px-2.5 py-1 text-[11px] font-medium rounded-full bg-white text-slate-700 border border-slate-200">Content</span>
                     </div>
-                    <button onclick="openApplyModal()" class="w-full py-2.5 px-4 rounded-full text-xs font-bold text-indigo-700 bg-indigo-50 hover:bg-indigo-600 hover:text-white border border-indigo-200/60 transition flex items-center justify-center gap-1.5 cursor-pointer">
+                    <button onclick="openApplyModal()" class="btn-animated-sheen w-full py-2.5 px-4 rounded-full text-xs font-bold text-indigo-700 bg-indigo-50 hover:bg-indigo-600 hover:text-white border border-indigo-200/60 hover:shadow-lg hover:shadow-indigo-600/25 transition-all duration-300 flex items-center justify-center gap-1.5 cursor-pointer group/btn active:scale-95">
                         <span>Explore & Register</span>
-                        <svg class="w-3.5 h-3.5" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M14 5l7 7m0 0l-7 7m7-7H3"/></svg>
+                        <svg class="w-3.5 h-3.5 transition-transform duration-300 group-hover/btn:translate-x-1" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2.5" d="M14 5l7 7m0 0l-7 7m7-7H3"/></svg>
                     </button>
                 </div>
             </div>
 
             <!-- BSc Card -->
-            <div class="motion-card-hover group rounded-[2.2rem] bg-[#FAFBF9] border border-slate-200/80 p-7 flex flex-col justify-between hover:shadow-2xl hover:shadow-slate-200/60 transition-all duration-300">
+            <div class="motion-card-hover group rounded-[2.2rem] bg-[#FAFBF9] border border-slate-200/80 p-7 flex flex-col justify-between hover:shadow-2xl hover:shadow-cyan-500/10 transition-all duration-300">
                 <div>
                     <div class="flex items-center justify-between mb-5">
                         <div class="w-12 h-12 rounded-2xl bg-white border border-slate-200 flex items-center justify-center font-extrabold text-sm text-cyan-700 shadow-xs">
@@ -237,15 +650,15 @@
                         <span class="px-2.5 py-1 text-[11px] font-medium rounded-full bg-white text-slate-700 border border-slate-200">EIA Eco-Audit</span>
                         <span class="px-2.5 py-1 text-[11px] font-medium rounded-full bg-white text-slate-700 border border-slate-200">GIS Basics</span>
                     </div>
-                    <button onclick="openApplyModal()" class="w-full py-2.5 px-4 rounded-full text-xs font-bold text-cyan-700 bg-cyan-50 hover:bg-cyan-600 hover:text-white border border-cyan-200/60 transition flex items-center justify-center gap-1.5 cursor-pointer">
+                    <button onclick="openApplyModal()" class="btn-animated-sheen w-full py-2.5 px-4 rounded-full text-xs font-bold text-cyan-700 bg-cyan-50 hover:bg-cyan-600 hover:text-white border border-cyan-200/60 hover:shadow-lg hover:shadow-cyan-600/25 transition-all duration-300 flex items-center justify-center gap-1.5 cursor-pointer group/btn active:scale-95">
                         <span>Explore & Register</span>
-                        <svg class="w-3.5 h-3.5" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M14 5l7 7m0 0l-7 7m7-7H3"/></svg>
+                        <svg class="w-3.5 h-3.5 transition-transform duration-300 group-hover/btn:translate-x-1" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2.5" d="M14 5l7 7m0 0l-7 7m7-7H3"/></svg>
                     </button>
                 </div>
             </div>
 
             <!-- BBA Card -->
-            <div class="motion-card-hover group rounded-[2.2rem] bg-[#FAFBF9] border border-slate-200/80 p-7 flex flex-col justify-between hover:shadow-2xl hover:shadow-slate-200/60 transition-all duration-300">
+            <div class="motion-card-hover group rounded-[2.2rem] bg-[#FAFBF9] border border-slate-200/80 p-7 flex flex-col justify-between hover:shadow-2xl hover:shadow-purple-500/10 transition-all duration-300">
                 <div>
                     <div class="flex items-center justify-between mb-5">
                         <div class="w-12 h-12 rounded-2xl bg-white border border-slate-200 flex items-center justify-center font-extrabold text-sm text-purple-700 shadow-xs">
@@ -268,15 +681,15 @@
                         <span class="px-2.5 py-1 text-[11px] font-medium rounded-full bg-white text-slate-700 border border-slate-200">Pitch Decks</span>
                         <span class="px-2.5 py-1 text-[11px] font-medium rounded-full bg-white text-slate-700 border border-slate-200">Marketing</span>
                     </div>
-                    <button onclick="openApplyModal()" class="w-full py-2.5 px-4 rounded-full text-xs font-bold text-purple-700 bg-purple-50 hover:bg-purple-600 hover:text-white border border-purple-200/60 transition flex items-center justify-center gap-1.5 cursor-pointer">
+                    <button onclick="openApplyModal()" class="btn-animated-sheen w-full py-2.5 px-4 rounded-full text-xs font-bold text-purple-700 bg-purple-50 hover:bg-purple-600 hover:text-white border border-purple-200/60 hover:shadow-lg hover:shadow-purple-600/25 transition-all duration-300 flex items-center justify-center gap-1.5 cursor-pointer group/btn active:scale-95">
                         <span>Explore & Register</span>
-                        <svg class="w-3.5 h-3.5" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M14 5l7 7m0 0l-7 7m7-7H3"/></svg>
+                        <svg class="w-3.5 h-3.5 transition-transform duration-300 group-hover/btn:translate-x-1" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2.5" d="M14 5l7 7m0 0l-7 7m7-7H3"/></svg>
                     </button>
                 </div>
             </div>
 
             <!-- BCA Card -->
-            <div class="motion-card-hover group rounded-[2.2rem] bg-[#FAFBF9] border border-slate-200/80 p-7 flex flex-col justify-between hover:shadow-2xl hover:shadow-slate-200/60 transition-all duration-300">
+            <div class="motion-card-hover group rounded-[2.2rem] bg-[#FAFBF9] border border-slate-200/80 p-7 flex flex-col justify-between hover:shadow-2xl hover:shadow-emerald-500/10 transition-all duration-300">
                 <div>
                     <div class="flex items-center justify-between mb-5">
                         <div class="w-12 h-12 rounded-2xl bg-white border border-slate-200 flex items-center justify-center font-extrabold text-sm text-emerald-700 shadow-xs">
@@ -299,9 +712,9 @@
                         <span class="px-2.5 py-1 text-[11px] font-medium rounded-full bg-white text-slate-700 border border-slate-200">SQL Database</span>
                         <span class="px-2.5 py-1 text-[11px] font-medium rounded-full bg-white text-slate-700 border border-slate-200">Cyber Hygiene</span>
                     </div>
-                    <button onclick="openApplyModal()" class="w-full py-2.5 px-4 rounded-full text-xs font-bold text-emerald-700 bg-emerald-50 hover:bg-emerald-600 hover:text-white border border-emerald-200/60 transition flex items-center justify-center gap-1.5 cursor-pointer">
+                    <button onclick="openApplyModal()" class="btn-animated-sheen w-full py-2.5 px-4 rounded-full text-xs font-bold text-emerald-700 bg-emerald-50 hover:bg-emerald-600 hover:text-white border border-emerald-200/60 hover:shadow-lg hover:shadow-emerald-600/25 transition-all duration-300 flex items-center justify-center gap-1.5 cursor-pointer group/btn active:scale-95">
                         <span>Explore & Register</span>
-                        <svg class="w-3.5 h-3.5" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M14 5l7 7m0 0l-7 7m7-7H3"/></svg>
+                        <svg class="w-3.5 h-3.5 transition-transform duration-300 group-hover/btn:translate-x-1" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2.5" d="M14 5l7 7m0 0l-7 7m7-7H3"/></svg>
                     </button>
                 </div>
             </div>
@@ -1077,20 +1490,34 @@
 </section>
 
 <!-- Bottom CTA Strip -->
-<section class="py-16 bg-gradient-to-r from-indigo-900 via-indigo-800 to-slate-900 text-white text-center px-4">
-    <div class="motion-reveal max-w-4xl mx-auto space-y-4">
-        <h2 class="text-3xl sm:text-4xl md:text-5xl font-serif">
-            Turn Your College Requirement into a <span class="text-indigo-300 italic">Career Advantage.</span>
+<section class="py-20 bg-gradient-to-r from-indigo-950 via-slate-900 to-indigo-900 text-white text-center px-4 relative overflow-hidden">
+    <!-- Floating background glow inside CTA -->
+    <div class="absolute inset-0 pointer-events-none">
+        <div class="blob-anim-1 absolute -top-20 left-1/4 w-96 h-96 bg-indigo-500/20 rounded-full blur-[100px]"></div>
+        <div class="blob-anim-2 absolute -bottom-20 right-1/4 w-96 h-96 bg-purple-500/20 rounded-full blur-[100px]"></div>
+        <div class="absolute inset-0 site-animated-grid opacity-20"></div>
+    </div>
+
+    <div class="motion-reveal max-w-4xl mx-auto space-y-5 relative z-10">
+        <div class="inline-flex items-center gap-2 px-3.5 py-1 rounded-full bg-white/10 backdrop-blur-md border border-white/20 text-indigo-200 text-xs font-semibold">
+            <span class="w-2 h-2 rounded-full bg-emerald-400 animate-ping"></span>
+            <span>UGC Cohort 2026 Admissions Open</span>
+        </div>
+        <h2 class="text-3xl sm:text-4xl md:text-5xl font-serif leading-tight">
+            Turn Your College Requirement into a <br class="hidden sm:block">
+            <span class="bg-gradient-to-r from-indigo-300 via-purple-300 to-emerald-300 bg-clip-text text-transparent animate-text-gradient italic font-bold">Career Advantage.</span>
         </h2>
-        <p class="text-xs sm:text-sm text-indigo-100/90 font-light max-w-xl mx-auto">
-            Join thousands of undergraduate learners from BA, BSc, BBA, BCA, and BCom. Start your practical internship journey today.
+        <p class="text-xs sm:text-sm text-indigo-100/90 font-light max-w-xl mx-auto leading-relaxed">
+            Join thousands of undergraduate learners from BA, BSc, BBA, BCA, and BCom. Start your practical internship journey today with accredited certifications.
         </p>
-        <div class="pt-2 flex flex-wrap justify-center gap-3">
-            <button onclick="openApplyModal()" class="motion-btn-spring px-8 py-3.5 rounded-full bg-white hover:bg-slate-100 text-slate-900 font-bold text-xs uppercase tracking-wider transition shadow-xl cursor-pointer">
-                Enroll in Upcoming Cohort
+        <div class="pt-4 flex flex-wrap justify-center items-center gap-3.5">
+            <button onclick="openApplyModal()" class="btn-animated-sheen btn-glow-pulse motion-btn-spring px-8 py-4 rounded-full bg-white hover:bg-slate-100 text-slate-900 font-bold text-xs uppercase tracking-wider transition-all duration-300 shadow-2xl hover:scale-105 active:scale-95 cursor-pointer flex items-center gap-2 group">
+                <span>Enroll in Upcoming Cohort</span>
+                <svg class="w-4 h-4 text-indigo-600 transition-transform duration-300 group-hover:translate-x-1" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2.5" d="M14 5l7 7m0 0l-7 7m7-7H3"/></svg>
             </button>
-            <a href="https://wa.me/916204141971" target="_blank" rel="noopener noreferrer" class="motion-btn-spring px-7 py-3.5 rounded-full bg-emerald-600 hover:bg-emerald-500 text-white font-bold text-xs uppercase tracking-wider transition shadow-xl flex items-center gap-2">
+            <a href="https://wa.me/916204141971" target="_blank" rel="noopener noreferrer" class="btn-animated-sheen motion-btn-spring px-7 py-4 rounded-full bg-emerald-600 hover:bg-emerald-500 text-white font-bold text-xs uppercase tracking-wider transition-all duration-300 shadow-xl shadow-emerald-600/30 hover:scale-105 active:scale-95 flex items-center gap-2 group">
                 <span>WhatsApp Counselor</span>
+                <svg class="w-4 h-4 transition-transform duration-300 group-hover:translate-x-1" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M14 5l7 7m0 0l-7 7m7-7H3"/></svg>
             </a>
         </div>
     </div>

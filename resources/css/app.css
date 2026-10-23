@@ -624,5 +624,295 @@ h1, h2, h3, .font-serif {
     }
 }
 
+/* =========================================================
+   PUBLIC WEBSITE LUXURY MOTION & ANIMATED AESTHETICS
+   - Dynamic Floating Fluid Gradient Background Orbs
+   - Animated Shimmer Sweeps on All Action Buttons
+   - Glowing Pulse Rings & Interactive Micro-Animations
+   - Infinite Institutional Partner Marquee
+   - High-Tech Glassmorphism Border Beams
+   ========================================================= */
+
+/* Ambient Background Fluid Gradient Mesh & Orbs */
+@keyframes blob-float-1 {
+    0%, 100% {
+        transform: translate(0px, 0px) scale(1) rotate(0deg);
+    }
+    33% {
+        transform: translate(60px, -50px) scale(1.12) rotate(120deg);
+    }
+    66% {
+        transform: translate(-40px, 40px) scale(0.92) rotate(240deg);
+    }
+}
+
+@keyframes blob-float-2 {
+    0%, 100% {
+        transform: translate(0px, 0px) scale(1) rotate(0deg);
+    }
+    33% {
+        transform: translate(-50px, 60px) scale(1.18) rotate(-120deg);
+    }
+    66% {
+        transform: translate(45px, -35px) scale(0.9) rotate(-240deg);
+    }
+}
+
+@keyframes blob-float-3 {
+    0%, 100% {
+        transform: translate(0px, 0px) scale(1);
+    }
+    50% {
+        transform: translate(40px, 50px) scale(1.15);
+    }
+}
+
+@keyframes blob-float-4 {
+    0%, 100% {
+        transform: translate(0px, 0px) scale(1);
+    }
+    50% {
+        transform: translate(-45px, -40px) scale(1.1);
+    }
+}
+
+/* Subtle Animated Cyber Grid Background */
+@keyframes grid-shimmer {
+    0% {
+        background-position: 0 0;
+    }
+    100% {
+        background-position: 56px 56px;
+    }
+}
+
+.site-animated-grid {
+    background-image: 
+        radial-gradient(circle at 1px 1px, rgba(99, 102, 241, 0.12) 1px, transparent 0);
+    background-size: 28px 28px;
+    animation: grid-shimmer 40s linear infinite;
+}
+
+.blob-anim-1 {
+    animation: blob-float-1 18s ease-in-out infinite;
+    will-change: transform;
+}
+.blob-anim-2 {
+    animation: blob-float-2 22s ease-in-out infinite;
+    will-change: transform;
+}
+.blob-anim-3 {
+    animation: blob-float-3 20s ease-in-out infinite;
+    will-change: transform;
+}
+.blob-anim-4 {
+    animation: blob-float-4 25s ease-in-out infinite;
+    will-change: transform;
+}
+
+/* Animated Button Light Sheen (Diagonal Shimmer Sweep) */
+@keyframes btn-sheen-sweep {
+    0% {
+        transform: translateX(-150%) skewX(-20deg);
+    }
+    20%, 100% {
+        transform: translateX(250%) skewX(-20deg);
+    }
+}
+
+/* Primary Animated Button */
+.btn-animated-sheen,
+body:not([data-admin-theme]) .motion-btn-spring:has(.bg-indigo-600),
+body:not([data-admin-theme]) button.bg-indigo-600:not([data-admin-theme] *),
+body:not([data-admin-theme]) a.bg-indigo-600:not([data-admin-theme] *),
+body:not([data-admin-theme]) button.bg-gradient-to-r:not([data-admin-theme] *) {
+    position: relative;
+    overflow: hidden;
+    isolation: isolate;
+}
+
+.btn-animated-sheen::after,
+body:not([data-admin-theme]) .motion-btn-spring:has(.bg-indigo-600)::after,
+body:not([data-admin-theme]) button.bg-indigo-600:not([data-admin-theme] *)::after,
+body:not([data-admin-theme]) a.bg-indigo-600:not([data-admin-theme] *)::after,
+body:not([data-admin-theme]) button.bg-gradient-to-r:not([data-admin-theme] *)::after {
+    content: '';
+    position: absolute;
+    top: 0;
+    left: 0;
+    width: 60%;
+    height: 100%;
+    background: linear-gradient(90deg, transparent, rgba(255, 255, 255, 0.35), transparent);
+    transform: translateX(-150%) skewX(-20deg);
+    animation: btn-sheen-sweep 3.8s cubic-bezier(0.4, 0, 0.2, 1) infinite;
+    pointer-events: none;
+    z-index: 2;
+}
+
+.btn-animated-sheen:hover::after,
+body:not([data-admin-theme]) .motion-btn-spring:has(.bg-indigo-600):hover::after,
+body:not([data-admin-theme]) button.bg-indigo-600:not([data-admin-theme] *):hover::after,
+body:not([data-admin-theme]) a.bg-indigo-600:not([data-admin-theme] *):hover::after,
+body:not([data-admin-theme]) button.bg-gradient-to-r:not([data-admin-theme] *):hover::after {
+    animation: btn-sheen-sweep 1.2s cubic-bezier(0.4, 0, 0.2, 1) infinite;
+}
+
+/* Pulsing Glow Rings for Key Action Buttons */
+@keyframes pulse-glow-indigo {
+    0%, 100% {
+        box-shadow: 0 10px 25px -5px rgba(79, 70, 229, 0.4), 0 0 0 0 rgba(99, 102, 241, 0.4);
+    }
+    50% {
+        box-shadow: 0 20px 35px -5px rgba(79, 70, 229, 0.6), 0 0 0 8px rgba(99, 102, 241, 0);
+    }
+}
+
+.btn-glow-pulse {
+    animation: pulse-glow-indigo 3s ease-in-out infinite;
+}
+
+.btn-glow-pulse:hover {
+    animation-duration: 1.5s;
+    transform: translateY(-2px);
+}
+
+/* Shimmer Border Gradient on Luxury Cards & Badges */
+@keyframes border-beam-spin {
+    0% {
+        background-position: 0% 50%;
+    }
+    50% {
+        background-position: 100% 50%;
+    }
+    100% {
+        background-position: 0% 50%;
+    }
+}
+
+.gradient-border-glow {
+    position: relative;
+    background: linear-gradient(135deg, rgba(255, 255, 255, 0.95), rgba(248, 250, 252, 0.9));
+}
+
+.gradient-border-glow::before {
+    content: '';
+    position: absolute;
+    inset: -1.5px;
+    border-radius: inherit;
+    padding: 1.5px;
+    background: linear-gradient(90deg, #6366F1, #A855F7, #EC4899, #06B6D4, #6366F1);
+    background-size: 300% 300%;
+    animation: border-beam-spin 8s ease infinite;
+    -webkit-mask: linear-gradient(#fff 0 0) content-box, linear-gradient(#fff 0 0);
+    -webkit-mask-composite: xor;
+    mask-composite: exclude;
+    pointer-events: none;
+    z-index: 1;
+}
+
+/* Animated Shifting Gradient Text */
+@keyframes text-gradient-shift {
+    0% {
+        background-position: 0% 50%;
+    }
+    50% {
+        background-position: 100% 50%;
+    }
+    100% {
+        background-position: 0% 50%;
+    }
+}
+
+.animate-text-gradient {
+    background-size: 200% auto;
+    animation: text-gradient-shift 4.5s ease infinite;
+}
+
+/* Floating micro-float animation */
+@keyframes float-gentle {
+    0%, 100% {
+        transform: translateY(0px);
+    }
+    50% {
+        transform: translateY(-8px);
+    }
+}
+
+.animate-float-slow {
+    animation: float-gentle 4.5s ease-in-out infinite;
+}
+
+.animate-float-delayed {
+    animation: float-gentle 5.5s ease-in-out 1.8s infinite;
+}
+
+/* Infinite Marquee Ticker for Credentials & Institutions */
+@keyframes marquee-scroll {
+    0% {
+        transform: translateX(0);
+    }
+    100% {
+        transform: translateX(-50%);
+    }
+}
+
+.marquee-container {
+    overflow: hidden;
+    user-select: none;
+    display: flex;
+    gap: 2rem;
+    mask-image: linear-gradient(to right, transparent 0%, black 10%, black 90%, transparent 100%);
+    -webkit-mask-image: linear-gradient(to right, transparent 0%, black 10%, black 90%, transparent 100%);
+}
+
+.marquee-track {
+    display: flex;
+    gap: 2rem;
+    white-space: nowrap;
+    animation: marquee-scroll 28s linear infinite;
+    will-change: transform;
+}
+
+.marquee-container:hover .marquee-track {
+    animation-play-state: paused;
+}
+
+/* Interactive Card Glow Hover Effect */
+.glass-interactive-card {
+    background: rgba(255, 255, 255, 0.88);
+    backdrop-filter: blur(16px);
+    -webkit-backdrop-filter: blur(16px);
+    border: 1px solid rgba(226, 232, 240, 0.85);
+    transition: all 0.35s cubic-bezier(0.25, 1, 0.5, 1);
+}
+
+.glass-interactive-card:hover {
+    transform: translateY(-6px) scale(1.01);
+    box-shadow: 0 24px 45px -12px rgba(79, 70, 229, 0.16), 0 8px 16px -6px rgba(0, 0, 0, 0.05);
+    border-color: rgba(165, 180, 252, 0.9);
+}
+
+/* Click Ripple feedback */
+.ripple-fx {
+    position: relative;
+    overflow: hidden;
+}
+
+.ripple-circle {
+    position: absolute;
+    border-radius: 50%;
+    transform: scale(0);
+    animation: ripple-spread 0.6s linear;
+    background-color: rgba(255, 255, 255, 0.4);
+    pointer-events: none;
+}
+
+@keyframes ripple-spread {
+    to {
+        transform: scale(4);
+        opacity: 0;
+    }
+}
+
 
 
