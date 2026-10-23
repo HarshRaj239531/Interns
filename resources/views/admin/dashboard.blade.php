@@ -581,7 +581,7 @@
 
                                 <!-- 2. Certificate Approval Access Button -->
                                 @if(!$app->certificate_issued)
-                                    <button type="button" onclick="openCertApprovalModal('{{ $app->id }}', '{{ $app->application_number }}', '{{ addslashes($app->user->name ?? 'Candidate') }}')" class="px-2.5 py-1 rounded-lg bg-emerald-600 hover:bg-emerald-500 text-white text-[10px] font-bold transition cursor-pointer shadow-xs">
+                                    <button type="button" onclick="openCertApprovalModal('{{ $app->id }}', '{{ $app->application_number }}', '{{ addslashes($app->user->name ?? 'Candidate') }}', '{{ $app->internship_start_date ? $app->internship_start_date->format('Y-m-d') : ($app->offer_letter_date ? $app->offer_letter_date->format('Y-m-d') : '') }}', '{{ $app->internship_end_date ? $app->internship_end_date->format('Y-m-d') : ($app->certificate_date ? $app->certificate_date->format('Y-m-d') : '') }}', '{{ $app->certificate_number ?? '' }}')" class="px-2.5 py-1 rounded-lg bg-emerald-600 hover:bg-emerald-500 text-white text-[10px] font-bold transition cursor-pointer shadow-xs">
                                         + Issue Cert
                                     </button>
                                 @else
@@ -1129,6 +1129,17 @@
                         </label>
                         <input type="text" name="lor_number" id="edit_lor_number" placeholder="LOR Reference No" class="w-full px-2.5 py-1.5 rounded-lg adm-input text-[11px] font-mono">
                     </div>
+
+                    <div class="col-span-1 sm:col-span-2 grid grid-cols-2 gap-3 pt-2 border-t border-slate-200 dark:border-slate-800">
+                        <div>
+                            <label class="block text-[11px] font-semibold adm-text-secondary mb-1">Internship Start Date</label>
+                            <input type="date" name="internship_start_date" id="edit_start_date" class="w-full px-2.5 py-1.5 rounded-lg adm-input text-xs">
+                        </div>
+                        <div>
+                            <label class="block text-[11px] font-semibold adm-text-secondary mb-1">Internship End Date</label>
+                            <input type="date" name="internship_end_date" id="edit_end_date" class="w-full px-2.5 py-1.5 rounded-lg adm-input text-xs">
+                        </div>
+                    </div>
                 </div>
             </div>
 
@@ -1156,9 +1167,19 @@
                 <input type="text" name="certificate_number" id="approval_cert_number" required class="w-full px-3 py-2 rounded-xl adm-input text-xs font-mono">
                 <p class="text-[10px] adm-text-muted mt-1">Leave as auto-generated or specify a custom UGC serial.</p>
             </div>
+            <div class="grid grid-cols-1 sm:grid-cols-2 gap-3">
+                <div>
+                    <label class="block text-xs font-semibold adm-text-secondary mb-1">Internship Starting Date *</label>
+                    <input type="date" name="internship_start_date" id="approval_start_date" required class="w-full px-3 py-2 rounded-xl adm-input text-xs">
+                </div>
+                <div>
+                    <label class="block text-xs font-semibold adm-text-secondary mb-1">Internship Ending Date *</label>
+                    <input type="date" name="internship_end_date" id="approval_end_date" required class="w-full px-3 py-2 rounded-xl adm-input text-xs">
+                </div>
+            </div>
             <div>
                 <label class="block text-xs font-semibold adm-text-secondary mb-1">Official Issue Date</label>
-                <input type="date" name="certificate_date" value="{{ date('Y-m-d') }}" required class="w-full px-3 py-2 rounded-xl adm-input text-xs">
+                <input type="date" name="certificate_date" id="approval_issue_date" value="{{ date('Y-m-d') }}" required class="w-full px-3 py-2 rounded-xl adm-input text-xs">
             </div>
             <div class="p-3 rounded-xl bg-emerald-50 dark:bg-emerald-950/40 border border-emerald-200 dark:border-emerald-800/40 text-[11px] text-emerald-800 dark:text-emerald-200">
                 Approving this certificate will automatically mark the student application status as <strong>COMPLETED</strong> and enable instant QR verification.
@@ -1309,6 +1330,8 @@
         document.getElementById('edit_cert_number').value = app.certificate_number || '';
         document.getElementById('edit_lor').checked = !!app.lor_issued;
         document.getElementById('edit_lor_number').value = app.lor_number || '';
+        document.getElementById('edit_start_date').value = app.internship_start_date ? app.internship_start_date.substring(0, 10) : '';
+        document.getElementById('edit_end_date').value = app.internship_end_date ? app.internship_end_date.substring(0, 10) : '';
 
         document.getElementById('editApplicantModal').classList.remove('hidden');
     }
@@ -1317,10 +1340,28 @@
         document.getElementById('editApplicantModal').classList.add('hidden');
     }
 
-    function openCertApprovalModal(appId, appNumber, candidateName) {
+    function openCertApprovalModal(appId, appNumber, candidateName, startDate, endDate, certNumber) {
         document.getElementById('certApprovalCandidateText').innerText = 'Approving completion certificate for candidate ' + candidateName + ' (' + appNumber + ')';
         document.getElementById('certApprovalForm').action = '/admin/applications/' + appId + '/issue-certificate';
-        document.getElementById('approval_cert_number').value = 'UGC-INF-' + Math.floor(100000 + Math.random() * 900000);
+        document.getElementById('approval_cert_number').value = certNumber || ('UGC-INF-' + Math.floor(100000 + Math.random() * 900000));
+
+        // Internship Starting Date
+        if (startDate) {
+            document.getElementById('approval_start_date').value = startDate.substring(0, 10);
+        } else {
+            const d = new Date();
+            d.setDate(d.getDate() - 45);
+            document.getElementById('approval_start_date').value = d.toISOString().split('T')[0];
+        }
+
+        // Internship Ending Date
+        if (endDate) {
+            document.getElementById('approval_end_date').value = endDate.substring(0, 10);
+        } else {
+            document.getElementById('approval_end_date').value = new Date().toISOString().split('T')[0];
+        }
+
+        document.getElementById('approval_issue_date').value = new Date().toISOString().split('T')[0];
         document.getElementById('certApprovalModal').classList.remove('hidden');
     }
 

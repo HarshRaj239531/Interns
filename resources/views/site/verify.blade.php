@@ -96,6 +96,22 @@
                         </div>
                     </div>
 
+                    @php
+                        $verifyStartDate = $profile->internship_start_date
+                            ? $profile->internship_start_date->format('F d, Y')
+                            : ($profile->offer_letter_date ? $profile->offer_letter_date->format('F d, Y') : null);
+                        $verifyEndDate = $profile->internship_end_date
+                            ? $profile->internship_end_date->format('F d, Y')
+                            : ($profile->certificate_date ? $profile->certificate_date->format('F d, Y') : null);
+                    @endphp
+
+                    @if($verifyStartDate && $verifyEndDate)
+                    <div class="p-4 rounded-2xl bg-[#FAFBF9] border border-slate-200/80">
+                        <span class="text-[10px] font-bold text-slate-400 uppercase tracking-wider block">Internship Period (Duration)</span>
+                        <span class="font-semibold text-slate-800">{{ $verifyStartDate }} &nbsp;to&nbsp; {{ $verifyEndDate }}</span>
+                    </div>
+                    @endif
+
                     @if($profile->marksheet_issued)
                     <div class="p-4 rounded-2xl bg-indigo-50/60 border border-indigo-100 flex items-center justify-between">
                         <div>

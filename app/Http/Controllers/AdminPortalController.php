@@ -191,6 +191,13 @@ class AdminPortalController extends Controller
     {
         $profile = StudentProfile::findOrFail($id);
 
+        $request->validate([
+            'certificate_number' => ['nullable', 'string', 'max:100'],
+            'certificate_date' => ['nullable', 'date'],
+            'internship_start_date' => ['nullable', 'date'],
+            'internship_end_date' => ['nullable', 'date'],
+        ]);
+
         $certNumber = $request->filled('certificate_number')
             ? trim($request->certificate_number)
             : 'UGC-INF-'.rand(100000, 999999);
@@ -204,10 +211,20 @@ class AdminPortalController extends Controller
             ? $request->certificate_date
             : now();
 
+        $startDate = $request->filled('internship_start_date')
+            ? $request->internship_start_date
+            : ($profile->internship_start_date ?? ($profile->offer_letter_date ? $profile->offer_letter_date->format('Y-m-d') : null));
+
+        $endDate = $request->filled('internship_end_date')
+            ? $request->internship_end_date
+            : ($profile->internship_end_date ?? ($request->filled('certificate_date') ? $request->certificate_date : now()->format('Y-m-d')));
+
         $profile->update([
             'certificate_issued' => true,
             'certificate_number' => $certNumber,
             'certificate_date' => $certDate,
+            'internship_start_date' => $startDate,
+            'internship_end_date' => $endDate,
             'status' => 'COMPLETED',
         ]);
 
@@ -312,6 +329,8 @@ class AdminPortalController extends Controller
             'consent_letter_issued' => ['nullable'],
             'certificate_issued' => ['nullable'],
             'certificate_number' => ['nullable', 'string', 'max:100'],
+            'internship_start_date' => ['nullable', 'date'],
+            'internship_end_date' => ['nullable', 'date'],
             'lor_issued' => ['nullable'],
             'lor_number' => ['nullable', 'string', 'max:100'],
         ]);
@@ -348,6 +367,8 @@ class AdminPortalController extends Controller
             'certificate_issued' => $request->has('certificate_issued'),
             'certificate_number' => $request->filled('certificate_number') ? trim($request->certificate_number) : ($profile->certificate_number ?? 'UGC-INF-'.rand(100000, 999999)),
             'certificate_date' => $request->has('certificate_issued') ? ($profile->certificate_date ?? now()) : null,
+            'internship_start_date' => $request->filled('internship_start_date') ? $request->internship_start_date : $profile->internship_start_date,
+            'internship_end_date' => $request->filled('internship_end_date') ? $request->internship_end_date : $profile->internship_end_date,
             'lor_issued' => $request->has('lor_issued'),
             'lor_number' => $request->filled('lor_number') ? trim($request->lor_number) : ($profile->lor_number ?? 'INF-LOR-2026-'.rand(1000, 9999)),
             'lor_date' => $request->has('lor_issued') ? ($profile->lor_date ?? now()) : null,
@@ -391,6 +412,8 @@ class AdminPortalController extends Controller
             'project_title' => ['nullable', 'string', 'max:255'],
             'attendance_rate' => ['nullable', 'integer', 'min:0', 'max:100'],
             'status' => ['required', 'string', 'in:PENDING,APPROVED,ACTIVE,COMPLETED'],
+            'internship_start_date' => ['nullable', 'date'],
+            'internship_end_date' => ['nullable', 'date'],
         ]);
 
         $plainPassword = ! empty($validated['password']) ? trim($validated['password']) : 'Student@123';
@@ -432,6 +455,8 @@ class AdminPortalController extends Controller
             'project_title' => ! empty($validated['project_title']) ? $validated['project_title'] : 'Capstone Research Evaluation',
             'attendance_rate' => $validated['attendance_rate'] ?? 85,
             'status' => $validated['status'],
+            'internship_start_date' => $request->filled('internship_start_date') ? $request->internship_start_date : null,
+            'internship_end_date' => $request->filled('internship_end_date') ? $request->internship_end_date : null,
             'offer_letter_issued' => in_array($validated['status'], ['APPROVED', 'ACTIVE', 'COMPLETED']),
             'offer_letter_date' => in_array($validated['status'], ['APPROVED', 'ACTIVE', 'COMPLETED']) ? now() : null,
             'consent_letter_issued' => in_array($validated['status'], ['ACTIVE', 'COMPLETED']),
@@ -676,6 +701,8 @@ class AdminPortalController extends Controller
             'program_domain' => ['required', 'string', 'max:255'],
             'certificate_number' => ['nullable', 'string', 'max:100'],
             'certificate_date' => ['required', 'date'],
+            'internship_start_date' => ['nullable', 'date'],
+            'internship_end_date' => ['nullable', 'date'],
             'mentor_name' => ['nullable', 'string', 'max:255'],
             'project_title' => ['nullable', 'string', 'max:255'],
             'marksheet_grade' => ['nullable', 'string', 'max:10'],
@@ -689,6 +716,8 @@ class AdminPortalController extends Controller
                 'certificate_issued' => true,
                 'certificate_number' => $certNumber,
                 'certificate_date' => $validated['certificate_date'],
+                'internship_start_date' => $request->filled('internship_start_date') ? $request->internship_start_date : $profile->internship_start_date,
+                'internship_end_date' => $request->filled('internship_end_date') ? $request->internship_end_date : $profile->internship_end_date,
                 'status' => 'COMPLETED',
                 'mentor_name' => $validated['mentor_name'] ?: $profile->mentor_name,
                 'project_title' => $validated['project_title'] ?: $profile->project_title,
@@ -732,6 +761,8 @@ class AdminPortalController extends Controller
             'certificate_issued' => true,
             'certificate_number' => $certNumber,
             'certificate_date' => $validated['certificate_date'],
+            'internship_start_date' => $request->filled('internship_start_date') ? $request->internship_start_date : now()->subDays(45)->format('Y-m-d'),
+            'internship_end_date' => $request->filled('internship_end_date') ? $request->internship_end_date : $validated['certificate_date'],
             'marksheet_issued' => true,
             'marksheet_grade' => $validated['marksheet_grade'] ?: 'A+',
             'marksheet_marks' => 94,

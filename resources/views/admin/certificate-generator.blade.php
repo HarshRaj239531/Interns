@@ -67,6 +67,8 @@
                                 data-mentor="{{ $st->mentor_name }}"
                                 data-project="{{ $st->project_title }}"
                                 data-cert="{{ $st->certificate_number }}"
+                                data-start="{{ $st->internship_start_date ? $st->internship_start_date->format('Y-m-d') : ($st->offer_letter_date ? $st->offer_letter_date->format('Y-m-d') : '') }}"
+                                data-end="{{ $st->internship_end_date ? $st->internship_end_date->format('Y-m-d') : ($st->certificate_date ? $st->certificate_date->format('Y-m-d') : '') }}"
                                 {{ ($selectedStudent && $selectedStudent->id === $st->id) ? 'selected' : '' }}>
                                 {{ $st->user->name }} ({{ $st->application_number }}) – {{ $st->college }} [{{ $st->program_domain }}]
                             </option>
@@ -113,6 +115,17 @@
                             <option value="{{ $stream->title }}">{{ $stream->title }} ({{ $stream->code }})</option>
                         @endforeach
                     </select>
+                </div>
+
+                <div class="grid grid-cols-1 sm:grid-cols-2 gap-3">
+                    <div>
+                        <label class="block text-xs font-semibold adm-text-secondary mb-1">Internship Starting Date *</label>
+                        <input type="date" name="internship_start_date" id="input_start_date" value="{{ date('Y-m-d', strtotime('-45 days')) }}" required class="w-full px-3.5 py-2 rounded-xl adm-input text-xs">
+                    </div>
+                    <div>
+                        <label class="block text-xs font-semibold adm-text-secondary mb-1">Internship Ending Date *</label>
+                        <input type="date" name="internship_end_date" id="input_end_date" value="{{ date('Y-m-d') }}" required class="w-full px-3.5 py-2 rounded-xl adm-input text-xs">
+                    </div>
                 </div>
 
                 <div class="grid grid-cols-1 sm:grid-cols-2 gap-3">
@@ -269,6 +282,11 @@
             document.getElementById('input_cert_number').value = cert;
             document.getElementById('previewSerial').innerText = 'SERIAL: ' + cert;
         }
+
+        const startDate = option.getAttribute('data-start');
+        const endDate = option.getAttribute('data-end');
+        if (startDate) document.getElementById('input_start_date').value = startDate;
+        if (endDate) document.getElementById('input_end_date').value = endDate;
     }
 
     // Dynamic live typing listeners for real-time preview

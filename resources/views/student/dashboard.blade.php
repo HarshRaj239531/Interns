@@ -161,6 +161,9 @@
                 <div>
                     @if($profile->certificate_issued)
                         <span class="text-[10px] font-mono font-bold text-emerald-600 block mb-1">Serial: {{ $profile->certificate_number }}</span>
+                        @if($profile->internship_start_date && $profile->internship_end_date)
+                            <span class="text-[10px] text-slate-500 block mb-1">Period: {{ $profile->internship_start_date->format('d M Y') }} – {{ $profile->internship_end_date->format('d M Y') }}</span>
+                        @endif
                         <span class="text-[10px] text-slate-400 block mb-3">Issued: {{ $profile->certificate_date?->format('M d, Y') }}</span>
                         <div class="flex flex-col gap-2">
                             <a href="{{ route('student.certificate') }}" target="_blank" class="w-full py-2.5 rounded-full bg-emerald-600 hover:bg-emerald-700 text-white font-bold text-xs uppercase tracking-wider flex items-center justify-center gap-1.5 shadow-sm transition motion-btn-spring">

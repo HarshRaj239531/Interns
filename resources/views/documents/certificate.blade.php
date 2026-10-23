@@ -90,8 +90,12 @@
         $settings = $settings ?? \App\Models\CertificateSetting::current();
 
         // Calculate Start Date and End Date
-        $startDate = $profile->offer_letter_date ? $profile->offer_letter_date->format('d F Y') : '06 June 2026';
-        $endDate = $profile->certificate_date ? $profile->certificate_date->format('d F Y') : '21 July 2026';
+        $startDate = $profile->internship_start_date
+            ? $profile->internship_start_date->format('d F Y')
+            : ($profile->offer_letter_date ? $profile->offer_letter_date->format('d F Y') : '06 June 2026');
+        $endDate = $profile->internship_end_date
+            ? $profile->internship_end_date->format('d F Y')
+            : ($profile->certificate_date ? $profile->certificate_date->format('d F Y') : '21 July 2026');
         $issueDate = $profile->certificate_date ? $profile->certificate_date->format('d F Y') : ($profile->created_at ? $profile->created_at->format('d F Y') : date('d F Y'));
 
         $score = $profile->marksheet_marks ?? 96;

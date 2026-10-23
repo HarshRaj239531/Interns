@@ -414,6 +414,65 @@ class InfinityInternsTest extends TestCase
         $this->assertEquals('ACTIVE', $profile->status);
     }
 
+    public function test_admin_can_issue_certificate_with_start_and_end_dates(): void
+    {
+        $admin = User::create([
+            'name' => 'Cert Admin',
+            'email' => 'cert.admin@infinityinterns.com',
+            'password' => bcrypt('Admin@123'),
+            'role' => 'ADMIN',
+        ]);
+
+        $student = User::create([
+            'name' => 'Priya Raj',
+            'email' => 'priya.raj@example.com',
+            'password' => bcrypt('Student@123'),
+            'role' => 'STUDENT',
+        ]);
+
+        $profile = StudentProfile::create([
+            'user_id' => $student->id,
+            'application_number' => 'INF-2026-7204',
+            'degree' => 'BCA',
+            'college' => 'Patna Science College',
+            'semester' => '6th Semester',
+            'program_domain' => 'Web Development',
+            'status' => 'ACTIVE',
+            'attendance_rate' => 95,
+            'certificate_issued' => false,
+        ]);
+
+        $this->actingAs($admin);
+
+        $response = $this->post(route('admin.application.certificate', $profile->id), [
+            'certificate_number' => 'UGC-INF-855357',
+            'certificate_date' => '2026-10-22',
+            'internship_start_date' => '2026-06-01',
+            'internship_end_date' => '2026-07-15',
+        ]);
+
+        $response->assertSessionHas('success');
+
+        $profile->refresh();
+        $this->assertTrue($profile->certificate_issued);
+        $this->assertEquals('UGC-INF-855357', $profile->certificate_number);
+        $this->assertEquals('COMPLETED', $profile->status);
+        $this->assertEquals('2026-06-01', $profile->internship_start_date->format('Y-m-d'));
+        $this->assertEquals('2026-07-15', $profile->internship_end_date->format('Y-m-d'));
+
+        // View Certificate and verify dates are rendered
+        $certResponse = $this->get(route('admin.application.view-certificate', $profile->id));
+        $certResponse->assertStatus(200);
+        $certResponse->assertSee('01 June 2026');
+        $certResponse->assertSee('15 July 2026');
+
+        // View Public Verifier
+        $verifyResponse = $this->get(route('verify', 'UGC-INF-855357'));
+        $verifyResponse->assertStatus(200);
+        $verifyResponse->assertSee('June 01, 2026');
+        $verifyResponse->assertSee('July 15, 2026');
+    }
+
     public function test_admin_can_export_applications_csv(): void
     {
         $admin = User::create([
