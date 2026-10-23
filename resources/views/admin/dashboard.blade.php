@@ -784,379 +784,399 @@
      ======================================================== -->
 
 <!-- 1. Add New Applicant Modal -->
-<div id="addApplicantModal" class="hidden fixed inset-0 z-50 flex items-center justify-center p-4 bg-black/60 backdrop-blur-sm overflow-y-auto">
-    <div class="relative w-full max-w-2xl my-8 rounded-3xl adm-card p-6 sm:p-8 shadow-2xl space-y-5">
-        <div class="flex items-center justify-between pb-3 border-b border-slate-200 dark:border-slate-800">
+<div id="addApplicantModal" class="hidden fixed inset-0 z-50 flex items-center justify-center p-3 sm:p-4 bg-black/70 backdrop-blur-sm" onclick="if(event.target === this) closeAddApplicantModal()">
+    <div class="relative w-full max-w-2xl max-h-[92vh] flex flex-col rounded-3xl adm-card shadow-2xl overflow-hidden border border-slate-200 dark:border-slate-800">
+        <!-- Sticky Modal Header -->
+        <div class="flex items-center justify-between px-6 py-4 border-b border-slate-200 dark:border-slate-800 bg-white/95 dark:bg-slate-900/95 backdrop-blur-sm shrink-0">
             <div>
-                <h3 class="text-base font-bold adm-text">+ Add & Enroll New Student Applicant</h3>
+                <h3 class="text-base font-bold adm-text flex items-center gap-2">
+                    <span>➕ Add & Enroll New Student Applicant</span>
+                </h3>
                 <p class="text-xs adm-text-muted">Register a candidate directly into the UGC internship registry.</p>
             </div>
-            <button onclick="closeAddApplicantModal()" class="adm-text-muted hover:adm-text font-bold text-xl cursor-pointer">&times;</button>
+            <button type="button" onclick="closeAddApplicantModal()" class="w-8 h-8 rounded-xl flex items-center justify-center adm-text-muted hover:adm-text hover:bg-slate-100 dark:hover:bg-slate-800 transition font-bold text-xl cursor-pointer" title="Close Modal">&times;</button>
         </div>
 
-        <form action="{{ route('admin.application.store') }}" method="POST" class="space-y-4">
+        <form action="{{ route('admin.application.store') }}" method="POST" class="flex flex-col flex-1 min-h-0 overflow-hidden">
             @csrf
-            <div class="grid grid-cols-1 sm:grid-cols-3 gap-3">
-                <div>
-                    <label class="block text-xs font-semibold adm-text-secondary mb-1">Full Student Name *</label>
-                    <input type="text" name="name" required placeholder="e.g. Rahul Sharma" class="w-full px-3 py-2 rounded-xl adm-input text-xs">
-                </div>
-                <div>
-                    <label class="block text-xs font-semibold adm-text-secondary mb-1">Email Address *</label>
-                    <input type="email" name="email" required placeholder="rahul@example.com" class="w-full px-3 py-2 rounded-xl adm-input text-xs">
-                </div>
-                <div>
-                    <label class="block text-xs font-semibold adm-text-secondary mb-1">Phone Number *</label>
-                    <input type="text" name="phone" required placeholder="+91 9876543210" class="w-full px-3 py-2 rounded-xl adm-input text-xs">
-                </div>
-            </div>
-
-            <!-- Student Portal Login & Password Credentials -->
-            <div class="p-3.5 rounded-2xl bg-indigo-50/70 dark:bg-indigo-950/40 border border-indigo-200/80 dark:border-indigo-800/60 space-y-2.5">
-                <div class="flex items-center justify-between">
-                    <div class="flex items-center gap-1.5">
-                        <span class="text-xs font-bold text-indigo-700 dark:text-indigo-400">🔑 Student Login Password</span>
-                        <span class="text-[10px] text-slate-500 dark:text-slate-400 font-normal">(Candidate will use this to sign in at /login)</span>
+            <!-- Scrollable Modal Body -->
+            <div id="addApplicantModalBody" class="overflow-y-auto px-6 py-5 space-y-4 flex-1">
+                <div class="grid grid-cols-1 sm:grid-cols-3 gap-3">
+                    <div>
+                        <label class="block text-xs font-semibold adm-text-secondary mb-1">Full Student Name *</label>
+                        <input type="text" name="name" required placeholder="e.g. Rahul Sharma" class="w-full px-3 py-2 rounded-xl adm-input text-xs">
                     </div>
-                    <button type="button" onclick="generateRandomStudentPassword('add_applicant_password')" class="text-[10px] font-bold text-indigo-700 dark:text-indigo-300 hover:text-indigo-900 bg-white dark:bg-slate-900 px-2.5 py-1 rounded-lg border border-indigo-200 dark:border-indigo-700 hover:shadow-xs transition cursor-pointer flex items-center gap-1">
-                        <span>⚡ Auto-Generate</span>
-                    </button>
+                    <div>
+                        <label class="block text-xs font-semibold adm-text-secondary mb-1">Email Address *</label>
+                        <input type="email" name="email" required placeholder="rahul@example.com" class="w-full px-3 py-2 rounded-xl adm-input text-xs">
+                    </div>
+                    <div>
+                        <label class="block text-xs font-semibold adm-text-secondary mb-1">Phone Number *</label>
+                        <input type="text" name="phone" required placeholder="+91 9876543210" class="w-full px-3 py-2 rounded-xl adm-input text-xs">
+                    </div>
                 </div>
-                <div class="relative">
-                    <input type="text" name="password" id="add_applicant_password" placeholder="Enter password (e.g. Student@123 or click Auto-Generate)" class="w-full px-3.5 py-2 pr-20 rounded-xl adm-input text-xs font-mono font-medium">
-                    <div class="absolute inset-y-0 right-1.5 flex items-center">
-                        <button type="button" onclick="togglePasswordVisibility('add_applicant_password', this)" class="text-xs px-2 py-1 text-slate-500 hover:text-slate-700 dark:hover:text-slate-300 font-medium cursor-pointer" title="Toggle visibility">
-                            👁️
+
+                <!-- Student Portal Login & Password Credentials -->
+                <div class="p-3.5 rounded-2xl bg-indigo-50/70 dark:bg-indigo-950/40 border border-indigo-200/80 dark:border-indigo-800/60 space-y-2.5">
+                    <div class="flex items-center justify-between">
+                        <div class="flex items-center gap-1.5">
+                            <span class="text-xs font-bold text-indigo-700 dark:text-indigo-400">🔑 Student Login Password</span>
+                            <span class="text-[10px] text-slate-500 dark:text-slate-400 font-normal">(Candidate will use this to sign in at /login)</span>
+                        </div>
+                        <button type="button" onclick="generateRandomStudentPassword('add_applicant_password')" class="text-[10px] font-bold text-indigo-700 dark:text-indigo-300 hover:text-indigo-900 bg-white dark:bg-slate-900 px-2.5 py-1 rounded-lg border border-indigo-200 dark:border-indigo-700 hover:shadow-xs transition cursor-pointer flex items-center gap-1">
+                            <span>⚡ Auto-Generate</span>
                         </button>
                     </div>
+                    <div class="relative">
+                        <input type="text" name="password" id="add_applicant_password" placeholder="Enter password (e.g. Student@123 or click Auto-Generate)" class="w-full px-3.5 py-2 pr-20 rounded-xl adm-input text-xs font-mono font-medium">
+                        <div class="absolute inset-y-0 right-1.5 flex items-center">
+                            <button type="button" onclick="togglePasswordVisibility('add_applicant_password', this)" class="text-xs px-2 py-1 text-slate-500 hover:text-slate-700 dark:hover:text-slate-300 font-medium cursor-pointer" title="Toggle visibility">
+                                👁️
+                            </button>
+                        </div>
+                    </div>
+                    <div class="flex items-center justify-between text-[10px] text-slate-500 dark:text-slate-400">
+                        <span>💡 If left empty, default password <code class="px-1 py-0.5 rounded bg-white dark:bg-slate-900 border font-mono">Student@123</code> is assigned.</span>
+                        <span class="text-emerald-600 dark:text-emerald-400 font-semibold">Min 6 characters</span>
+                    </div>
                 </div>
-                <div class="flex items-center justify-between text-[10px] text-slate-500 dark:text-slate-400">
-                    <span>💡 If left empty, default password <code class="px-1 py-0.5 rounded bg-white dark:bg-slate-900 border font-mono">Student@123</code> is assigned.</span>
-                    <span class="text-emerald-600 dark:text-emerald-400 font-semibold">Min 6 characters</span>
-                </div>
-            </div>
 
-            <div class="grid grid-cols-1 sm:grid-cols-3 gap-3">
+                <div class="grid grid-cols-1 sm:grid-cols-3 gap-3">
+                    <div>
+                        <div class="flex items-center justify-between mb-1">
+                            <label class="block text-xs font-semibold adm-text-secondary">Degree Program *</label>
+                            <a href="{{ route('admin.academic-setup', ['tab' => 'degrees']) }}" target="_blank" class="text-[10px] text-indigo-600 dark:text-indigo-400 hover:underline font-bold">+ New Degree</a>
+                        </div>
+                        <select name="degree" required class="w-full px-3 py-2 rounded-xl adm-input text-xs">
+                            @if(isset($degrees))
+                                @foreach($degrees as $deg)
+                                    <option value="{{ $deg->code }}">{{ $deg->name }} ({{ $deg->code }})</option>
+                                @endforeach
+                            @else
+                                <option value="BSc">Bachelor of Science (BSc)</option>
+                                <option value="BA">Bachelor of Arts (BA)</option>
+                                <option value="BBA">Bachelor of Business Admin (BBA)</option>
+                                <option value="BCA">Bachelor of Computer App (BCA)</option>
+                                <option value="BCom">Bachelor of Commerce (BCom)</option>
+                            @endif
+                        </select>
+                    </div>
+                    <div>
+                        <label class="block text-xs font-semibold adm-text-secondary mb-1">Current Semester *</label>
+                        <select name="semester" required class="w-full px-3 py-2 rounded-xl adm-input text-xs">
+                            <option value="1st Semester">1st Semester</option>
+                            <option value="2nd Semester">2nd Semester</option>
+                            <option value="3rd Semester">3rd Semester</option>
+                            <option value="4th Semester">4th Semester</option>
+                            <option value="5th Semester" selected>5th Semester</option>
+                            <option value="6th Semester">6th Semester</option>
+                            <option value="7th/8th Semester">7th/8th Semester</option>
+                        </select>
+                    </div>
+                    <div>
+                        <label class="block text-xs font-semibold adm-text-secondary mb-1">Initial Status *</label>
+                        <select name="status" required class="w-full px-3 py-2 rounded-xl adm-input text-xs font-bold">
+                            <option value="APPROVED" selected>APPROVED</option>
+                            <option value="ACTIVE">ACTIVE</option>
+                            <option value="PENDING">PENDING</option>
+                            <option value="COMPLETED">COMPLETED</option>
+                        </select>
+                    </div>
+                </div>
+
+                <!-- University & Consent Letter Details -->
+                <div class="grid grid-cols-1 sm:grid-cols-4 gap-3 p-3 rounded-2xl bg-slate-50 dark:bg-slate-900/40 border border-slate-200 dark:border-slate-800">
+                    <div>
+                        <label class="block text-[11px] font-semibold adm-text-secondary mb-1">Gender</label>
+                        <select name="gender" class="w-full px-3 py-2 rounded-xl adm-input text-xs">
+                            <option value="">Select Gender</option>
+                            <option value="Female">Female</option>
+                            <option value="Male">Male</option>
+                            <option value="Other">Other</option>
+                        </select>
+                    </div>
+                    <div>
+                        <label class="block text-[11px] font-semibold adm-text-secondary mb-1">Father's Name</label>
+                        <input type="text" name="father_name" placeholder="e.g. Rameshwar Prasad" class="w-full px-3 py-2 rounded-xl adm-input text-xs">
+                    </div>
+                    <div>
+                        <label class="block text-[11px] font-semibold adm-text-secondary mb-1">Univ. Reg. Number</label>
+                        <input type="text" name="university_reg_no" placeholder="e.g. 21005678" class="w-full px-3 py-2 rounded-xl adm-input text-xs font-mono">
+                    </div>
+                    <div>
+                        <label class="block text-[11px] font-semibold adm-text-secondary mb-1">Univ. Roll Number</label>
+                        <input type="text" name="university_roll_no" placeholder="e.g. 21BCA042" class="w-full px-3 py-2 rounded-xl adm-input text-xs font-mono">
+                    </div>
+                </div>
+
                 <div>
                     <div class="flex items-center justify-between mb-1">
-                        <label class="block text-xs font-semibold adm-text-secondary">Degree Program *</label>
-                        <a href="{{ route('admin.academic-setup', ['tab' => 'degrees']) }}" target="_blank" class="text-[10px] text-indigo-600 dark:text-indigo-400 hover:underline font-bold">+ New Degree</a>
+                        <label class="block text-xs font-semibold adm-text-secondary">School / College / Institute Name *</label>
+                        <a href="{{ route('admin.academic-setup', ['tab' => 'schools']) }}" target="_blank" class="text-[10px] text-indigo-600 dark:text-indigo-400 hover:underline font-bold">+ New College</a>
                     </div>
-                    <select name="degree" required class="w-full px-3 py-2 rounded-xl adm-input text-xs">
-                        @if(isset($degrees))
-                            @foreach($degrees as $deg)
-                                <option value="{{ $deg->code }}">{{ $deg->name }} ({{ $deg->code }})</option>
+                    <input type="text" name="college" list="adminSchoolDatalist" required placeholder="Select or type e.g. Patna Science College, Patna University" class="w-full px-3 py-2 rounded-xl adm-input text-xs">
+                    <datalist id="adminSchoolDatalist">
+                        @if(isset($schools))
+                            @foreach($schools as $sch)
+                                <option value="{{ $sch->name }}">{{ $sch->city ? ' (' . $sch->city . ')' : '' }}</option>
                             @endforeach
-                        @else
-                            <option value="BSc">Bachelor of Science (BSc)</option>
-                            <option value="BA">Bachelor of Arts (BA)</option>
-                            <option value="BBA">Bachelor of Business Admin (BBA)</option>
-                            <option value="BCA">Bachelor of Computer App (BCA)</option>
-                            <option value="BCom">Bachelor of Commerce (BCom)</option>
                         @endif
-                    </select>
+                    </datalist>
                 </div>
-                <div>
-                    <label class="block text-xs font-semibold adm-text-secondary mb-1">Current Semester *</label>
-                    <select name="semester" required class="w-full px-3 py-2 rounded-xl adm-input text-xs">
-                        <option value="1st Semester">1st Semester</option>
-                        <option value="2nd Semester">2nd Semester</option>
-                        <option value="3rd Semester">3rd Semester</option>
-                        <option value="4th Semester">4th Semester</option>
-                        <option value="5th Semester" selected>5th Semester</option>
-                        <option value="6th Semester">6th Semester</option>
-                        <option value="7th/8th Semester">7th/8th Semester</option>
-                    </select>
-                </div>
-                <div>
-                    <label class="block text-xs font-semibold adm-text-secondary mb-1">Initial Status *</label>
-                    <select name="status" required class="w-full px-3 py-2 rounded-xl adm-input text-xs font-bold">
-                        <option value="APPROVED" selected>APPROVED</option>
-                        <option value="ACTIVE">ACTIVE</option>
-                        <option value="PENDING">PENDING</option>
-                        <option value="COMPLETED">COMPLETED</option>
-                    </select>
-                </div>
-            </div>
 
-            <!-- University & Consent Letter Details -->
-            <div class="grid grid-cols-1 sm:grid-cols-4 gap-3 p-3 rounded-2xl bg-slate-50 dark:bg-slate-900/40 border border-slate-200 dark:border-slate-800">
                 <div>
-                    <label class="block text-[11px] font-semibold adm-text-secondary mb-1">Gender</label>
-                    <select name="gender" class="w-full px-3 py-2 rounded-xl adm-input text-xs">
-                        <option value="">Select Gender</option>
-                        <option value="Female">Female</option>
-                        <option value="Male">Male</option>
-                        <option value="Other">Other</option>
-                    </select>
-                </div>
-                <div>
-                    <label class="block text-[11px] font-semibold adm-text-secondary mb-1">Father's Name</label>
-                    <input type="text" name="father_name" placeholder="e.g. Rameshwar Prasad" class="w-full px-3 py-2 rounded-xl adm-input text-xs">
-                </div>
-                <div>
-                    <label class="block text-[11px] font-semibold adm-text-secondary mb-1">Univ. Reg. Number</label>
-                    <input type="text" name="university_reg_no" placeholder="e.g. 21005678" class="w-full px-3 py-2 rounded-xl adm-input text-xs font-mono">
-                </div>
-                <div>
-                    <label class="block text-[11px] font-semibold adm-text-secondary mb-1">Univ. Roll Number</label>
-                    <input type="text" name="university_roll_no" placeholder="e.g. 21BCA042" class="w-full px-3 py-2 rounded-xl adm-input text-xs font-mono">
-                </div>
-            </div>
-
-            <div>
-                <div class="flex items-center justify-between mb-1">
-                    <label class="block text-xs font-semibold adm-text-secondary">School / College / Institute Name *</label>
-                    <a href="{{ route('admin.academic-setup', ['tab' => 'schools']) }}" target="_blank" class="text-[10px] text-indigo-600 dark:text-indigo-400 hover:underline font-bold">+ New College</a>
-                </div>
-                <input type="text" name="college" list="adminSchoolDatalist" required placeholder="Select or type e.g. Patna Science College, Patna University" class="w-full px-3 py-2 rounded-xl adm-input text-xs">
-                <datalist id="adminSchoolDatalist">
-                    @if(isset($schools))
-                        @foreach($schools as $sch)
-                            <option value="{{ $sch->name }}">{{ $sch->city ? ' (' . $sch->city . ')' : '' }}</option>
+                    <label class="block text-xs font-semibold adm-text-secondary mb-1">Internship Stream Track *</label>
+                    <select name="program_domain" required class="w-full px-3 py-2 rounded-xl adm-input text-xs">
+                        @foreach($streams as $stream)
+                            <option value="{{ $stream->title }}">{{ $stream->title }} ({{ $stream->code }})</option>
                         @endforeach
-                    @endif
-                </datalist>
-            </div>
-
-            <div>
-                <label class="block text-xs font-semibold adm-text-secondary mb-1">Internship Stream Track *</label>
-                <select name="program_domain" required class="w-full px-3 py-2 rounded-xl adm-input text-xs">
-                    @foreach($streams as $stream)
-                        <option value="{{ $stream->title }}">{{ $stream->title }} ({{ $stream->code }})</option>
-                    @endforeach
-                </select>
-            </div>
-
-            <div class="grid grid-cols-1 sm:grid-cols-2 gap-3">
-                <div>
-                    <label class="block text-xs font-semibold adm-text-secondary mb-1">Assigned Faculty Mentor</label>
-                    <input type="text" name="mentor_name" placeholder="Dr. S. K. Narayan" class="w-full px-3 py-2 rounded-xl adm-input text-xs">
+                    </select>
                 </div>
+
+                <div class="grid grid-cols-1 sm:grid-cols-2 gap-3">
+                    <div>
+                        <label class="block text-xs font-semibold adm-text-secondary mb-1">Assigned Faculty Mentor</label>
+                        <input type="text" name="mentor_name" placeholder="Dr. S. K. Narayan" class="w-full px-3 py-2 rounded-xl adm-input text-xs">
+                    </div>
+                    <div>
+                        <label class="block text-xs font-semibold adm-text-secondary mb-1">Initial Attendance (%)</label>
+                        <input type="number" name="attendance_rate" value="90" min="0" max="100" class="w-full px-3 py-2 rounded-xl adm-input text-xs">
+                    </div>
+                </div>
+
                 <div>
-                    <label class="block text-xs font-semibold adm-text-secondary mb-1">Initial Attendance (%)</label>
-                    <input type="number" name="attendance_rate" value="90" min="0" max="100" class="w-full px-3 py-2 rounded-xl adm-input text-xs">
+                    <label class="block text-xs font-semibold adm-text-secondary mb-1">Capstone Project Title</label>
+                    <input type="text" name="project_title" placeholder="Undergraduate Practical Capstone Project" class="w-full px-3 py-2 rounded-xl adm-input text-xs">
                 </div>
             </div>
 
-            <div>
-                <label class="block text-xs font-semibold adm-text-secondary mb-1">Capstone Project Title</label>
-                <input type="text" name="project_title" placeholder="Undergraduate Practical Capstone Project" class="w-full px-3 py-2 rounded-xl adm-input text-xs">
-            </div>
-
-            <div class="flex justify-end gap-2 pt-3 border-t border-slate-200 dark:border-slate-800">
-                <button type="button" onclick="closeAddApplicantModal()" class="px-4 py-2 rounded-xl bg-slate-100 dark:bg-slate-800 hover:bg-slate-200 dark:hover:bg-slate-700 text-slate-700 dark:text-slate-300 border border-slate-300 dark:border-slate-700 text-xs font-semibold transition cursor-pointer">Cancel</button>
-                <button type="submit" class="px-6 py-2 rounded-xl bg-indigo-600 hover:bg-indigo-700 text-white text-xs font-bold transition shadow-lg shadow-indigo-600/30 cursor-pointer">Enroll Applicant</button>
+            <!-- Sticky Modal Footer -->
+            <div class="flex items-center justify-between px-6 py-3.5 border-t border-slate-200 dark:border-slate-800 bg-slate-50/95 dark:bg-slate-900/95 backdrop-blur-sm shrink-0">
+                <span class="text-[11px] text-slate-500 dark:text-slate-400 hidden sm:inline">Candidate will be enrolled into the registry.</span>
+                <div class="flex items-center gap-2 ml-auto">
+                    <button type="button" onclick="closeAddApplicantModal()" class="px-4 py-2 rounded-xl bg-slate-100 dark:bg-slate-800 hover:bg-slate-200 dark:hover:bg-slate-700 text-slate-700 dark:text-slate-300 border border-slate-300 dark:border-slate-700 text-xs font-semibold transition cursor-pointer">Cancel</button>
+                    <button type="submit" class="px-6 py-2 rounded-xl bg-indigo-600 hover:bg-indigo-700 text-white text-xs font-bold transition shadow-lg shadow-indigo-600/30 cursor-pointer">Enroll Applicant</button>
+                </div>
             </div>
         </form>
     </div>
 </div>
 
 <!-- 2. Edit Full Applicant Modal -->
-<div id="editApplicantModal" class="hidden fixed inset-0 z-50 flex items-center justify-center p-4 bg-black/60 backdrop-blur-sm overflow-y-auto">
-    <div class="relative w-full max-w-2xl my-8 rounded-3xl adm-card p-6 sm:p-8 shadow-2xl space-y-5">
-        <div class="flex items-center justify-between pb-3 border-b border-slate-200 dark:border-slate-800">
+<div id="editApplicantModal" class="hidden fixed inset-0 z-50 flex items-center justify-center p-3 sm:p-4 bg-black/70 backdrop-blur-sm" onclick="if(event.target === this) closeEditApplicantModal()">
+    <div class="relative w-full max-w-2xl max-h-[92vh] flex flex-col rounded-3xl adm-card shadow-2xl overflow-hidden border border-slate-200 dark:border-slate-800">
+        <!-- Sticky Modal Header -->
+        <div class="flex items-center justify-between px-6 py-4 border-b border-slate-200 dark:border-slate-800 bg-white/95 dark:bg-slate-900/95 backdrop-blur-sm shrink-0">
             <div>
-                <h3 class="text-base font-bold adm-text">Edit Student Applicant & Documentation Record</h3>
+                <h3 class="text-base font-bold adm-text flex items-center gap-2">
+                    <span>✏️ Edit Student Applicant & Documentation</span>
+                </h3>
                 <p class="text-xs adm-text-muted" id="editAppNumberLabel"></p>
             </div>
-            <button onclick="closeEditApplicantModal()" class="adm-text-muted hover:adm-text font-bold text-xl cursor-pointer">&times;</button>
+            <button type="button" onclick="closeEditApplicantModal()" class="w-8 h-8 rounded-xl flex items-center justify-center adm-text-muted hover:adm-text hover:bg-slate-100 dark:hover:bg-slate-800 transition font-bold text-xl cursor-pointer" title="Close Modal">&times;</button>
         </div>
 
-        <form id="editApplicantForm" method="POST" class="space-y-4">
+        <form id="editApplicantForm" method="POST" class="flex flex-col flex-1 min-h-0 overflow-hidden">
             @csrf
-            <div class="grid grid-cols-1 sm:grid-cols-3 gap-3">
-                <div>
-                    <label class="block text-xs font-semibold adm-text-secondary mb-1">Full Student Name *</label>
-                    <input type="text" name="name" id="edit_name" required class="w-full px-3 py-2 rounded-xl adm-input text-xs">
-                </div>
-                <div>
-                    <label class="block text-xs font-semibold adm-text-secondary mb-1">Email Address *</label>
-                    <input type="email" name="email" id="edit_email" required class="w-full px-3 py-2 rounded-xl adm-input text-xs">
-                </div>
-                <div>
-                    <label class="block text-xs font-semibold adm-text-secondary mb-1">Phone Number *</label>
-                    <input type="text" name="phone" id="edit_phone" required class="w-full px-3 py-2 rounded-xl adm-input text-xs">
-                </div>
-            </div>
-
-            <!-- Reset Student Password (Optional) -->
-            <div class="p-3.5 rounded-2xl bg-amber-50/70 dark:bg-amber-950/30 border border-amber-200/80 dark:border-amber-800/60 space-y-2">
-                <div class="flex items-center justify-between">
-                    <div class="flex items-center gap-1.5">
-                        <span class="text-xs font-bold text-amber-800 dark:text-amber-400">🔑 Reset Student Password (Optional)</span>
+            <!-- Scrollable Modal Body -->
+            <div id="editApplicantModalBody" class="overflow-y-auto px-6 py-5 space-y-4 flex-1">
+                <div class="grid grid-cols-1 sm:grid-cols-3 gap-3">
+                    <div>
+                        <label class="block text-xs font-semibold adm-text-secondary mb-1">Full Student Name *</label>
+                        <input type="text" name="name" id="edit_name" required class="w-full px-3 py-2 rounded-xl adm-input text-xs">
                     </div>
-                    <button type="button" onclick="generateRandomStudentPassword('edit_new_password')" class="text-[10px] font-bold text-amber-700 dark:text-amber-300 hover:text-amber-900 bg-white dark:bg-slate-900 px-2.5 py-1 rounded-lg border border-amber-200 dark:border-amber-700 hover:shadow-xs transition cursor-pointer flex items-center gap-1">
-                        <span>⚡ Auto-Generate New Password</span>
-                    </button>
+                    <div>
+                        <label class="block text-xs font-semibold adm-text-secondary mb-1">Email Address *</label>
+                        <input type="email" name="email" id="edit_email" required class="w-full px-3 py-2 rounded-xl adm-input text-xs">
+                    </div>
+                    <div>
+                        <label class="block text-xs font-semibold adm-text-secondary mb-1">Phone Number *</label>
+                        <input type="text" name="phone" id="edit_phone" required class="w-full px-3 py-2 rounded-xl adm-input text-xs">
+                    </div>
                 </div>
-                <div class="relative">
-                    <input type="text" name="new_password" id="edit_new_password" placeholder="Leave blank to keep existing password, or enter new password..." class="w-full px-3.5 py-2 pr-20 rounded-xl adm-input text-xs font-mono font-medium">
-                    <div class="absolute inset-y-0 right-1.5 flex items-center">
-                        <button type="button" onclick="togglePasswordVisibility('edit_new_password', this)" class="text-xs px-2 py-1 text-slate-500 hover:text-slate-700 dark:hover:text-slate-300 font-medium cursor-pointer" title="Toggle visibility">
-                            👁️
+
+                <!-- Reset Student Password (Optional) -->
+                <div class="p-3.5 rounded-2xl bg-amber-50/70 dark:bg-amber-950/30 border border-amber-200/80 dark:border-amber-800/60 space-y-2">
+                    <div class="flex items-center justify-between">
+                        <div class="flex items-center gap-1.5">
+                            <span class="text-xs font-bold text-amber-800 dark:text-amber-400">🔑 Reset Student Password (Optional)</span>
+                        </div>
+                        <button type="button" onclick="generateRandomStudentPassword('edit_new_password')" class="text-[10px] font-bold text-amber-700 dark:text-amber-300 hover:text-amber-900 bg-white dark:bg-slate-900 px-2.5 py-1 rounded-lg border border-amber-200 dark:border-amber-700 hover:shadow-xs transition cursor-pointer flex items-center gap-1">
+                            <span>⚡ Auto-Generate New Password</span>
                         </button>
                     </div>
-                </div>
-                <p class="text-[10px] text-slate-500 dark:text-slate-400">
-                    If candidate forgot their password or requested a reset, enter a new password here.
-                </p>
-            </div>
-
-            <div class="grid grid-cols-1 sm:grid-cols-3 gap-3">
-                <div>
-                    <label class="block text-xs font-semibold adm-text-secondary mb-1">Degree Program *</label>
-                    <select name="degree" id="edit_degree" required class="w-full px-3 py-2 rounded-xl adm-input text-xs">
-                        @if(isset($degrees))
-                            @foreach($degrees as $deg)
-                                <option value="{{ $deg->code }}">{{ $deg->name }} ({{ $deg->code }})</option>
-                            @endforeach
-                        @else
-                            <option value="BA">Bachelor of Arts (BA)</option>
-                            <option value="BSc">Bachelor of Science (BSc)</option>
-                            <option value="BBA">Bachelor of Business Admin (BBA)</option>
-                            <option value="BCA">Bachelor of Computer App (BCA)</option>
-                            <option value="BCom">Bachelor of Commerce (BCom)</option>
-                        @endif
-                    </select>
-                </div>
-                <div>
-                    <label class="block text-xs font-semibold adm-text-secondary mb-1">Current Semester *</label>
-                    <select name="semester" id="edit_semester" required class="w-full px-3 py-2 rounded-xl adm-input text-xs">
-                        <option value="1st Semester">1st Semester</option>
-                        <option value="2nd Semester">2nd Semester</option>
-                        <option value="3rd Semester">3rd Semester</option>
-                        <option value="4th Semester">4th Semester</option>
-                        <option value="5th Semester">5th Semester</option>
-                        <option value="6th Semester">6th Semester</option>
-                        <option value="7th/8th Semester">7th/8th Semester</option>
-                    </select>
-                </div>
-                <div>
-                    <label class="block text-xs font-semibold adm-text-secondary mb-1">Application Status *</label>
-                    <select name="status" id="edit_status" required class="w-full px-3 py-2 rounded-xl adm-input text-xs font-bold">
-                        <option value="PENDING">PENDING</option>
-                        <option value="APPROVED">APPROVED</option>
-                        <option value="ACTIVE">ACTIVE</option>
-                        <option value="COMPLETED">COMPLETED</option>
-                        <option value="REJECTED">REJECTED</option>
-                    </select>
-                </div>
-            </div>
-
-            <!-- University & Consent Letter Details -->
-            <div class="grid grid-cols-1 sm:grid-cols-4 gap-3 p-3 rounded-2xl bg-slate-50 dark:bg-slate-900/40 border border-slate-200 dark:border-slate-800">
-                <div>
-                    <label class="block text-[11px] font-semibold adm-text-secondary mb-1">Gender</label>
-                    <select name="gender" id="edit_gender" class="w-full px-3 py-2 rounded-xl adm-input text-xs">
-                        <option value="">Select Gender</option>
-                        <option value="Female">Female</option>
-                        <option value="Male">Male</option>
-                        <option value="Other">Other</option>
-                    </select>
-                </div>
-                <div>
-                    <label class="block text-[11px] font-semibold adm-text-secondary mb-1">Father's Name</label>
-                    <input type="text" name="father_name" id="edit_father_name" placeholder="e.g. Rameshwar Prasad" class="w-full px-3 py-2 rounded-xl adm-input text-xs">
-                </div>
-                <div>
-                    <label class="block text-[11px] font-semibold adm-text-secondary mb-1">Univ. Reg. Number</label>
-                    <input type="text" name="university_reg_no" id="edit_reg_no" placeholder="e.g. 21005678" class="w-full px-3 py-2 rounded-xl adm-input text-xs font-mono">
-                </div>
-                <div>
-                    <label class="block text-[11px] font-semibold adm-text-secondary mb-1">Univ. Roll Number</label>
-                    <input type="text" name="university_roll_no" id="edit_roll_no" placeholder="e.g. 21BCA042" class="w-full px-3 py-2 rounded-xl adm-input text-xs font-mono">
-                </div>
-            </div>
-
-            <div>
-                <label class="block text-xs font-semibold adm-text-secondary mb-1">College / Institute Name *</label>
-                <input type="text" name="college" id="edit_college" list="adminSchoolDatalist" required class="w-full px-3 py-2 rounded-xl adm-input text-xs">
-            </div>
-
-            <div>
-                <label class="block text-xs font-semibold adm-text-secondary mb-1">Internship Stream Domain Track *</label>
-                <select name="program_domain" id="edit_domain" required class="w-full px-3 py-2 rounded-xl adm-input text-xs">
-                    @foreach($streams as $stream)
-                        <option value="{{ $stream->title }}">{{ $stream->title }} ({{ $stream->code }})</option>
-                    @endforeach
-                </select>
-            </div>
-
-            <div class="grid grid-cols-1 sm:grid-cols-2 gap-3">
-                <div>
-                    <label class="block text-xs font-semibold adm-text-secondary mb-1">Assigned Faculty Mentor *</label>
-                    <input type="text" name="mentor_name" id="edit_mentor" required class="w-full px-3 py-2 rounded-xl adm-input text-xs">
-                </div>
-                <div>
-                    <label class="block text-xs font-semibold adm-text-secondary mb-1">Verified Attendance (%) *</label>
-                    <input type="number" name="attendance_rate" id="edit_attendance" min="0" max="100" required class="w-full px-3 py-2 rounded-xl adm-input text-xs">
-                </div>
-            </div>
-
-            <div>
-                <label class="block text-xs font-semibold adm-text-secondary mb-1">Capstone Project Title *</label>
-                <input type="text" name="project_title" id="edit_project_title" required class="w-full px-3 py-2 rounded-xl adm-input text-xs">
-            </div>
-
-            <!-- Documents Release Checkboxes & Values -->
-            <div class="p-4 rounded-2xl bg-slate-50 dark:bg-slate-900/60 border border-slate-200 dark:border-slate-800 space-y-3">
-                <span class="text-[10px] font-bold uppercase tracking-wider text-indigo-600 dark:text-indigo-400 block">Controlled Official Documents</span>
-
-                <div class="grid grid-cols-1 sm:grid-cols-2 gap-3 text-xs">
-                    <label class="flex items-center gap-2 cursor-pointer">
-                        <input type="checkbox" name="offer_letter_issued" id="edit_offer_letter" class="rounded text-indigo-600 focus:ring-indigo-500">
-                        <span class="adm-text font-medium">Offer & Acceptance Letter Released</span>
-                    </label>
-
-                    <label class="flex items-center gap-2 cursor-pointer">
-                        <input type="checkbox" name="consent_letter_issued" id="edit_consent_letter" class="rounded text-indigo-600 focus:ring-indigo-500">
-                        <span class="adm-text font-medium">Official Consent Undertaking Released</span>
-                    </label>
-
-                    <div>
-                        <label class="flex items-center gap-2 cursor-pointer mb-1">
-                            <input type="checkbox" name="certificate_issued" id="edit_certificate" class="rounded text-indigo-600 focus:ring-indigo-500">
-                            <span class="adm-text font-medium">Completion Certificate Approved</span>
-                        </label>
-                        <input type="text" name="certificate_number" id="edit_cert_number" placeholder="Certificate Serial No" class="w-full px-2.5 py-1.5 rounded-lg adm-input text-[11px] font-mono">
-                    </div>
-
-                    <div>
-                        <label class="flex items-center gap-2 cursor-pointer mb-1">
-                            <input type="checkbox" name="lor_issued" id="edit_lor" class="rounded text-indigo-600 focus:ring-indigo-500">
-                            <span class="adm-text font-medium">Letter of Recommendation (LOR)</span>
-                        </label>
-                        <input type="text" name="lor_number" id="edit_lor_number" placeholder="LOR Reference No" class="w-full px-2.5 py-1.5 rounded-lg adm-input text-[11px] font-mono">
-                    </div>
-
-                    <div class="col-span-1 sm:col-span-2 grid grid-cols-2 gap-3 pt-2 border-t border-slate-200 dark:border-slate-800">
-                        <div>
-                            <label class="block text-[11px] font-semibold adm-text-secondary mb-1">Internship Start Date</label>
-                            <input type="date" name="internship_start_date" id="edit_start_date" class="w-full px-2.5 py-1.5 rounded-lg adm-input text-xs">
-                        </div>
-                        <div>
-                            <label class="block text-[11px] font-semibold adm-text-secondary mb-1">Internship End Date</label>
-                            <input type="date" name="internship_end_date" id="edit_end_date" class="w-full px-2.5 py-1.5 rounded-lg adm-input text-xs">
+                    <div class="relative">
+                        <input type="text" name="new_password" id="edit_new_password" placeholder="Leave blank to keep existing password, or enter new password..." class="w-full px-3.5 py-2 pr-20 rounded-xl adm-input text-xs font-mono font-medium">
+                        <div class="absolute inset-y-0 right-1.5 flex items-center">
+                            <button type="button" onclick="togglePasswordVisibility('edit_new_password', this)" class="text-xs px-2 py-1 text-slate-500 hover:text-slate-700 dark:hover:text-slate-300 font-medium cursor-pointer" title="Toggle visibility">
+                                👁️
+                            </button>
                         </div>
                     </div>
+                    <p class="text-[10px] text-slate-500 dark:text-slate-400">
+                        If candidate forgot their password or requested a reset, enter a new password here.
+                    </p>
+                </div>
+
+                <div class="grid grid-cols-1 sm:grid-cols-3 gap-3">
+                    <div>
+                        <label class="block text-xs font-semibold adm-text-secondary mb-1">Degree Program *</label>
+                        <select name="degree" id="edit_degree" required class="w-full px-3 py-2 rounded-xl adm-input text-xs">
+                            @if(isset($degrees))
+                                @foreach($degrees as $deg)
+                                    <option value="{{ $deg->code }}">{{ $deg->name }} ({{ $deg->code }})</option>
+                                @endforeach
+                            @else
+                                <option value="BA">Bachelor of Arts (BA)</option>
+                                <option value="BSc">Bachelor of Science (BSc)</option>
+                                <option value="BBA">Bachelor of Business Admin (BBA)</option>
+                                <option value="BCA">Bachelor of Computer App (BCA)</option>
+                                <option value="BCom">Bachelor of Commerce (BCom)</option>
+                            @endif
+                        </select>
+                    </div>
+                    <div>
+                        <label class="block text-xs font-semibold adm-text-secondary mb-1">Current Semester *</label>
+                        <select name="semester" id="edit_semester" required class="w-full px-3 py-2 rounded-xl adm-input text-xs">
+                            <option value="1st Semester">1st Semester</option>
+                            <option value="2nd Semester">2nd Semester</option>
+                            <option value="3rd Semester">3rd Semester</option>
+                            <option value="4th Semester">4th Semester</option>
+                            <option value="5th Semester">5th Semester</option>
+                            <option value="6th Semester">6th Semester</option>
+                            <option value="7th/8th Semester">7th/8th Semester</option>
+                        </select>
+                    </div>
+                    <div>
+                        <label class="block text-xs font-semibold adm-text-secondary mb-1">Application Status *</label>
+                        <select name="status" id="edit_status" required class="w-full px-3 py-2 rounded-xl adm-input text-xs font-bold">
+                            <option value="PENDING">PENDING</option>
+                            <option value="APPROVED">APPROVED</option>
+                            <option value="ACTIVE">ACTIVE</option>
+                            <option value="COMPLETED">COMPLETED</option>
+                            <option value="REJECTED">REJECTED</option>
+                        </select>
+                    </div>
+                </div>
+
+                <!-- University & Consent Letter Details -->
+                <div class="grid grid-cols-1 sm:grid-cols-4 gap-3 p-3 rounded-2xl bg-slate-50 dark:bg-slate-900/40 border border-slate-200 dark:border-slate-800">
+                    <div>
+                        <label class="block text-[11px] font-semibold adm-text-secondary mb-1">Gender</label>
+                        <select name="gender" id="edit_gender" class="w-full px-3 py-2 rounded-xl adm-input text-xs">
+                            <option value="">Select Gender</option>
+                            <option value="Female">Female</option>
+                            <option value="Male">Male</option>
+                            <option value="Other">Other</option>
+                        </select>
+                    </div>
+                    <div>
+                        <label class="block text-[11px] font-semibold adm-text-secondary mb-1">Father's Name</label>
+                        <input type="text" name="father_name" id="edit_father_name" placeholder="e.g. Rameshwar Prasad" class="w-full px-3 py-2 rounded-xl adm-input text-xs">
+                    </div>
+                    <div>
+                        <label class="block text-[11px] font-semibold adm-text-secondary mb-1">Univ. Reg. Number</label>
+                        <input type="text" name="university_reg_no" id="edit_reg_no" placeholder="e.g. 21005678" class="w-full px-3 py-2 rounded-xl adm-input text-xs font-mono">
+                    </div>
+                    <div>
+                        <label class="block text-[11px] font-semibold adm-text-secondary mb-1">Univ. Roll Number</label>
+                        <input type="text" name="university_roll_no" id="edit_roll_no" placeholder="e.g. 21BCA042" class="w-full px-3 py-2 rounded-xl adm-input text-xs font-mono">
+                    </div>
+                </div>
+
+                <div>
+                    <label class="block text-xs font-semibold adm-text-secondary mb-1">College / Institute Name *</label>
+                    <input type="text" name="college" id="edit_college" list="adminSchoolDatalist" required class="w-full px-3 py-2 rounded-xl adm-input text-xs">
+                </div>
+
+                <div>
+                    <label class="block text-xs font-semibold adm-text-secondary mb-1">Internship Stream Domain Track *</label>
+                    <select name="program_domain" id="edit_domain" required class="w-full px-3 py-2 rounded-xl adm-input text-xs">
+                        @foreach($streams as $stream)
+                            <option value="{{ $stream->title }}">{{ $stream->title }} ({{ $stream->code }})</option>
+                        @endforeach
+                    </select>
+                </div>
+
+                <div class="grid grid-cols-1 sm:grid-cols-2 gap-3">
+                    <div>
+                        <label class="block text-xs font-semibold adm-text-secondary mb-1">Assigned Faculty Mentor *</label>
+                        <input type="text" name="mentor_name" id="edit_mentor" required class="w-full px-3 py-2 rounded-xl adm-input text-xs">
+                    </div>
+                    <div>
+                        <label class="block text-xs font-semibold adm-text-secondary mb-1">Verified Attendance (%) *</label>
+                        <input type="number" name="attendance_rate" id="edit_attendance" min="0" max="100" required class="w-full px-3 py-2 rounded-xl adm-input text-xs">
+                    </div>
+                </div>
+
+                <div>
+                    <label class="block text-xs font-semibold adm-text-secondary mb-1">Capstone Project Title *</label>
+                    <input type="text" name="project_title" id="edit_project_title" required class="w-full px-3 py-2 rounded-xl adm-input text-xs">
+                </div>
+
+                <!-- Documents Release Checkboxes & Values -->
+                <div class="p-4 rounded-2xl bg-slate-50 dark:bg-slate-900/60 border border-slate-200 dark:border-slate-800 space-y-3">
+                    <span class="text-[10px] font-bold uppercase tracking-wider text-indigo-600 dark:text-indigo-400 block">Controlled Official Documents</span>
+
+                    <div class="grid grid-cols-1 sm:grid-cols-2 gap-3 text-xs">
+                        <label class="flex items-center gap-2 cursor-pointer">
+                            <input type="checkbox" name="offer_letter_issued" id="edit_offer_letter" class="rounded text-indigo-600 focus:ring-indigo-500">
+                            <span class="adm-text font-medium">Offer & Acceptance Letter Released</span>
+                        </label>
+
+                        <label class="flex items-center gap-2 cursor-pointer">
+                            <input type="checkbox" name="consent_letter_issued" id="edit_consent_letter" class="rounded text-indigo-600 focus:ring-indigo-500">
+                            <span class="adm-text font-medium">Official Consent Undertaking Released</span>
+                        </label>
+
+                        <div>
+                            <label class="flex items-center gap-2 cursor-pointer mb-1">
+                                <input type="checkbox" name="certificate_issued" id="edit_certificate" class="rounded text-indigo-600 focus:ring-indigo-500">
+                                <span class="adm-text font-medium">Completion Certificate Approved</span>
+                            </label>
+                            <input type="text" name="certificate_number" id="edit_cert_number" placeholder="Certificate Serial No" class="w-full px-2.5 py-1.5 rounded-lg adm-input text-[11px] font-mono">
+                        </div>
+
+                        <div>
+                            <label class="flex items-center gap-2 cursor-pointer mb-1">
+                                <input type="checkbox" name="lor_issued" id="edit_lor" class="rounded text-indigo-600 focus:ring-indigo-500">
+                                <span class="adm-text font-medium">Letter of Recommendation (LOR)</span>
+                            </label>
+                            <input type="text" name="lor_number" id="edit_lor_number" placeholder="LOR Reference No" class="w-full px-2.5 py-1.5 rounded-lg adm-input text-[11px] font-mono">
+                        </div>
+
+                        <div class="col-span-1 sm:col-span-2 grid grid-cols-2 gap-3 pt-2 border-t border-slate-200 dark:border-slate-800">
+                            <div>
+                                <label class="block text-[11px] font-semibold adm-text-secondary mb-1">Internship Start Date</label>
+                                <input type="date" name="internship_start_date" id="edit_start_date" class="w-full px-2.5 py-1.5 rounded-lg adm-input text-xs">
+                            </div>
+                            <div>
+                                <label class="block text-[11px] font-semibold adm-text-secondary mb-1">Internship End Date</label>
+                                <input type="date" name="internship_end_date" id="edit_end_date" class="w-full px-2.5 py-1.5 rounded-lg adm-input text-xs">
+                            </div>
+                        </div>
+                    </div>
                 </div>
             </div>
 
-            <div class="flex justify-end gap-2 pt-2 border-t border-slate-200 dark:border-slate-800">
-                <button type="button" onclick="closeEditApplicantModal()" class="px-4 py-2 rounded-xl bg-slate-100 dark:bg-slate-800 hover:bg-slate-200 dark:hover:bg-slate-700 text-slate-700 dark:text-slate-300 border border-slate-300 dark:border-slate-700 text-xs font-semibold transition cursor-pointer">Cancel</button>
-                <button type="submit" class="px-6 py-2 rounded-xl bg-indigo-600 hover:bg-indigo-700 text-white text-xs font-bold transition shadow-lg shadow-indigo-600/30 cursor-pointer">Save All Changes</button>
+            <!-- Sticky Modal Footer -->
+            <div class="flex items-center justify-between px-6 py-3.5 border-t border-slate-200 dark:border-slate-800 bg-slate-50/95 dark:bg-slate-900/95 backdrop-blur-sm shrink-0">
+                <span class="text-[11px] text-slate-500 dark:text-slate-400 hidden sm:inline">Review changes carefully before saving.</span>
+                <div class="flex items-center gap-2 ml-auto">
+                    <button type="button" onclick="closeEditApplicantModal()" class="px-4 py-2 rounded-xl bg-slate-100 dark:bg-slate-800 hover:bg-slate-200 dark:hover:bg-slate-700 text-slate-700 dark:text-slate-300 border border-slate-300 dark:border-slate-700 text-xs font-semibold transition cursor-pointer">Cancel</button>
+                    <button type="submit" class="px-6 py-2 rounded-xl bg-indigo-600 hover:bg-indigo-700 text-white text-xs font-bold transition shadow-lg shadow-indigo-600/30 cursor-pointer">Save All Changes</button>
+                </div>
             </div>
         </form>
     </div>
 </div>
 
 <!-- 3. Certificate Approval Access Modal -->
-<div id="certApprovalModal" class="hidden fixed inset-0 z-50 flex items-center justify-center p-4 bg-black/60 backdrop-blur-sm">
-    <div class="w-full max-w-md rounded-3xl adm-card p-6 shadow-2xl space-y-4">
+<div id="certApprovalModal" class="hidden fixed inset-0 z-50 flex items-center justify-center p-3 sm:p-4 bg-black/70 backdrop-blur-sm" onclick="if(event.target === this) closeCertApprovalModal()">
+    <div class="w-full max-w-md max-h-[92vh] overflow-y-auto rounded-3xl adm-card p-6 shadow-2xl space-y-4">
         <div class="flex items-center justify-between pb-3 border-b border-slate-200 dark:border-slate-800">
             <h3 class="text-base font-bold text-emerald-600 dark:text-emerald-400">Approve & Issue UGC Certificate</h3>
-            <button onclick="closeCertApprovalModal()" class="adm-text-muted hover:adm-text font-bold text-lg cursor-pointer">&times;</button>
+            <button type="button" onclick="closeCertApprovalModal()" class="w-8 h-8 rounded-xl flex items-center justify-center adm-text-muted hover:adm-text hover:bg-slate-100 dark:hover:bg-slate-800 transition font-bold text-lg cursor-pointer" title="Close">&times;</button>
         </div>
         <p class="text-xs adm-text-muted" id="certApprovalCandidateText"></p>
 
@@ -1193,11 +1213,11 @@
 </div>
 
 <!-- 4. Issue LOR Modal -->
-<div id="lorModal" class="hidden fixed inset-0 z-50 flex items-center justify-center p-4 bg-black/60 backdrop-blur-sm">
-    <div class="w-full max-w-md rounded-3xl adm-card p-6 shadow-2xl space-y-4">
+<div id="lorModal" class="hidden fixed inset-0 z-50 flex items-center justify-center p-3 sm:p-4 bg-black/70 backdrop-blur-sm" onclick="if(event.target === this) closeLorModal()">
+    <div class="w-full max-w-md max-h-[92vh] overflow-y-auto rounded-3xl adm-card p-6 shadow-2xl space-y-4">
         <div class="flex items-center justify-between pb-3 border-b border-slate-200 dark:border-slate-800">
             <h3 class="text-base font-bold text-amber-600 dark:text-amber-400">Issue Letter of Recommendation</h3>
-            <button onclick="closeLorModal()" class="adm-text-muted hover:adm-text font-bold text-lg cursor-pointer">&times;</button>
+            <button type="button" onclick="closeLorModal()" class="w-8 h-8 rounded-xl flex items-center justify-center adm-text-muted hover:adm-text hover:bg-slate-100 dark:hover:bg-slate-800 transition font-bold text-lg cursor-pointer" title="Close">&times;</button>
         </div>
         <p class="text-xs adm-text-muted" id="lorCandidateText"></p>
 
@@ -1224,11 +1244,11 @@
 </div>
 
 <!-- 5. Issue Marksheet Modal -->
-<div id="marksheetModal" class="hidden fixed inset-0 z-50 flex items-center justify-center p-4 bg-black/60 backdrop-blur-sm">
-    <div class="w-full max-w-md rounded-3xl adm-card p-6 shadow-2xl space-y-4">
+<div id="marksheetModal" class="hidden fixed inset-0 z-50 flex items-center justify-center p-3 sm:p-4 bg-black/70 backdrop-blur-sm" onclick="if(event.target === this) closeMarksheetModal()">
+    <div class="w-full max-w-md max-h-[92vh] overflow-y-auto rounded-3xl adm-card p-6 shadow-2xl space-y-4">
         <div class="flex items-center justify-between pb-3 border-b border-slate-200 dark:border-slate-800">
             <h3 class="text-base font-bold adm-text">Generate Official Marksheet Scorecard</h3>
-            <button onclick="closeMarksheetModal()" class="adm-text-muted hover:adm-text font-bold text-lg cursor-pointer">&times;</button>
+            <button type="button" onclick="closeMarksheetModal()" class="w-8 h-8 rounded-xl flex items-center justify-center adm-text-muted hover:adm-text hover:bg-slate-100 dark:hover:bg-slate-800 transition font-bold text-lg cursor-pointer" title="Close">&times;</button>
         </div>
         <p class="text-xs adm-text-muted" id="marksheetAppIdText"></p>
 
@@ -1264,10 +1284,14 @@
             generateRandomStudentPassword('add_applicant_password');
         }
         document.getElementById('addApplicantModal').classList.remove('hidden');
+        const modalBody = document.getElementById('addApplicantModalBody');
+        if (modalBody) modalBody.scrollTop = 0;
+        document.body.style.overflow = 'hidden';
     }
 
     function closeAddApplicantModal() {
         document.getElementById('addApplicantModal').classList.add('hidden');
+        document.body.style.overflow = '';
     }
 
     function generateRandomStudentPassword(inputId) {
@@ -1334,10 +1358,14 @@
         document.getElementById('edit_end_date').value = app.internship_end_date ? app.internship_end_date.substring(0, 10) : '';
 
         document.getElementById('editApplicantModal').classList.remove('hidden');
+        const modalBody = document.getElementById('editApplicantModalBody');
+        if (modalBody) modalBody.scrollTop = 0;
+        document.body.style.overflow = 'hidden';
     }
 
     function closeEditApplicantModal() {
         document.getElementById('editApplicantModal').classList.add('hidden');
+        document.body.style.overflow = '';
     }
 
     function openCertApprovalModal(appId, appNumber, candidateName, startDate, endDate, certNumber) {
@@ -1363,10 +1391,12 @@
 
         document.getElementById('approval_issue_date').value = new Date().toISOString().split('T')[0];
         document.getElementById('certApprovalModal').classList.remove('hidden');
+        document.body.style.overflow = 'hidden';
     }
 
     function closeCertApprovalModal() {
         document.getElementById('certApprovalModal').classList.add('hidden');
+        document.body.style.overflow = '';
     }
 
     function openLorModal(appId, appNumber, candidateName) {
@@ -1374,20 +1404,35 @@
         document.getElementById('lorForm').action = '/admin/applications/' + appId + '/issue-lor';
         document.getElementById('lor_number_input').value = 'INF-LOR-2026-' + Math.floor(1000 + Math.random() * 9000);
         document.getElementById('lorModal').classList.remove('hidden');
+        document.body.style.overflow = 'hidden';
     }
 
     function closeLorModal() {
         document.getElementById('lorModal').classList.add('hidden');
+        document.body.style.overflow = '';
     }
 
     function openMarksheetModal(appId, appNumber) {
         document.getElementById('marksheetAppIdText').innerText = 'Issuing evaluation scorecard for application ' + appNumber;
         document.getElementById('marksheetForm').action = '/admin/applications/' + appId + '/issue-marksheet';
         document.getElementById('marksheetModal').classList.remove('hidden');
+        document.body.style.overflow = 'hidden';
     }
 
     function closeMarksheetModal() {
         document.getElementById('marksheetModal').classList.add('hidden');
+        document.body.style.overflow = '';
     }
+
+    // Close any open modal with Escape key
+    document.addEventListener('keydown', function(e) {
+        if (e.key === 'Escape') {
+            closeAddApplicantModal();
+            closeEditApplicantModal();
+            closeCertApprovalModal();
+            closeLorModal();
+            closeMarksheetModal();
+        }
+    });
 </script>
 @endsection
